@@ -1,0 +1,33 @@
+{
+  "name": "f-22",
+  "private": true,
+  "version": "0.1.0",
+  "description": "A Strapi application",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "devDependencies": {},
+  "dependencies": {
+    "@strapi/plugin-i18n": "4.12.4",
+    "@strapi/plugin-users-permissions": "4.12.4",
+    "@strapi/strapi": "4.12.4",
+    "better-sqlite3": "8.5.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^3.6.0",
+    "strapi-provider-email-smtp": "^1.0.3"
+  },
+  "author": {
+    "name": "A Strapi developer"
+  },
+  "strapi": {
+    "uuid": "d97e7b2d-ce5b-49ff-9a24-394cbcd8eaed"
+  },
+  "engines": {
+    "node": ">=16.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}

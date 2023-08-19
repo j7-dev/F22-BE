@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vip_levels",
+  "info": {
+    "singularName": "vip-level",
+    "pluralName": "vip-levels",
+    "displayName": "VIP Level"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "Label": {
+      "type": "string",
+      "required": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "vip_level"
+    }
+  }
+}
