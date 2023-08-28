@@ -15,22 +15,32 @@ jobs:
 
       - name: Deploy to Server
         run: |
-          # 使用SSH連接到伺服器
-          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@198.74.125.203 << EOF
-            # 切換到你的專案目錄
-            cd /var/www/html/f22
-
-            # 執行git pull
-            git pull origin master
-
-            # 執行yarn install
-            yarn install
-
-            # 執行yarn build
-            yarn build
-
-            # 執行yarn start
-            yarn start
-          EOF
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/staging.key
+          chmod 600 ~/.ssh/staging.key
+          cat >>~/.ssh/config <<END
+          Host staging
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/staging.key
+            StrictHostKeyChecking no
+          END
         env:
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+
+      - name: Cd to Project
+        run: ssh staging 'sudo cd /var/www/html/f22'
+
+      - name: Git Pull
+        run: ssh staging 'sudo git pull origin master'
+
+      - name: Yarn install
+        run: ssh staging 'sudo yarn install'
+
+      - name: Yarn build
+        run: ssh staging 'sudo yarn build'
+
+      - name: Yarn start
+        run: ssh staging 'sudo yarn start'
