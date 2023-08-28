@@ -32,3 +32,5 @@ jobs:
             # 執行yarn start
             yarn start
           EOF
+        env:
+          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
