@@ -1,0 +1,34 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - master # 這裡使用你的主要分支名稱，可以根據實際情況修改
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04 # ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2 # 使用官方的Checkout action來檢出你的代碼
+
+      - name: Deploy to Server
+        run: |
+          # 使用SSH連接到伺服器
+          ssh -i ${{ secrets.SSH_PRIVATE_KEY }} root@198.74.125.203 << EOF
+            # 切換到你的專案目錄
+            cd /var/www/html/f22
+
+            # 執行git pull
+            git pull origin master
+
+            # 執行yarn install
+            yarn install
+
+            # 執行yarn build
+            yarn build
+
+            # 執行yarn start
+            yarn start
+          EOF
