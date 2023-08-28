@@ -11,7 +11,7 @@ import pluginId from "../../pluginId";
 const HomePage = () => {
   return (
     <div>
-      <h1>{pluginId}&apos;s HomePage test</h1>
+      <h1>{pluginId}&apos;s HomePage test test</h1>
       <p>Happy coding</p>
     </div>
   );
