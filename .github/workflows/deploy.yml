@@ -30,14 +30,5 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
-      - name: Git Pull
-        run: ssh staging 'cd /var/www/html/f22 && git pull origin master'
-
-      - name: Yarn install
-        run: ssh staging 'yarn install'
-
-      - name: Yarn build
-        run: ssh staging 'yarn build'
-
-      - name: Yarn start
-        run: ssh staging 'yarn start'
+      - name: Yarn build and start
+        run: ssh staging 'cd /var/www/html/f22 && git pull origin master && yarn install && yarn build && yarn start'
