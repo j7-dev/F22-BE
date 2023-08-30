@@ -70,6 +70,10 @@
       "relation": "oneToOne",
       "target": "api::vip-level.vip-level",
       "inversedBy": "user"
+    },
+    "balance": {
+      "type": "decimal",
+      "required": true
     }
   }
 }
