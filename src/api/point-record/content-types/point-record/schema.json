@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "point_records",
+  "info": {
+    "singularName": "point-record",
+    "pluralName": "point-records",
+    "displayName": "point record",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "by": {
+      "type": "enumeration",
+      "enum": [
+        "system",
+        "admin",
+        "user"
+      ]
+    },
+    "userId": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
