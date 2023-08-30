@@ -114,4 +114,4 @@ build
 .strapi-updater.json
 
 .vscode/settings.json
-config/server.js
+config
