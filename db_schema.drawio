@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-03T03:32:32.011Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="iSYc3Mt7H1oJjY1b6dHR" version="21.7.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-03T03:34:25.270Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="bzacEi40AxGMh0nviycq" version="21.7.2" type="github">
   <diagram name="Page-1" id="efa7a0a1-bf9b-a30e-e6df-94a7791c09e9">
-    <mxGraphModel dx="5346" dy="2661" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="7258" dy="3656" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -3696,6 +3696,9 @@
           <mxGeometry x="240" width="220" height="173" as="geometry">
             <mxRectangle width="220" height="173" as="alternateBounds" />
           </mxGeometry>
+        </mxCell>
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1986" value="Betting System" style="text;whiteSpace=wrap;html=1;fontSize=120;" vertex="1" parent="1">
+          <mxGeometry x="-950" y="-690" width="846" height="140" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
