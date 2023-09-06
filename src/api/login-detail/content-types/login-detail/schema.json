@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "login_details",
+  "info": {
+    "singularName": "login-detail",
+    "pluralName": "login-details",
+    "displayName": "Login Detail",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "login_details"
+    },
+    "ip": {
+      "type": "string"
+    },
+    "device": {
+      "type": "string"
+    },
+    "login_url": {
+      "type": "string"
+    }
+  }
+}

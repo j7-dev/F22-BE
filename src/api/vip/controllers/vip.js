@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * vip-level controller
+ * vip controller
  */
 
 const { createCoreController } = require('@strapi/strapi').factories;
 
-module.exports = createCoreController('api::vip-level.vip-level');
+module.exports = createCoreController('api::vip.vip');

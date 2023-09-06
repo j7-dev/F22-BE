@@ -26,9 +26,9 @@
     "by": {
       "type": "enumeration",
       "enum": [
-        "system",
-        "admin",
-        "user"
+        "SYSTEM",
+        "ADMIN",
+        "USER"
       ]
     },
     "userId": {

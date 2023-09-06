@@ -65,15 +65,64 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "vip_level": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::vip-level.vip-level",
-      "inversedBy": "user"
-    },
     "balance": {
       "type": "decimal",
       "required": true
+    },
+    "vip": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vip.vip",
+      "inversedBy": "user"
+    },
+    "cash_balance": {
+      "type": "decimal",
+      "required": true
+    },
+    "reward_point_balance": {
+      "type": "decimal",
+      "required": true
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "phone": {
+      "type": "string",
+      "regex": "[0-9]"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ]
+    },
+    "birthday": {
+      "type": "date"
+    },
+    "bank_accounts": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::bank-account.bank-account",
+      "mappedBy": "user"
+    },
+    "vip_upgrate_records": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vip-upgrate-record.vip-upgrate-record",
+      "mappedBy": "user"
+    },
+    "user_notes": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::user-note.user-note",
+      "mappedBy": "user"
+    },
+    "login_details": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::login-detail.login-detail",
+      "mappedBy": "user"
     }
   }
 }

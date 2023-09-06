@@ -1,0 +1,105 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vips",
+  "info": {
+    "singularName": "vip",
+    "pluralName": "vips",
+    "displayName": "vip",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "unique": true,
+      "default": "VIP1"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "vip"
+    },
+    "order": {
+      "type": "integer",
+      "required": true,
+      "unique": true,
+      "min": 0
+    },
+    "upgrade_award": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    },
+    "users_role": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.role",
+      "inversedBy": "vip"
+    },
+    "activated": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "deposit_upgrade_threshold": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "valid_bet_amount_upgrade_threshold": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "deposit_downgrade_threshold": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "valid_bet_amount_downgrade_threshold": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "upgrade_evaluation_interval": {
+      "type": "integer",
+      "min": 1,
+      "default": 7,
+      "required": true
+    },
+    "vip_duration": {
+      "type": "integer",
+      "default": 30,
+      "min": 1,
+      "required": true
+    },
+    "vip_upgrate_record": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vip-upgrate-record.vip-upgrate-record",
+      "mappedBy": "vip"
+    },
+    "discount": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::discount.discount",
+      "inversedBy": "vips"
+    },
+    "deposit_bonus": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::deposit-bonus.deposit-bonus",
+      "inversedBy": "vips"
+    }
+  }
+}

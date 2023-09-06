@@ -1,0 +1,58 @@
+{
+  "kind": "collectionType",
+  "collectionName": "deposit_bonuses",
+  "info": {
+    "singularName": "deposit-bonus",
+    "pluralName": "deposit-bonuses",
+    "displayName": "Deposit Bonus"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "vips": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vip.vip",
+      "mappedBy": "deposit_bonus"
+    },
+    "label": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "deposit_type": {
+      "type": "enumeration",
+      "enum": [
+        "NORMAL",
+        "FIRST",
+        "FIRST_BY_DATE"
+      ]
+    },
+    "bonus_rate": {
+      "type": "float",
+      "min": 0,
+      "required": true
+    },
+    "min_deposit_amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "max_bonus_amount": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    },
+    "extra_ratio": {
+      "type": "json",
+      "required": true
+    }
+  }
+}

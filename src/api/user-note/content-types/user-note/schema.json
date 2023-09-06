@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "user_notes",
+  "info": {
+    "singularName": "user-note",
+    "pluralName": "user-notes",
+    "displayName": "User Note",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "user_notes"
+    },
+    "note": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

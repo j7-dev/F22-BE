@@ -1,0 +1,18 @@
+{
+  "collectionName": "components_wallet_award_types",
+  "info": {
+    "displayName": "Award Type",
+    "icon": "star",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "award_type": {
+      "type": "enumeration",
+      "enum": [
+        "CASH",
+        "AWARD_POINT"
+      ]
+    }
+  }
+}

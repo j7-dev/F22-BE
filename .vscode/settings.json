@@ -1,13 +1,26 @@
 {
 	"files.exclude": {
-		"**/.git": false,
+		"**/.git": true,
 		"**/.svn": true,
 		"**/.hg": true,
 		"**/CVS": true,
 		"**/.DS_Store": true,
 		"**/Thumbs.db": true,
 		"**/bower_components": true,
-		"**/tmp": true
+		"**/tmp": true,
+		"**/node_modules": true,
+		"node_modules": true,
+		"**/.tmp": false,
+		".tmp": false,
+		".git": true,
+		"**/.github": true,
+		".github": true,
+		"**/.vscode": true,
+		".vscode": true,
+		"**/build": true,
+		"build": true,
+		"**/public": true,
+		"public": true
 	},
 	"explorerExclude.backup": {}
 }

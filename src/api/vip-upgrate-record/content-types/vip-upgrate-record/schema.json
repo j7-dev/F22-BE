@@ -1,0 +1,43 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vip_upgrate_records",
+  "info": {
+    "singularName": "vip-upgrate-record",
+    "pluralName": "vip-upgrate-records",
+    "displayName": "Vip Upgrate Record"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "vip_upgrate_records"
+    },
+    "vip": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vip.vip",
+      "inversedBy": "vip_upgrate_record"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "APPROVED",
+        "REJECTED"
+      ],
+      "default": "PENDING",
+      "required": true
+    },
+    "reason": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

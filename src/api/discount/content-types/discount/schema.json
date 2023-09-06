@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "discounts",
+  "info": {
+    "singularName": "discount",
+    "pluralName": "discounts",
+    "displayName": "Discount"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "vips": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vip.vip",
+      "mappedBy": "discount"
+    },
+    "valid_bet_amount_threshold": {
+      "type": "decimal",
+      "min": 0,
+      "required": true
+    },
+    "ratio": {
+      "type": "json",
+      "required": true
+    },
+    "discount_limit": {
+      "type": "decimal",
+      "required": false,
+      "min": 0
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    }
+  }
+}

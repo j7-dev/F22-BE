@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_general_meta_data",
+  "info": {
+    "displayName": "Meta Data",
+    "icon": "cube"
+  },
+  "options": {},
+  "attributes": {
+    "meta_key": {
+      "type": "string",
+      "required": true
+    },
+    "meta_value": {
+      "type": "text"
+    }
+  }
+}

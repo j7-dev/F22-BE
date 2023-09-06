@@ -1,0 +1,47 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bank_accounts",
+  "info": {
+    "singularName": "bank-account",
+    "pluralName": "bank-accounts",
+    "displayName": "bank_account",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "label": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "bank_accounts"
+    },
+    "bank_name": {
+      "type": "string"
+    },
+    "bank_code": {
+      "type": "string"
+    },
+    "bank_account_number": {
+      "type": "string",
+      "regex": "[0-9]",
+      "required": true
+    },
+    "owner_real_name": {
+      "type": "string"
+    },
+    "meta": {
+      "displayName": "Meta Data",
+      "type": "component",
+      "repeatable": false,
+      "component": "general.meta-data"
+    }
+  }
+}

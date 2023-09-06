@@ -1,0 +1,27 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Site setting"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "vip_upgrade_mode": {
+      "type": "enumeration",
+      "enum": [
+        "AUTO",
+        "MANUAL"
+      ],
+      "required": true,
+      "default": "AUTO"
+    },
+    "company_info": {
+      "type": "json"
+    }
+  }
+}

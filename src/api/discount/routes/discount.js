@@ -1,9 +1,9 @@
 'use strict';
 
 /**
- * vip-level router
+ * discount router
  */
 
 const { createCoreRouter } = require('@strapi/strapi').factories;
 
-module.exports = createCoreRouter('api::vip-level.vip-level');
+module.exports = createCoreRouter('api::discount.discount');
