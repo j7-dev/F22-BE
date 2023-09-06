@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-06T09:26:27.572Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="h9Dz7MKxif-X_QAlfgsT" version="21.7.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-06T10:33:02.710Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="_sSmepznkX4TfxCDEQ8f" version="21.7.2" type="github">
   <diagram name="Page-1" id="efa7a0a1-bf9b-a30e-e6df-94a7791c09e9">
     <mxGraphModel dx="3912" dy="1915" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
@@ -3188,7 +3188,7 @@
             <mxRectangle width="130" height="59" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1827" value="首儲 | 當日首儲 | 儲值&lt;br&gt;first | first_by_date | normal&lt;br&gt;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1824" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1827" value="儲值 | 首儲 | 當日首儲&lt;br&gt;NORMAL | FIRST | FIRST_BY_DATE" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1824" vertex="1">
           <mxGeometry x="310" width="360" height="59" as="geometry">
             <mxRectangle width="360" height="59" as="alternateBounds" />
           </mxGeometry>
