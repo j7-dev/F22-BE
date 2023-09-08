@@ -18,8 +18,8 @@ module.exports = {
           if (!user) {
               return ctx.badRequest(null, 'User not found');
           }
-          // TODO Check if the user has enough balance
-          if (user.cash_balance < amount) {
+          // 預防用戶金額不夠扣
+          if (Number(user.cash_balance) + Number(amount) < 0) {
               return ctx.badRequest(null, 'Insufficient balance');
           }
 
