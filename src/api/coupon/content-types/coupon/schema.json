@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "coupons",
+  "info": {
+    "singularName": "coupon",
+    "pluralName": "coupons",
+    "displayName": "Coupon"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "coupon_type": {
+      "type": "enumeration",
+      "enum": [
+        "FIXED",
+        "PERCENT"
+      ],
+      "default": "FIXED",
+      "required": true
+    },
+    "coupon_amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type",
+      "required": true
+    },
+    "individual_use": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "usage_limit": {
+      "type": "integer",
+      "min": 0
+    },
+    "usage_limit_per_user": {
+      "type": "integer",
+      "min": 0
+    },
+    "usage_count": {
+      "type": "integer",
+      "min": 0
+    },
+    "time_start": {
+      "type": "datetime"
+    },
+    "time_end": {
+      "type": "datetime"
+    },
+    "valid_bet_amount_threshold": {
+      "type": "decimal",
+      "min": 0
+    },
+    "exclude_game_providers": {
+      "type": "json"
+    }
+  }
+}

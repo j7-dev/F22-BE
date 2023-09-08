@@ -3,7 +3,7 @@ module.exports = {
     {
       method: "POST",
       path: "/wallet-api/add",
-      handler: "wallet-api.add",
+      handler: "add.add",
       config: {
         policies: [],
         middlewares: [],
@@ -12,7 +12,7 @@ module.exports = {
     {
       method: "POST",
       path: "/wallet-api/deduct",
-      handler: "wallet-api.deduct",
+      handler: "deduct.deduct",
       config: {
         policies: [],
         middlewares: [],
@@ -21,7 +21,7 @@ module.exports = {
     {
       method: "GET",
       path: "/wallet-api/balance",
-      handler: "wallet-api.balance",
+      handler: "balance.balance",
       config: {
         policies: [],
         middlewares: [],

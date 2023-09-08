@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "transaction_records",
+  "info": {
+    "singularName": "transaction-record",
+    "pluralName": "transaction-records",
+    "displayName": "Transaction Record"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "transaction_records"
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "BET",
+        "DEPOSIT",
+        "WITHDRAW",
+        "MANUAL",
+        "COUPON"
+      ],
+      "default": "BET",
+      "required": true
+    },
+    "by": {
+      "type": "enumeration",
+      "enum": [
+        "SYSTEM",
+        "ADMIN",
+        "USER"
+      ],
+      "default": "SYSTEM",
+      "required": true
+    },
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "amount": {
+      "required": true,
+      "type": "decimal"
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "SUCCESS",
+        "FAILED",
+        "CANCEL",
+        "PENDING",
+        "REJECTED"
+      ],
+      "default": "PENDING",
+      "required": true
+    },
+    "bet_record": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::bet-record.bet-record",
+      "inversedBy": "transaction_record"
+    }
+  }
+}

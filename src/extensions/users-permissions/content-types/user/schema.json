@@ -65,10 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "balance": {
-      "type": "decimal",
-      "required": true
-    },
     "vip": {
       "type": "relation",
       "relation": "oneToOne",
@@ -122,6 +118,24 @@
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::login-detail.login-detail",
+      "mappedBy": "user"
+    },
+    "commission": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::commission.commission",
+      "mappedBy": "user"
+    },
+    "transaction_records": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::transaction-record.transaction-record",
+      "mappedBy": "user"
+    },
+    "user_relationship": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::user-relationship.user-relationship",
       "mappedBy": "user"
     }
   }

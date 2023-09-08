@@ -1,0 +1,60 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bet_records",
+  "info": {
+    "singularName": "bet-record",
+    "pluralName": "bet-records",
+    "displayName": "Bet Record",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "PENDING",
+        "COMPLETE",
+        "CANCEL"
+      ],
+      "default": "PENDING",
+      "required": true
+    },
+    "result": {
+      "type": "enumeration",
+      "enum": [
+        "BET",
+        "WIN",
+        "LOSE"
+      ],
+      "default": "BET",
+      "required": true
+    },
+    "game_provider": {
+      "type": "string",
+      "required": true
+    },
+    "game": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true,
+      "min": 0
+    },
+    "transaction_record": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction-record.transaction-record",
+      "mappedBy": "bet_record"
+    },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    }
+  }
+}

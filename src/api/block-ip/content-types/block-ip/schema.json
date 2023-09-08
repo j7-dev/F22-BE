@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "block_ips",
+  "info": {
+    "singularName": "block-ip",
+    "pluralName": "block-ips",
+    "displayName": "Block IP"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "ip": {
+      "type": "string",
+      "required": true
+    },
+    "activated": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "title": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

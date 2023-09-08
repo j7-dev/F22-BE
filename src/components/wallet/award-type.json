@@ -13,6 +13,13 @@
         "CASH",
         "AWARD_POINT"
       ]
+    },
+    "currency": {
+      "type": "enumeration",
+      "enum": [
+        "KRW"
+      ],
+      "default": "KRW"
     }
   }
 }
