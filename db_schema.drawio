@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2023-09-09T04:36:11.927Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="yDPp9o9QgZB4vaPYrgjo" version="21.7.2" type="github">
+<mxfile host="app.diagrams.net" modified="2023-09-09T04:38:26.897Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="-WmOVbYgRFpu4EqFrPqw" version="21.7.2" type="github">
   <diagram name="Page-1" id="efa7a0a1-bf9b-a30e-e6df-94a7791c09e9">
     <mxGraphModel dx="3725" dy="1818" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
@@ -2245,12 +2245,12 @@
         <mxCell id="JA4_q4VAuaDKWuVmDtCK-1528" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1479" vertex="1">
           <mxGeometry y="57" width="640" height="27" as="geometry" />
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1529" value="user_id" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" parent="JA4_q4VAuaDKWuVmDtCK-1528" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1529" value="users" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" parent="JA4_q4VAuaDKWuVmDtCK-1528" vertex="1">
           <mxGeometry width="148" height="27" as="geometry">
             <mxRectangle width="148" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1530" value="BIGINT" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1528" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1530" value="多對一" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1528" vertex="1">
           <mxGeometry x="148" width="92" height="27" as="geometry">
             <mxRectangle width="92" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2309,7 +2309,7 @@
             <mxRectangle width="92" height="76" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1491" value="輸贏金額計算 | &lt;strike&gt;總有效金額投注計算&lt;/strike&gt;&lt;br&gt;winLoss" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1488" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1491" value="輸贏金額計算 | &lt;strike&gt;總有效金額投注計算&lt;br&gt;&lt;/strike&gt;WINLOSE" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1488" vertex="1">
           <mxGeometry x="240" width="400" height="76" as="geometry">
             <mxRectangle width="400" height="76" as="alternateBounds" />
           </mxGeometry>
