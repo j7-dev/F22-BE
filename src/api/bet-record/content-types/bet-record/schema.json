@@ -45,16 +45,16 @@
       "required": true,
       "min": 0
     },
+    "award_type": {
+      "type": "component",
+      "repeatable": false,
+      "component": "wallet.award-type"
+    },
     "transaction_record": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::transaction-record.transaction-record",
       "mappedBy": "bet_record"
-    },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
     }
   }
 }

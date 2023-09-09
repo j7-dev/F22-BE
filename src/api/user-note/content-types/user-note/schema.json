@@ -12,15 +12,15 @@
   },
   "pluginOptions": {},
   "attributes": {
+    "note": {
+      "type": "text",
+      "required": true
+    },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "user_notes"
-    },
-    "note": {
-      "type": "string",
-      "required": true
     }
   }
 }

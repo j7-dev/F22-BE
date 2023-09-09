@@ -4,19 +4,14 @@
   "info": {
     "singularName": "commission",
     "pluralName": "commissions",
-    "displayName": "Commission"
+    "displayName": "Commission",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "user": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "commission"
-    },
     "label": {
       "type": "string",
       "required": true,
@@ -34,6 +29,12 @@
     },
     "formula": {
       "type": "json"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "commission"
     }
   }
 }

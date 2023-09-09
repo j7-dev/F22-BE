@@ -29,8 +29,8 @@ module.exports = {
     },
     {
       method: "POST",
-      path: "/wallet-api/updateBalance",
-      handler: "update-balance.updateBalance",
+      path: "/wallet-api/update-balance",
+      handler: "update-balance.main",
       config: {
         policies: [],
         middlewares: [],

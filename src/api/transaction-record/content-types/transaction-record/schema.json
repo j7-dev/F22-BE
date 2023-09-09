@@ -4,19 +4,14 @@
   "info": {
     "singularName": "transaction-record",
     "pluralName": "transaction-records",
-    "displayName": "Transaction Record"
+    "displayName": "Transaction Record",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "transaction_records"
-    },
     "type": {
       "type": "enumeration",
       "enum": [
@@ -72,6 +67,12 @@
       "relation": "oneToOne",
       "target": "api::bet-record.bet-record",
       "inversedBy": "transaction_record"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "transaction_records"
     }
   }
 }

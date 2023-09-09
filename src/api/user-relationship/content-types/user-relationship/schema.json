@@ -17,17 +17,21 @@
       "required": true,
       "min": 0
     },
-    "parent_user_id": {
-      "type": "integer"
-    },
-    "affiliate_user_id": {
-      "type": "integer"
-    },
     "user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "user_relationship"
+      "mappedBy": "user_relationship"
+    },
+    "parent_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "affiliate_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

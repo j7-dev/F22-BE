@@ -14,6 +14,7 @@
     "@strapi/plugin-users-permissions": "4.12.4",
     "@strapi/strapi": "4.12.4",
     "better-sqlite3": "8.5.0",
+    "dayjs": "^1.11.9",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
     "strapi-provider-email-smtp": "^1.0.3"
@@ -28,5 +29,8 @@
     "node": ">=16.0.0 <=20.x.x",
     "npm": ">=6.0.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "@faker-js/faker": "^8.0.2"
+  }
 }

@@ -18,12 +18,6 @@
       "unique": true,
       "default": "VIP1"
     },
-    "user": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "vip"
-    },
     "order": {
       "type": "integer",
       "required": true,
@@ -83,12 +77,6 @@
       "min": 1,
       "required": true
     },
-    "vip_upgrate_record": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::vip-upgrate-record.vip-upgrate-record",
-      "mappedBy": "vip"
-    },
     "discount": {
       "type": "relation",
       "relation": "manyToOne",
@@ -100,6 +88,12 @@
       "relation": "manyToOne",
       "target": "api::deposit-bonus.deposit-bonus",
       "inversedBy": "vips"
+    },
+    "users": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "vip"
     }
   }
 }

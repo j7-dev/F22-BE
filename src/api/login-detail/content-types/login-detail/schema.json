@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "login_details"
-    },
     "ip": {
       "type": "string"
     },
@@ -26,6 +20,12 @@
     },
     "login_url": {
       "type": "string"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "login_details"
     }
   }
 }

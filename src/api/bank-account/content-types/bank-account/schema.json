@@ -4,7 +4,7 @@
   "info": {
     "singularName": "bank-account",
     "pluralName": "bank-accounts",
-    "displayName": "Bank account",
+    "displayName": "Bank Account",
     "description": ""
   },
   "options": {
@@ -15,13 +15,7 @@
     "label": {
       "type": "string",
       "required": true,
-      "unique": true
-    },
-    "user": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "bank_accounts"
+      "unique": false
     },
     "bank_name": {
       "type": "string"
@@ -37,11 +31,11 @@
     "owner_real_name": {
       "type": "string"
     },
-    "meta": {
-      "displayName": "Meta Data",
-      "type": "component",
-      "repeatable": false,
-      "component": "general.meta-data"
+    "user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "bank_accounts"
     }
   }
 }
