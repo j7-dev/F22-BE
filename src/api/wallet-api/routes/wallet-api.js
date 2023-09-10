@@ -18,14 +18,5 @@ module.exports = {
         middlewares: [],
       },
     },
-    {
-      method: 'GET',
-      path: '/wallet-api/balance/calculate',
-      handler: 'balance.calculate',
-      config: {
-        policies: [],
-        middlewares: [],
-      },
-    },
   ],
 }
