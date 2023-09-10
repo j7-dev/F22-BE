@@ -34,6 +34,7 @@ module.exports = {
             }
           )
           const currency_id = findCurrency[0].id
+          const currency_slug = findCurrency[0].slug
 
           const findAmountType = await strapi.entityService.findMany(
             'api::amount-type.amount-type',
@@ -89,10 +90,12 @@ module.exports = {
               }
             )
             status = 'SUCCESS'
-            console.log('⭐  updateResult', status, updateResult)
           } catch (error) {
             status = 'FAILED'
           }
+
+          const updatedBalanceAmount =
+            status === 'SUCCESS' ? newBalance : findBalance?.amount
 
           /**
            * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
@@ -100,7 +103,7 @@ module.exports = {
            * TODO 之後要考慮到 transaction_record 的 Status 才做紀錄
            */
 
-          const theTransaction = await strapi.entityService.create(
+          const createTxnResult = await strapi.entityService.create(
             'api::transaction-record.transaction-record',
             {
               data: {
@@ -115,12 +118,17 @@ module.exports = {
               },
             }
           )
-
           // respond
           ctx.body = {
             status: '200',
             message: 'updateBalance success',
-            data: theTransaction,
+            data: {
+              result: createTxnResult,
+              balance: {
+                amount: updatedBalanceAmount.toString(),
+                currency: currency_slug,
+              },
+            },
           }
         }
       )
