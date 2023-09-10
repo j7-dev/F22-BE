@@ -65,14 +65,6 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "cash_balance": {
-      "type": "decimal",
-      "required": true
-    },
-    "reward_point_balance": {
-      "type": "decimal",
-      "required": true
-    },
     "display_name": {
       "type": "string"
     },
@@ -137,6 +129,12 @@
       "relation": "manyToOne",
       "target": "api::commission.commission",
       "inversedBy": "users"
+    },
+    "balances": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::balance.balance",
+      "mappedBy": "user"
     }
   }
 }

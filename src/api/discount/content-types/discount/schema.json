@@ -30,11 +30,6 @@
       "type": "decimal",
       "required": false,
       "min": 0
-    },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
     }
   }
 }
