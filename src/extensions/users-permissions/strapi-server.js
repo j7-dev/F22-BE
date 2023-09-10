@@ -1,4 +1,5 @@
 const { faker } = require('@faker-js/faker')
+const user = require('./content-types/user')
 
 const getUserName = (role) => {
   switch (role) {
@@ -81,5 +82,8 @@ module.exports = (plugin) => {
       prefix: '',
     },
   })
+
+  plugin.contentTypes.user = user
+
   return plugin
 }

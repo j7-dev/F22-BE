@@ -1,14 +1,10 @@
 module.exports = {
   async afterCreate(event) {
-    const { result, params } = event
-    const { id: currency_id, label, slug } = result
+    const { result } = event
+    const created_user_id = result?.id
 
-    // 取得全 user id
-    const userIds = await strapi.entityService.findMany(
-      'plugin::users-permissions.user',
-      {
-        fields: ['id'],
-      }
+    const currencies = await strapi.entityService.findMany(
+      'api::currency.currency'
     )
 
     // 取得全 amount type id
@@ -19,9 +15,8 @@ module.exports = {
       }
     )
 
-    userIds.forEach(async (user) => {
-      const { id: user_id } = user
-
+    currencies.forEach(async (currency) => {
+      const { id: currency_id } = currency
       amountTypeIds.forEach(async (amountType) => {
         const { id: amount_type_id } = amountType
         const createResult = await strapi.entityService.create(
@@ -29,16 +24,13 @@ module.exports = {
           {
             data: {
               amount: 0,
-              user: user_id,
+              user: created_user_id,
               currency: currency_id,
               amount_type: amount_type_id,
             },
           }
         )
-        console.log('⭐  afterCreate:  balance', createResult)
       })
     })
-
-    // do something to the result;
   },
 }
