@@ -20,7 +20,7 @@ module.exports = {
       ]
 
       for (const field of requiredFields) {
-        if (!body[field]) {
+        if (body[field] === undefined) {
           return ctx.badRequest(`${field} is required`)
         }
       }
@@ -138,7 +138,7 @@ module.exports = {
       const requiredFields = ['user_id']
 
       for (const field of requiredFields) {
-        if (!ctx.request.query[field]) {
+        if (ctx.request.query[field] === undefined) {
           return ctx.badRequest(`${field} is required`)
         }
       }
