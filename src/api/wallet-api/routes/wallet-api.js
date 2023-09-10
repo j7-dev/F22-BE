@@ -1,40 +1,31 @@
 module.exports = {
   routes: [
     {
-      method: "POST",
-      path: "/wallet-api/add",
-      handler: "add.add",
+      method: 'GET',
+      path: '/wallet-api/balance/get',
+      handler: 'balance.get',
       config: {
         policies: [],
         middlewares: [],
       },
     },
     {
-      method: "POST",
-      path: "/wallet-api/deduct",
-      handler: "deduct.deduct",
+      method: 'POST',
+      path: '/wallet-api/balance/add',
+      handler: 'balance.add',
       config: {
         policies: [],
         middlewares: [],
       },
     },
     {
-      method: "GET",
-      path: "/wallet-api/balance",
-      handler: "balance.balance",
+      method: 'GET',
+      path: '/wallet-api/balance/calculate',
+      handler: 'balance.calculate',
       config: {
         policies: [],
         middlewares: [],
       },
     },
-    {
-      method: "POST",
-      path: "/wallet-api/update-balance",
-      handler: "update-balance.main",
-      config: {
-        policies: [],
-        middlewares: [],
-      }
-    },
-  ]
-};
+  ],
+}
