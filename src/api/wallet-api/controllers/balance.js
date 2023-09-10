@@ -54,20 +54,20 @@ module.exports = {
           const findBalance = findBalances[0] || null
 
           // 沒有 balance 就新增初始值 0
-          if (!findBalance) {
-            const createResult = await strapi.entityService.create(
-              'api::balance.balance',
-              {
+
+          const createBalanceResult = !!findBalance
+            ? null
+            : await strapi.entityService.create('api::balance.balance', {
                 data: {
                   amount: 0,
                   user: body.user_id,
                   currency: currency_id,
                   amount_type: amount_type_id,
                 },
-              }
-            )
-            console.log('⭐  afterCreate:  balance', createResult)
-          }
+              })
+
+          const theBalanceId =
+            findBalance?.id || createBalanceResult?.id || null
 
           // 預防用戶金額不夠扣
           const newBalance =
@@ -77,15 +77,22 @@ module.exports = {
           }
 
           // Update the user balance
-          const updateResult = await strapi.entityService.update(
-            'api::balance.balance',
-            findBalance?.id,
-            {
-              data: {
-                amount: newBalance,
-              },
-            }
-          )
+          let status = 'PENDING'
+          try {
+            const updateResult = await strapi.entityService.update(
+              'api::balance.balance',
+              theBalanceId,
+              {
+                data: {
+                  amount: newBalance,
+                },
+              }
+            )
+            status = 'SUCCESS'
+            console.log('⭐  updateResult', status, updateResult)
+          } catch (error) {
+            status = 'FAILED'
+          }
 
           /**
            * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
@@ -97,12 +104,14 @@ module.exports = {
             'api::transaction-record.transaction-record',
             {
               data: {
+                type: body.type,
                 title: body.title,
                 description: body.description,
                 amount: body.amount,
                 by: body.by,
                 user: body.user_id, // connect
                 bet_record: body.bet_record_id, // connect
+                status,
               },
             }
           )
@@ -111,7 +120,7 @@ module.exports = {
           ctx.body = {
             status: '200',
             message: 'updateBalance success',
-            data: updateResult,
+            data: theTransaction,
           }
         }
       )
@@ -180,48 +189,6 @@ module.exports = {
         status: '200',
         message: 'get cash_balance success',
         data: formattedBalances,
-      }
-    } catch (err) {
-      ctx.body = err
-    }
-  },
-  calculate: async (ctx, next) => {
-    try {
-      // 取的 query string 的 userId
-      const { user_id } = ctx.request.query
-
-      // 如果沒有帶參數就回 400
-      const requiredFields = ['user_id']
-
-      for (const field of requiredFields) {
-        if (!ctx.request.query[field]) {
-          return ctx.badRequest(`${field} is required`)
-        }
-      }
-
-      // 取得 userId 的所有 transaction-record
-      const userTxns = await strapi.entityService.findMany(
-        'api::transaction-record.transaction-record',
-        {
-          fields: ['title', 'amount'],
-          filters: { user_id },
-          populate: '*',
-        }
-      )
-      console.log('⭐  calculate:  userTxns', userTxns)
-
-      // 計算 cash_balance ，就是遍歷 userTxns 的 amount 加總起來
-      // 白話就是  把這 user 的每筆 record 的 amount 加總起來
-      const cash_balance = userTxns.reduce((acc, cur) => {
-        return acc + cur.amount
-      }, 0)
-
-      ctx.body = {
-        status: '200',
-        message: 'get cash_balance success',
-        data: {
-          cash_balance,
-        },
       }
     } catch (err) {
       ctx.body = err

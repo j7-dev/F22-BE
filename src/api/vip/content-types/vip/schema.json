@@ -29,11 +29,6 @@
       "min": 0,
       "required": true
     },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
-    },
     "users_role": {
       "type": "relation",
       "relation": "oneToOne",

@@ -45,11 +45,6 @@
       "required": true,
       "min": 0
     },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
-    },
     "transaction_record": {
       "type": "relation",
       "relation": "oneToOne",

@@ -45,11 +45,6 @@
       "required": true,
       "type": "decimal"
     },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
-    },
     "status": {
       "type": "enumeration",
       "enum": [

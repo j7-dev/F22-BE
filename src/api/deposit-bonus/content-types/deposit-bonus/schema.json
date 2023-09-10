@@ -45,11 +45,6 @@
       "min": 0,
       "required": true
     },
-    "award_type": {
-      "type": "component",
-      "repeatable": false,
-      "component": "wallet.award-type"
-    },
     "extra_ratio": {
       "type": "json",
       "required": true
