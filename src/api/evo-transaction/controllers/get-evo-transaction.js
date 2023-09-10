@@ -35,8 +35,9 @@ module.exports = {
 
       const formattedTransactions = transactions.map((transaction) => ({
         ...transaction,
-        user_id: transaction.user_id.id,
-        currency: transaction.currency.slug,
+        amount: transaction?.amount?.toString(),
+        user_id: transaction?.user_id?.id,
+        currency: transaction?.currency?.slug,
       }))
 
       ctx.body = {

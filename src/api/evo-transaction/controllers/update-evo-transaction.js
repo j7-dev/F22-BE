@@ -16,7 +16,7 @@ module.exports = {
     const findTxns = await strapi.entityService.findMany(
       'api::evo-transaction.evo-transaction',
       {
-        filters: { transaction_id: body.data.transaction_id },
+        filters: { transaction_id: body?.data?.transaction_id },
         populate: ['currency'],
       }
     )
@@ -26,7 +26,7 @@ module.exports = {
     }
     const findTxn = findTxns[0]
 
-    const currency = body.data.currency || null
+    const currency = body?.data?.currency || null
 
     const findCurrencies = !!currency
       ? await strapi.entityService.findMany('api::currency.currency', {
@@ -43,11 +43,11 @@ module.exports = {
     try {
       const updateResult = await strapi.entityService.update(
         'api::evo-transaction.evo-transaction',
-        findTxn.id,
+        findTxn?.id,
         {
           data: {
-            ...body.data,
-            currency: !!currency ? findCurrency.id : findTxn.currency.id,
+            ...body?.data,
+            currency: !!currency ? findCurrency?.id : findTxn?.currency?.id,
           },
         }
       )
@@ -55,7 +55,10 @@ module.exports = {
       ctx.body = {
         status: '200',
         message: 'update evo transactions success',
-        data: updateResult,
+        data: {
+          ...updateResult,
+          amount: updateResult?.amount?.toString(),
+        },
       }
     } catch (err) {
       ctx.body = err
