@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "evo_transactions",
+  "info": {
+    "singularName": "evo-transaction",
+    "pluralName": "evo-transactions",
+    "displayName": "Evo Transaction",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "transaction_ref_id": {
+      "type": "string",
+      "required": false
+    },
+    "session_id": {
+      "type": "string",
+      "required": true
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "transaction_type": {
+      "type": "enumeration",
+      "enum": [
+        "DEBIT",
+        "CREDIT",
+        "CANCEL"
+      ],
+      "required": true
+    },
+    "is_finish": {
+      "type": "boolean",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::currency.currency"
+    },
+    "game_id": {
+      "type": "string",
+      "required": true
+    },
+    "game_type": {
+      "type": "string",
+      "required": true
+    },
+    "game_table_id": {
+      "type": "string",
+      "required": true
+    },
+    "game_table_vid": {
+      "type": "string",
+      "required": true
+    },
+    "uuid": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "transaction_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

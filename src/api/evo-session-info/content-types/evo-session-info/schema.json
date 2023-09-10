@@ -1,0 +1,26 @@
+{
+  "kind": "collectionType",
+  "collectionName": "evo_session_infos",
+  "info": {
+    "singularName": "evo-session-info",
+    "pluralName": "evo-session-infos",
+    "displayName": "Evo Session Info",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "session_id": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    }
+  }
+}
