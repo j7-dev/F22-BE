@@ -135,6 +135,10 @@
       "relation": "oneToMany",
       "target": "api::balance.balance",
       "mappedBy": "user"
+    },
+    "uuid": {
+      "type": "uid",
+      "required": true
     }
   }
 }

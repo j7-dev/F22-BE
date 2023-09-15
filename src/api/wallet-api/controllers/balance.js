@@ -7,7 +7,6 @@ module.exports = {
       const result = await strapi
         .service('api::wallet-api.wallet-api')
         .add(body)
-      console.log('⭐  add  result', result)
       // respond
       ctx.body = {
         status: '200',

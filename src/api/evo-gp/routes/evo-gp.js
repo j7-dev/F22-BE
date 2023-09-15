@@ -9,5 +9,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/evo/opengame',
+      handler: 'evo-gp.opengame',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 }

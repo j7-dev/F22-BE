@@ -4,7 +4,8 @@
   "info": {
     "singularName": "site-setting",
     "pluralName": "site-settings",
-    "displayName": "Site setting"
+    "displayName": "Site setting",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -22,6 +23,11 @@
     },
     "company_info": {
       "type": "json"
+    },
+    "default_currency": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::currency.currency"
     }
   }
 }
