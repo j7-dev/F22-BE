@@ -26,55 +26,58 @@ module.exports = () => ({
         }
       }
 
-      const findCurrency = await strapi.entityService.findMany(
-        'api::currency.currency',
-        {
-          filters: { slug: body.currency },
-        }
-      )
-      const currency_id = findCurrency[0].id
-      const currency_slug = findCurrency[0].slug
-
-      const findAmountType = await strapi.entityService.findMany(
-        'api::amount-type.amount-type',
-        {
-          filters: { slug: amount_type },
-        }
-      )
-      const amount_type_id = findAmountType[0].id
-
-      const findBalances =
-        (await strapi.entityService.findMany('api::balance.balance', {
-          filters: {
-            user: body.user_id,
-            currency: currency_id,
-            amount_type: amount_type_id,
-          },
-        })) || []
-      const findBalance = findBalances[0] || null
-
-      // 沒有 balance 就新增初始值 0
-      const createBalanceResult = !!findBalance
-        ? null
-        : await strapi.entityService.create('api::balance.balance', {
-            data: {
-              amount: 0,
-              user: body.user_id,
-              currency: currency_id,
-              amount_type: amount_type_id,
-            },
-          })
-
-      const theBalanceId = findBalance?.id || createBalanceResult?.id || null
-
-      // 預防用戶金額不夠扣
-      const newBalance = Number(findBalance?.amount || 0) + Number(body.amount)
-      if (newBalance < 0) {
-        return 'Insufficient balance'
-      }
-
       return await strapi.db.transaction(
         async ({ trx, rollback, commit, onCommit, onRollback }) => {
+          const findCurrency = await strapi.entityService.findMany(
+            'api::currency.currency',
+            {
+              filters: { slug: body.currency },
+            }
+          )
+          const currency_id = findCurrency[0].id
+          const currency_slug = findCurrency[0].slug
+
+          const findAmountType = await strapi.entityService.findMany(
+            'api::amount-type.amount-type',
+            {
+              filters: { slug: amount_type },
+            }
+          )
+          const amount_type_id = findAmountType[0].id
+
+          const findBalances =
+            (await strapi.entityService.findMany('api::balance.balance', {
+              filters: {
+                user: body.user_id,
+                currency: currency_id,
+                amount_type: amount_type_id,
+              },
+            })) || []
+          const findBalance = findBalances[0] || null
+
+          // 沒有 balance 就新增初始值 0
+
+          const createBalanceResult = !!findBalance
+            ? null
+            : await strapi.entityService.create('api::balance.balance', {
+                data: {
+                  amount: 0,
+                  user: body.user_id,
+                  currency: currency_id,
+                  amount_type: amount_type_id,
+                },
+              })
+
+          const theBalanceId =
+            findBalance?.id || createBalanceResult?.id || null
+
+          // 預防用戶金額不夠扣
+          const newBalance =
+            Number(findBalance?.amount || 0) + Number(body.amount)
+          if (newBalance < 0) {
+            return 'Insufficient balance'
+          }
+
           // Update the user balance
           let status = 'PENDING'
           try {
@@ -99,7 +102,6 @@ module.exports = () => ({
            * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
            * 創建一筆 Transaction Record
            * TODO 之後要考慮到 transaction_record 的 Status 才做紀錄
-           * 轉道生命週期鉤子裡面
            */
 
           const createTxnResult = await strapi.entityService.create(
