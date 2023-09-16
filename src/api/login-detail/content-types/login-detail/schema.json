@@ -15,9 +15,6 @@
     "ip": {
       "type": "string"
     },
-    "device": {
-      "type": "string"
-    },
     "login_url": {
       "type": "string"
     },
@@ -26,6 +23,9 @@
       "relation": "manyToOne",
       "target": "plugin::users-permissions.user",
       "inversedBy": "login_details"
+    },
+    "user_agent": {
+      "type": "json"
     }
   }
 }

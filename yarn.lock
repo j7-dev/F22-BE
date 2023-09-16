@@ -5184,6 +5184,13 @@ js-sha3@0.8.0:
   resolved "https://registry.npmjs.org/js-tokens/-/js-tokens-4.0.0.tgz"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
+js-yaml@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/js-yaml/-/js-yaml-4.1.0.tgz#c1fb65f8f5017901cdd2c951864ba18458a10602"
+  integrity sha512-wpxZs9NoxZaJESJGIZTyDEaYpl0FKSA+FB9aJiyemKhMwkxQg63h4T1KJgUGHpTqPDNRcmmYLugrRjJlBtWvRA==
+  dependencies:
+    argparse "^2.0.1"
+
 jsesc@^2.5.1:
   version "2.5.2"
   resolved "https://registry.npmjs.org/jsesc/-/jsesc-2.5.2.tgz"
@@ -6136,6 +6143,13 @@ node-addon-api@^6.0.0:
   version "6.1.0"
   resolved "https://registry.npmjs.org/node-addon-api/-/node-addon-api-6.1.0.tgz"
   integrity sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==
+
+node-device-detector@^2.0.16:
+  version "2.0.16"
+  resolved "https://registry.yarnpkg.com/node-device-detector/-/node-device-detector-2.0.16.tgz#6b72d39c6a8ae6f9e0b29dea471ae78142d9fafd"
+  integrity sha512-Kt/PCAw4q8Z9u07ZfX8vSTbVdSi6VddJtSowaVnIaQlYConoJ6uH4EtKJdLzIRQdXTOFs9B1Uzd1e/vX5dgKdQ==
+  dependencies:
+    js-yaml "^4.1.0"
 
 node-fetch@2.6.9:
   version "2.6.9"
