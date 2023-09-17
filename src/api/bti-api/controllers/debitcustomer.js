@@ -8,10 +8,23 @@ module.exports = {
   debitcustomer: async (ctx, next) => {
     try {
       // 取的 query string 的 auth_token
-      const { cust_id } = ctx.request.query;
-      const { req_id } = ctx.request.query;
-      const { amount } = ctx.request.query;
-      const { purchase_id } = ctx.request.query;
+      const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } = ctx.request.query;
+
+      const result = await strapi.entityService.create(
+        'api::bti-requests-singular.bti-requests-singular',
+        {
+          data: {
+            cust_id: cust_id,
+            amount: amount,
+            agent_id: agent_id,
+            customer_id: customer_id,
+            req_id: req_id,
+            purchase_id: purchase_id,
+            url: "test",
+            type: "debitcustomer",
+          },
+        }
+      )
 
       ctx.body = {
         status: "200",
