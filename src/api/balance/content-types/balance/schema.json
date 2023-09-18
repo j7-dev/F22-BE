@@ -25,11 +25,6 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::amount-type.amount-type"
-    },
-    "currency": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::currency.currency"
     }
   }
 }

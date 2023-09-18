@@ -28,7 +28,7 @@ module.exports = {
         'api::evo-transaction.evo-transaction',
         {
           filters,
-          populate: ['user_id', 'currency'],
+          populate: ['user_id'],
           sort: { createdAt: 'desc' },
         }
       )
@@ -37,7 +37,6 @@ module.exports = {
         ...transaction,
         amount: transaction?.amount?.toString(),
         user_id: transaction?.user_id?.id,
-        currency: transaction?.currency?.slug,
       }))
 
       ctx.body = {

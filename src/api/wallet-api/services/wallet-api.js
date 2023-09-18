@@ -28,14 +28,10 @@ module.exports = () => ({
 
       return await strapi.db.transaction(
         async ({ trx, rollback, commit, onCommit, onRollback }) => {
-          const findCurrency = await strapi.entityService.findMany(
-            'api::currency.currency',
-            {
-              filters: { slug: body.currency },
-            }
-          )
-          const currency_id = findCurrency[0].id
-          const currency_slug = findCurrency[0].slug
+          const currency =
+            body?.data?.currency.toUpperCase() ||
+            process.env?.DEFAULT_CURRENCY ||
+            null
 
           const findAmountType = await strapi.entityService.findMany(
             'api::amount-type.amount-type',
@@ -49,7 +45,7 @@ module.exports = () => ({
             (await strapi.entityService.findMany('api::balance.balance', {
               filters: {
                 user: body.user_id,
-                currency: currency_id,
+                currency,
                 amount_type: amount_type_id,
               },
             })) || []
@@ -63,7 +59,7 @@ module.exports = () => ({
                 data: {
                   amount: 0,
                   user: body.user_id,
-                  currency: currency_id,
+                  currency,
                   amount_type: amount_type_id,
                 },
               })
@@ -124,7 +120,7 @@ module.exports = () => ({
             result: createTxnResult,
             balance: {
               amount: updatedBalanceAmount.toString(),
-              currency: currency_slug,
+              currency,
             },
           }
 
@@ -161,9 +157,6 @@ module.exports = () => ({
                 amount_type: {
                   fields: ['slug'],
                 },
-                currency: {
-                  fields: ['slug'],
-                },
               },
             },
           },
@@ -174,11 +167,23 @@ module.exports = () => ({
 
       if (!!currency) {
         const findBalance = userBalances.find(
-          (balance) => balance.currency.slug === query.currency
+          (balance) => balance.currency === query.currency
         )
 
         // 沒有 balance 就新增初始值 0
         if (!findBalance) {
+          const createBalanceResult = await strapi.entityService.create(
+            'api::balance.balance',
+            {
+              data: {
+                amount: 0,
+                user: query.user_id,
+                currency,
+                amount_type: 1, // CASH
+              },
+            }
+          )
+          userBalances.push(createBalanceResult)
         }
       }
 
@@ -187,7 +192,7 @@ module.exports = () => ({
           ...balance,
           amount: balance.amount.toString(),
           amount_type: balance.amount_type.slug,
-          currency: balance.currency.slug,
+          currency: balance.currency,
         }
       })
 
