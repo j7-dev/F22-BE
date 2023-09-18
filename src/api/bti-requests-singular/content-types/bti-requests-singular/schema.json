@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bti_requests_plural",
+  "info": {
+    "singularName": "bti-requests-singular",
+    "pluralName": "bti-requests-plural",
+    "displayName": "BTi Requests",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "trx_id": {
+      "type": "string"
+    },
+    "cust_id": {
+      "type": "string"
+    },
+    "amount": {
+      "type": "decimal"
+    },
+    "reserve_id": {
+      "type": "string"
+    },
+    "req_id": {
+      "type": "string"
+    },
+    "purchase_id": {
+      "type": "string"
+    },
+    "url": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    }
+  }
+}

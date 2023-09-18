@@ -10,19 +10,25 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
 
+      //TODO: auto_token from DB
+      if(auth_token == "0"){
+        ctx.body = {
+          error_code: "-3",
+          error_message: "TokenNotValid"
+        };
+        return;
+      }
+      
+
       ctx.body = {
-        status: "200",
-        message: "get auth_token success",
-        data: {
-          error_code: "ec",
-          error_message: "em",
-          cust_id: "cid",
-          balance: 0,
-          cust_login: "cust_login",
-          city: "city",
-          country: "country",
-          currency_code: "currency_code"
-        },
+          error_code: "0",
+          error_message: "No error",
+          cust_id: "abc123",
+          balance: 100,
+          cust_login: "abc123",
+          city: "ID",
+          country: "ID",
+          currency_code: "IDR"
       };
     } catch (err) {
       ctx.body = err;
