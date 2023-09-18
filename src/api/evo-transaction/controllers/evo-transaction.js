@@ -12,10 +12,12 @@ module.exports = createCoreController(
     async create(ctx) {
       const body = ctx.request.body
       const user_id = body.data.user_id || null
+      const siteSetting = await strapi.entityService.findMany(
+        'api::site-setting.site-setting'
+      )
+      const defaultCurrency = siteSetting?.default_currency
       const currency =
-        body.data.currency.toUpperCase() ||
-        process.env?.DEFAULT_CURRENCY ||
-        null
+        body.data.currency.toUpperCase() || defaultCurrency || null
 
       if (user_id === undefined) {
         return ctx.badRequest('user_id is required')
