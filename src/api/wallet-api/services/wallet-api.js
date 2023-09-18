@@ -26,31 +26,34 @@ module.exports = () => ({
         }
       }
 
+      const siteSetting = await strapi.entityService.findMany(
+        'api::site-setting.site-setting'
+      )
+      const defaultCurrency = siteSetting?.default_currency
+
+      const currency =
+        body?.data?.currency.toUpperCase() || defaultCurrency || null
+
+      const findAmountType = await strapi.entityService.findMany(
+        'api::amount-type.amount-type',
+        {
+          filters: { slug: amount_type },
+        }
+      )
+      const amount_type_id = findAmountType[0].id
+
+      const findBalances =
+        (await strapi.entityService.findMany('api::balance.balance', {
+          filters: {
+            user: body.user_id,
+            currency,
+            amount_type: amount_type_id,
+          },
+        })) || []
+      const findBalance = findBalances[0] || null
+
       return await strapi.db.transaction(
         async ({ trx, rollback, commit, onCommit, onRollback }) => {
-          const currency =
-            body?.data?.currency.toUpperCase() ||
-            process.env?.DEFAULT_CURRENCY ||
-            null
-
-          const findAmountType = await strapi.entityService.findMany(
-            'api::amount-type.amount-type',
-            {
-              filters: { slug: amount_type },
-            }
-          )
-          const amount_type_id = findAmountType[0].id
-
-          const findBalances =
-            (await strapi.entityService.findMany('api::balance.balance', {
-              filters: {
-                user: body.user_id,
-                currency,
-                amount_type: amount_type_id,
-              },
-            })) || []
-          const findBalance = findBalances[0] || null
-
           // 沒有 balance 就新增初始值 0
 
           const createBalanceResult = !!findBalance
@@ -133,8 +136,12 @@ module.exports = () => ({
   },
   get: async (query) => {
     try {
-      // 取的 query string 的 userId
-      const currency = query.currency || undefined
+      const siteSetting = await strapi.entityService.findMany(
+        'api::site-setting.site-setting'
+      )
+      const defaultCurrency = siteSetting?.default_currency
+
+      const currency = query?.currency || defaultCurrency || null
 
       // 如果沒有帶參數就回 400
       const requiredFields = ['user_id']
@@ -144,54 +151,50 @@ module.exports = () => ({
           return `${field} is required`
         }
       }
+      if (!currency) {
+        return 'currency is required'
+      }
 
       // 取得 user 的所有 balance
-      const user = await strapi.entityService.findOne(
-        'plugin::users-permissions.user',
-        query.user_id,
+      const balances = await strapi.entityService.findMany(
+        'api::balance.balance',
         {
+          filters: {
+            user: query.user_id,
+          },
           populate: {
-            balances: {
-              fields: ['amount'],
-              populate: {
-                amount_type: {
-                  fields: ['slug'],
-                },
-              },
+            amount_type: {
+              fields: ['slug'],
             },
           },
         }
       )
 
-      const userBalances = user?.balances || []
+      const findBalance = balances.find(
+        (balance) => balance.currency === currency
+      )
 
-      if (!!currency) {
-        const findBalance = userBalances.find(
-          (balance) => balance.currency === query.currency
+      // 沒有 balance 就新增初始值 0
+      if (!findBalance) {
+        const createBalanceResult = await strapi.entityService.create(
+          'api::balance.balance',
+          {
+            data: {
+              amount: 0,
+              user: query.user_id,
+              currency,
+              amount_type: 1, // CASH
+            },
+          }
         )
-
-        // 沒有 balance 就新增初始值 0
-        if (!findBalance) {
-          const createBalanceResult = await strapi.entityService.create(
-            'api::balance.balance',
-            {
-              data: {
-                amount: 0,
-                user: query.user_id,
-                currency,
-                amount_type: 1, // CASH
-              },
-            }
-          )
-          userBalances.push(createBalanceResult)
-        }
+        balances.push(createBalanceResult)
       }
 
-      const formattedBalances = userBalances.map((balance) => {
+      const formattedBalances = balances.map((balance) => {
         return {
           ...balance,
           amount: balance.amount.toString(),
-          amount_type: balance.amount_type.slug,
+          amount_type: balance?.amount_type?.slug || 'CASH',
           currency: balance.currency,
         }
       })
