@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pp_transactions",
+  "info": {
+    "singularName": "pp-transaction",
+    "pluralName": "pp-transactions",
+    "displayName": "PP transaction"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "game_id": {
+      "type": "string"
+    },
+    "round_id": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "bonus": {
+      "type": "decimal",
+      "required": true
+    },
+    "reference": {
+      "type": "string",
+      "required": true
+    },
+    "timestamp": {
+      "type": "integer",
+      "required": true
+    },
+    "round_details": {
+      "type": "json"
+    },
+    "jackpot_id": {
+      "type": "string"
+    },
+    "jackpot_details": {
+      "type": "json"
+    },
+    "campaign_id": {
+      "type": "string"
+    },
+    "campaign_type": {
+      "type": "string"
+    },
+    "transaction_type": {
+      "type": "enumeration",
+      "enum": [
+        "RESULT",
+        "BONUS",
+        "JACKPOT",
+        "PROMO",
+        "REFUND",
+        "BET"
+      ],
+      "required": true
+    }
+  }
+}

@@ -12,7 +12,12 @@ module.exports = createCoreController(
     async create(ctx) {
       const body = ctx.request.body
       const user_id = body.data.user_id || null
-      const currency = body.data.currency || null
+      const siteSetting = await strapi.entityService.findMany(
+        'api::site-setting.site-setting'
+      )
+      const defaultCurrency = siteSetting?.default_currency
+      const currency =
+        body.data.currency.toUpperCase() || defaultCurrency || null
 
       if (user_id === undefined) {
         return ctx.badRequest('user_id is required')
@@ -20,21 +25,6 @@ module.exports = createCoreController(
       if (currency === undefined) {
         return ctx.badRequest('currency is required')
       }
-
-      const findCurrencies = await strapi.entityService.findMany(
-        'api::currency.currency',
-        {
-          filters: { slug: currency },
-        }
-      )
-
-      if (findCurrencies.length === 0) {
-        return ctx.badRequest('currency not found')
-      }
-
-      const findCurrency = findCurrencies[0]
-
-      body.data.currency = findCurrency.id
 
       const response = await super.create(ctx)
 

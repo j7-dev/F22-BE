@@ -17,7 +17,6 @@ module.exports = {
       'api::evo-transaction.evo-transaction',
       {
         filters: { transaction_id: body?.data?.transaction_id },
-        populate: ['currency'],
       }
     )
 
@@ -25,20 +24,13 @@ module.exports = {
       return ctx.badRequest('transaction not found')
     }
     const findTxn = findTxns[0]
+    const siteSetting = await strapi.entityService.findMany(
+      'api::site-setting.site-setting'
+    )
+    const defaultCurrency = siteSetting?.default_currency
 
-    const currency = body?.data?.currency || null
-
-    const findCurrencies = !!currency
-      ? await strapi.entityService.findMany('api::currency.currency', {
-          filters: { slug: currency },
-        })
-      : []
-
-    if (!!currency && findCurrencies.length === 0) {
-      return ctx.badRequest('currency not found')
-    }
-
-    const findCurrency = findCurrencies[0]
+    const currency =
+      body?.data?.currency.toUpperCase() || defaultCurrency || null
 
     try {
       const updateResult = await strapi.entityService.update(
@@ -47,7 +39,7 @@ module.exports = {
         {
           data: {
             ...body?.data,
-            currency: !!currency ? findCurrency?.id : findTxn?.currency?.id,
+            currency,
           },
         }
       )

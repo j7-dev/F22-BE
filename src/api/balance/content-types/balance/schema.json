@@ -4,7 +4,8 @@
   "info": {
     "singularName": "balance",
     "pluralName": "balances",
-    "displayName": "Balance"
+    "displayName": "Balance",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -27,9 +28,8 @@
       "target": "api::amount-type.amount-type"
     },
     "currency": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::currency.currency"
+      "type": "string",
+      "required": true
     }
   }
 }

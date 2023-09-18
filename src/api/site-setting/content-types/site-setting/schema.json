@@ -14,10 +14,7 @@
   "attributes": {
     "vip_upgrade_mode": {
       "type": "enumeration",
-      "enum": [
-        "AUTO",
-        "MANUAL"
-      ],
+      "enum": ["AUTO", "MANUAL"],
       "required": true,
       "default": "AUTO"
     },
@@ -25,9 +22,12 @@
       "type": "json"
     },
     "default_currency": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::currency.currency"
+      "type": "string",
+      "required": true
+    },
+    "support_currency": {
+      "type": "json",
+      "required": true
     }
   }
 }
