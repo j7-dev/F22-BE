@@ -42,6 +42,12 @@ module.exports = () => ({
           filters: { slug: amount_type },
         }
       )
+
+      // 如果沒有找到 amount_type 就回 400
+      if (!findAmountType.length) {
+        return `amount_type ${amount_type} is not found`
+      }
+
       const amount_type_id = findAmountType[0].id
 
       const balances =
