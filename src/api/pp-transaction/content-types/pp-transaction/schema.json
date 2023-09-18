@@ -4,7 +4,8 @@
   "info": {
     "singularName": "pp-transaction",
     "pluralName": "pp-transactions",
-    "displayName": "PP transaction"
+    "displayName": "PP transaction",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -32,14 +33,14 @@
     },
     "bonus": {
       "type": "decimal",
-      "required": true
+      "required": false
     },
     "reference": {
       "type": "string",
       "required": true
     },
     "timestamp": {
-      "type": "integer",
+      "type": "biginteger",
       "required": true
     },
     "round_details": {
