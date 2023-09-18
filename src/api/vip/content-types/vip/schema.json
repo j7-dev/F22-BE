@@ -89,6 +89,10 @@
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "vip"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
     }
   }
 }

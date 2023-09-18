@@ -4,7 +4,8 @@
   "info": {
     "singularName": "coupon",
     "pluralName": "coupons",
-    "displayName": "Coupon"
+    "displayName": "Coupon",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -66,6 +67,9 @@
     },
     "exclude_game_providers": {
       "type": "json"
+    },
+    "currency": {
+      "type": "string"
     }
   }
 }

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "deposit-bonus",
     "pluralName": "deposit-bonuses",
-    "displayName": "Deposit Bonus"
+    "displayName": "Deposit Bonus",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -47,6 +48,10 @@
     },
     "extra_ratio": {
       "type": "json",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
       "required": true
     }
   }

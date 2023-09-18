@@ -50,6 +50,10 @@
       "relation": "oneToOne",
       "target": "api::transaction-record.transaction-record",
       "mappedBy": "bet_record"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
     }
   }
 }

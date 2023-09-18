@@ -31,6 +31,7 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@faker-js/faker": "^8.0.2"
+    "@faker-js/faker": "^8.0.2",
+    "@types/lodash-es": "^4.17.9"
   }
 }
