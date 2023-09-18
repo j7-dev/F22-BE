@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pp_token_infos",
+  "info": {
+    "singularName": "pp-token-info",
+    "pluralName": "pp-token-infos",
+    "displayName": "PP token info"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "token": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
