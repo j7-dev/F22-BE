@@ -39,9 +39,17 @@ module.exports = {
 
     try {
       const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body)
-
+      console.log('⭐  getResult', getResult)
+      console.log(
+        '⭐  getResult.request?.connection',
+        getResult?.request?.connection?.remoteAddress
+      )
       ctx.body = getResult?.data
     } catch (err) {
+      console.log(
+        '⭐  err.request?.connection',
+        err?.request?.connection?.remoteAddress
+      )
       ctx.body = err.response.data
     }
   },
