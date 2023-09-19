@@ -1,7 +1,7 @@
 // @ts-nocheck
 'use strict'
 
-const axios = require('axios')
+const axios = require('axios').default
 /**
  * A set of functions called "actions" for `evo-gp`
  */
@@ -32,25 +32,17 @@ module.exports = {
     }
   },
   opengame: async (ctx, next) => {
-    const apiUrl = process.env?.EVO_OPEN_GAME_API_URL
-    const key = process.env?.EVO_CASINO_KEY
-    const token = process.env?.EVO_TOKEN
-    const body = ctx.request.body
+    const apiUrl = process?.env?.EVO_OPEN_GAME_API_URL
+    const key = process?.env?.EVO_CASINO_KEY
+    const token = process?.env?.EVO_TOKEN
+    const body = ctx?.request?.body
 
     try {
-      const getResult = await axios({
-        method: 'post',
-        url: `${apiUrl}/${key}/${token}`,
-        data: body,
-        headers: {
-          'Content-Type': 'application/json',
-          // Accept: 'application/json',
-        },
-      })
+      const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body)
 
       ctx.body = getResult?.data
     } catch (err) {
-      ctx.body = err
+      ctx.body = err.response.data
     }
   },
 }
