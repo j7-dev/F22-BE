@@ -80,7 +80,7 @@ module.exports = () => ({
       // 預防用戶金額不夠扣
       const allowNegative = body?.allowNegative ?? false
 
-      if (newBalance < 0 && !allowNegative) {
+      if (newBalance < 0 && !allowNegative && body?.amount < 0) {
         return 'Insufficient balance'
       }
 
