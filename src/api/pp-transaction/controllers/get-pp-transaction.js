@@ -39,7 +39,7 @@ module.exports = {
         amount: transaction?.amount?.toString(),
         timestamp: Number(transaction?.timestamp),
         user_id: transaction?.user_id?.id,
-        transaction_id: transaction?.transaction_id,
+        transaction_id: transaction?.id,
       }))
 
       ctx.body = {
