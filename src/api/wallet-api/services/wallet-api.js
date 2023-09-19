@@ -74,9 +74,12 @@ module.exports = () => ({
 
       const theBalanceId = findBalance?.id || createBalanceResult?.id || null
 
-      // 預防用戶金額不夠扣
+      // 計算修改後的 balance
       const newBalance = Number(findBalance?.amount || 0) + Number(body.amount)
-      if (newBalance < 0) {
+
+      // 預防用戶金額不夠扣
+      const allowNegative = body?.allowNegative ?? false
+      if (newBalance < 0 && !allowNegative) {
         return 'Insufficient balance'
       }
 
