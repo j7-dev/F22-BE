@@ -37,8 +37,12 @@ module.exports = {
     const token = process?.env?.EVO_TOKEN
     const body = ctx?.request?.body
 
+    console.log('⭐ API', `${apiUrl}/${key}/${token}`)
+
     try {
-      const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body)
+      const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
+        family: 4,
+      })
       console.log('⭐  getResult', getResult)
       console.log(
         '⭐  getResult.request?.connection',
