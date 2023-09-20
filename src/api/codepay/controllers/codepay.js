@@ -24,14 +24,17 @@ module.exports = {
     }
 
     // code pay 儲值
+
     const newsendResult = await strapi
       .service('api::codepay.codepay')
       .newsend(body)
 
-    try {
+    if (newsendResult?.status === 200) {
       ctx.body = newsendResult?.data
-    } catch (err) {
-      ctx.body = err
+    } else {
+      throw new Error(
+        'please ensure your simple address and send password are CORRECT.'
+      )
     }
   },
 }

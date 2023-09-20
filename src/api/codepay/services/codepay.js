@@ -97,9 +97,9 @@ module.exports = () => ({
         }
       )
 
-      const newsend_status_code = newsendResult?.data?.detail?.status_code
+      const msg = newsendResult?.data?.detail?.msg
 
-      if (newsend_status_code === 200) {
+      if (msg.startsWith('succ')) {
         // 成功 add balance
         const addResult = await strapi
           .service('api::wallet-api.wallet-api')
@@ -112,11 +112,17 @@ module.exports = () => ({
             currency: body?.currency,
             amount_type: body?.amount_type || 'CASH',
           })
+        return {
+          ...newsendResult,
+          status: 200,
+        }
       }
-
-      return newsendResult
     } catch (err) {
-      return err?.response?.data
+      console.log('⭐  err', err?.response?.data)
+      return {
+        ...err?.response?.data,
+        status: 400,
+      }
     }
   },
 })
