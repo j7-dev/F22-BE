@@ -1,6 +1,7 @@
 const user = require('./content-types/user')
 
 module.exports = (plugin) => {
+  // 讓 ROLE 在 ADMIN 可見
   plugin.contentTypes.role.schema.pluginOptions = {
     'content-manager': {
       visible: true,
@@ -9,7 +10,9 @@ module.exports = (plugin) => {
       visible: true,
     },
   }
+  plugin.contentTypes.user = user
 
+  // 登入時紀錄資訊
   plugin.routes['content-api'].routes = plugin.routes['content-api'].routes.map(
     (item) => {
       if (item.method == 'POST' && item.path == '/auth/local') {
@@ -20,7 +23,39 @@ module.exports = (plugin) => {
     }
   )
 
-  plugin.contentTypes.user = user
+  // 讓 user/me 支援 populate
+
+  const sanitizeOutput = (user) => {
+    const {
+      password,
+      resetPasswordToken,
+      confirmationToken,
+      ...sanitizedUser
+    } = user // be careful, you need to omit other private attributes yourself
+    return sanitizedUser
+  }
+
+  plugin.controllers.user.me = async (ctx) => {
+    if (!ctx.state.user) {
+      return ctx.unauthorized()
+    }
+    const user = await strapi.entityService.findOne(
+      'plugin::users-permissions.user',
+      ctx.state.user.id,
+      { populate: ['role', 'vip', 'balances'] }
+    )
+
+    ctx.body = sanitizeOutput(user)
+  }
+
+  plugin.controllers.user.find = async (ctx) => {
+    const users = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      { ...ctx.params, populate: ['role'] }
+    )
+
+    ctx.body = users.map((user) => sanitizeOutput(user))
+  }
 
   return plugin
 }
