@@ -9,5 +9,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/pp/opengame',
+      handler: 'pp-gp.opengame',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 }
