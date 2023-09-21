@@ -2,6 +2,15 @@ module.exports = {
   routes: [
     {
       method: "GET",
+      path: "/bti-api/balance",
+      handler: "balance.balance",
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: "GET",
       path: "/bti-api/validatetoken",
       handler: "validatetoken.validatetoken",
       config: {
@@ -19,18 +28,18 @@ module.exports = {
       },
     },
     {
-      method: "GET",
-      path: "/bti-api/cancelreserve",
-      handler: "cancelreserve.cancelreserve",
+      method: "POST",
+      path: "/bti-api/debitreserve",
+      handler: "debitreserve.debitreserve",
       config: {
         policies: [],
         middlewares: [],
       }
     },
     {
-      method: "POST",
-      path: "/bti-api/debitreserve",
-      handler: "debitreserve.debitreserve",
+      method: "GET",
+      path: "/bti-api/cancelreserve",
+      handler: "cancelreserve.cancelreserve",
       config: {
         policies: [],
         middlewares: [],
