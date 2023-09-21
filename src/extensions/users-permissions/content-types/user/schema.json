@@ -137,8 +137,9 @@
       "mappedBy": "user"
     },
     "uuid": {
-      "type": "uid",
-      "required": true
+      "type": "string",
+      "unique": true,
+      "default": " "
     }
   }
 }
