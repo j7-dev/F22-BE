@@ -6,13 +6,12 @@
 
 module.exports = {
   balance: async (ctx, next) => {
-    var formattedInfos ={};
+    var formattedInfos = {};
     try {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
 
-      const session_id = auth_token;
-      if (session_id === undefined) {
+      if (auth_token === undefined) {
         ctx.body = {
           error_code: "-3",
           error_message: "TokenNotValid"
@@ -21,6 +20,7 @@ module.exports = {
       }
 
       try {
+        const session_id = auth_token;
         const infos = await strapi.entityService.findMany(
           'api::evo-session-info.evo-session-info',
           {
@@ -31,6 +31,15 @@ module.exports = {
             sort: { createdAt: 'desc' },
           }
         )
+
+        //DB result validation
+        if (infos == undefined) {
+          ctx.body = {
+            error_code: "-3",
+            error_message: "TokenNotValid"
+          };
+          return;
+        }
 
         formattedInfos = infos.map((info) => ({
           id: info.id,
@@ -48,17 +57,7 @@ module.exports = {
       } catch (err) {
         ctx.body = err
       }
-      
-      //TODO: get player_info by token from DB to get user id
-      if (auth_token == "0") {
-        ctx.body = {
-          error_code: "-3",
-          error_message: "TokenNotValid"
-        };
-        return;
-      }
 
-      
       //then get balance by user id
       try {
         const result = await strapi
