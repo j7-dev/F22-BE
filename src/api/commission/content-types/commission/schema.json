@@ -30,11 +30,20 @@
     "formula": {
       "type": "json"
     },
-    "users": {
+    "agents": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user",
       "mappedBy": "commission"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true
     }
   }
 }
