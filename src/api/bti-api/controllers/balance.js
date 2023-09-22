@@ -19,17 +19,20 @@ module.exports = {
         return;
       }
       
-      
-      ctx.body = {
-          error_code: "0",
-          error_message: "No error",
-          cust_id: "abc123",
+      const query = ctx.request.query
+      try {
+        const result = await strapi
+          .service('api::wallet-api.wallet-api')
+          .get(query)
+        ctx.body = {
+          status: "success",
           balance: 100,
-          cust_login: "abc123",
-          city: "ID",
-          country: "ID",
-          currency_code: "IDR"
-      };
+          data: result,
+        }
+      } catch (err) {
+        ctx.body = err
+      }
+      
     } catch (err) {
       ctx.body = err;
     }
