@@ -14,7 +14,10 @@
   "attributes": {
     "vip_upgrade_mode": {
       "type": "enumeration",
-      "enum": ["AUTO", "MANUAL"],
+      "enum": [
+        "AUTO",
+        "MANUAL"
+      ],
       "required": true,
       "default": "AUTO"
     },
@@ -25,7 +28,16 @@
       "type": "string",
       "required": true
     },
-    "support_currency": {
+    "support_currencies": {
+      "type": "json",
+      "required": true
+    },
+    "defaut_amount_type": {
+      "type": "string",
+      "required": true,
+      "default": "CASH"
+    },
+    "support_amount_types": {
       "type": "json",
       "required": true
     }

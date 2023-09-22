@@ -17,7 +17,7 @@ module.exports = {
     const siteSetting = await strapi.entityService.findMany(
       'api::site-setting.site-setting'
     )
-    const supportCurrencies = siteSetting?.support_currency
+    const supportCurrencies = siteSetting?.support_currencies || []
 
     // 取得全 amount type id
     const amountTypeIds = await strapi.entityService.findMany(
