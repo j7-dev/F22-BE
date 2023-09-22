@@ -69,8 +69,8 @@ module.exports = {
           };
         } catch (err) {
           ctx.body = {
-            error_code: "-3",
-            error_message: "TokenNotValid",
+            error_code: "-2",
+            error_message: "CustomerNotFound",
             err: err
           };
           return;
@@ -79,8 +79,8 @@ module.exports = {
 
       } catch (err) {
         ctx.body = {
-          error_code: "-3",
-          error_message: "TokenNotValid",
+          error_code: "-1",
+          error_message: "GeneralError",
           err: err
         };
         return;
