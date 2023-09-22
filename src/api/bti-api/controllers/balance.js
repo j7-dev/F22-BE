@@ -55,7 +55,12 @@ module.exports = {
           data: formattedInfos,
         }
       } catch (err) {
-        ctx.body = err
+        ctx.body = {
+          error_code: "-3",
+          error_message: "TokenNotValid",
+          err:err
+        };
+        return;
       }
 
       //then get balance by user id
@@ -70,11 +75,21 @@ module.exports = {
           data: result,
         }
       } catch (err) {
-        ctx.body = err
+        ctx.body = {
+          error_code: "-3",
+          error_message: "TokenNotValid",
+          err:err
+        };
+        return;
       }
 
     } catch (err) {
-      ctx.body = err;
+      ctx.body = {
+        error_code: "-3",
+        error_message: "TokenNotValid",
+        err:err
+      };
+      return;
     }
   },
 };
