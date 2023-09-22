@@ -11,6 +11,7 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
 
+      //parameter check
       if (auth_token === undefined) {
         ctx.body = {
           error_code: "-3",
@@ -19,6 +20,7 @@ module.exports = {
         return;
       }
 
+      //get user info by token
       try {
         const session_id = auth_token;
         const infos = await strapi.entityService.findMany(
@@ -41,29 +43,24 @@ module.exports = {
           return;
         }
 
+        //format DB result
         formattedInfos = infos.map((info) => ({
           id: info.id,
           session_id: info.session_id,
           created_at: info.createdAt,
           user_id: info.user_id.id,
           currency: "KRW"
-        }))
-
-        ctx.body = {
-          status: '200',
-          message: 'get evo session info success',
-          data: formattedInfos,
-        }
+        }));
       } catch (err) {
         ctx.body = {
           error_code: "-3",
           error_message: "TokenNotValid",
-          err:err
+          err: err
         };
         return;
       }
 
-      //then get balance by user id
+      //get balance by user id
       try {
         const result = await strapi
           .service('api::wallet-api.wallet-api')
@@ -78,7 +75,7 @@ module.exports = {
         ctx.body = {
           error_code: "-3",
           error_message: "TokenNotValid",
-          err:err
+          err: err
         };
         return;
       }
@@ -87,7 +84,7 @@ module.exports = {
       ctx.body = {
         error_code: "-3",
         error_message: "TokenNotValid",
-        err:err
+        err: err
       };
       return;
     }
