@@ -72,6 +72,11 @@
     "currency": {
       "type": "string",
       "required": true
+    },
+    "updated_by_user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
