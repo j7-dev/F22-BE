@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "bti_token_infos",
+  "info": {
+    "singularName": "bti-token-info",
+    "pluralName": "bti-token-infos",
+    "displayName": "Bti token info"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "token": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}
