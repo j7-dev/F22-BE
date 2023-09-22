@@ -70,6 +70,10 @@
     },
     "currency": {
       "type": "string"
+    },
+    "amount_type": {
+      "type": "string",
+      "required": true
     }
   }
 }

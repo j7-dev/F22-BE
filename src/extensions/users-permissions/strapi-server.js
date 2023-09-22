@@ -1,6 +1,9 @@
-const user = require('./content-types/user')
+const userContentType = require('./content-types/user')
 
 module.exports = (plugin) => {
+  // support lifecycles
+  plugin.contentTypes.user = userContentType
+
   plugin.contentTypes.role.schema.pluginOptions = {
     'content-manager': {
       visible: true,

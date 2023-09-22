@@ -22,12 +22,11 @@
       "target": "plugin::users-permissions.user",
       "inversedBy": "balances"
     },
-    "amount_type": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::amount-type.amount-type"
-    },
     "currency": {
+      "type": "string",
+      "required": true
+    },
+    "amount_type": {
       "type": "string",
       "required": true
     }

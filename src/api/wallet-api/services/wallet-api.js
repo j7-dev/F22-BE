@@ -7,10 +7,6 @@
 module.exports = () => ({
   add: async (body) => {
     try {
-      // 預設 CASH
-      const amount_type =
-        body.amount_type || process.env?.DEFAULT_AMOUNT_TYPE || 'CASH'
-
       // 如果沒有帶參數就回 400
       const requiredFields = [
         'type',
@@ -32,30 +28,18 @@ module.exports = () => ({
         'api::site-setting.site-setting'
       )
       const defaultCurrency = siteSetting?.default_currency
+      const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
+      const amount_type = body?.amount_type || defaultAmountType
 
       const currency =
         body?.data?.currency.toUpperCase() || defaultCurrency || null
-
-      const findAmountType = await strapi.entityService.findMany(
-        'api::amount-type.amount-type',
-        {
-          filters: { slug: amount_type },
-        }
-      )
-
-      // 如果沒有找到 amount_type 就回 400
-      if (!findAmountType.length) {
-        return `amount_type ${amount_type} is not found`
-      }
-
-      const amount_type_id = findAmountType[0].id
 
       const balances =
         (await strapi.entityService.findMany('api::balance.balance', {
           filters: {
             user: body.user_id,
             currency,
-            amount_type: amount_type_id,
+            amount_type,
           },
         })) || []
       const findBalance = balances[0] || null
@@ -68,7 +52,7 @@ module.exports = () => ({
               amount: 0,
               user: body.user_id,
               currency,
-              amount_type: amount_type_id,
+              amount_type,
             },
           })
 
@@ -124,11 +108,12 @@ module.exports = () => ({
             title: body.title,
             description: body.description,
             amount: body.amount,
+            amount_type,
+            currency,
             by: body.by,
             user: body.user_id, // connect
             bet_record: body.bet_record_id, // connect
             status,
-            currency,
           },
         }
       )
@@ -139,20 +124,12 @@ module.exports = () => ({
           filters: {
             user: body.user_id,
           },
-          populate: {
-            amount_type: {
-              fields: ['slug'],
-            },
-          },
         }
       )
       const formattedUserBalances = userBalances.map((balance) => ({
         ...balance,
         amount: balance.amount.toString(),
-        amount_type:
-          balance?.amount_type?.slug ||
-          process.env?.DEFAULT_AMOUNT_TYPE ||
-          'CASH',
+        amount_type: balance?.amount_type,
         currency: balance.currency,
       }))
 
@@ -194,17 +171,14 @@ module.exports = () => ({
           filters: {
             user: query.user_id,
           },
-          populate: {
-            amount_type: {
-              fields: ['slug'],
-            },
-          },
         }
       )
 
       const findBalance = balances.find(
         (balance) => balance.currency === currency
       )
+
+      const amount_type = query?.amount_type || 'CASH'
 
       // 沒有 balance 就新增初始值 0
       if (!findBalance) {
@@ -215,7 +189,7 @@ module.exports = () => ({
               amount: 0,
               user: query.user_id,
               currency,
-              amount_type: 1, // CASH
+              amount_type,
             },
           }
         )
@@ -226,10 +200,7 @@ module.exports = () => ({
         return {
           ...balance,
           amount: balance.amount.toString(),
-          amount_type:
-            balance?.amount_type?.slug ||
-            process.env?.DEFAULT_AMOUNT_TYPE ||
-            'CASH',
+          amount_type: balance?.amount_type,
           currency: balance.currency,
         }
       })
