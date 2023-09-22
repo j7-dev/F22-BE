@@ -1,7 +1,6 @@
 const user = require('./content-types/user')
 
 module.exports = (plugin) => {
-  // 讓 ROLE 在 ADMIN 可見
   plugin.contentTypes.role.schema.pluginOptions = {
     'content-manager': {
       visible: true,
@@ -10,9 +9,7 @@ module.exports = (plugin) => {
       visible: true,
     },
   }
-  plugin.contentTypes.user = user
 
-  // 登入時紀錄資訊
   plugin.routes['content-api'].routes = plugin.routes['content-api'].routes.map(
     (item) => {
       if (item.method == 'POST' && item.path == '/auth/local') {

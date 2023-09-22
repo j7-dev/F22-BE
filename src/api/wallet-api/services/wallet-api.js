@@ -33,7 +33,8 @@ module.exports = () => ({
       )
       const defaultCurrency = siteSetting?.default_currency
 
-      const currency = body?.currency.toUpperCase() || defaultCurrency || null
+      const currency =
+        body?.data?.currency.toUpperCase() || defaultCurrency || null
 
       const findAmountType = await strapi.entityService.findMany(
         'api::amount-type.amount-type',
@@ -71,17 +72,17 @@ module.exports = () => ({
             },
           })
 
+      const theBalanceId = findBalance?.id || createBalanceResult?.id || null
+
       // 計算修改後的 balance
       const newBalance = Number(findBalance?.amount || 0) + Number(body.amount)
 
       // 預防用戶金額不夠扣
       const allowNegative = body?.allowNegative ?? false
 
-      if (newBalance < 0 && !allowNegative && body?.amount < 0) {
+      if (newBalance < 0 && !allowNegative) {
         return 'Insufficient balance'
       }
-
-      const theBalanceId = findBalance?.id || createBalanceResult?.id || null
 
       let status = 'PENDING'
 
@@ -234,107 +235,6 @@ module.exports = () => ({
       })
 
       return formattedBalances
-    } catch (err) {
-      return err
-    }
-  },
-  withdraw: async (body) => {
-    // 只做創建 transaction record 狀態=PENDING
-    // afterUpdate 且 狀態=APPROVED 才做 balance 的更新
-    try {
-      // 預設 CASH
-      const amount_type =
-        body.amount_type || process.env?.DEFAULT_AMOUNT_TYPE || 'CASH'
-
-      // 如果沒有帶參數就回 400
-      const requiredFields = ['amount', 'user_id']
-
-      for (const field of requiredFields) {
-        if (body[field] === undefined) {
-          return `${field} is required`
-        }
-      }
-
-      // 取得幣別
-      const siteSetting = await strapi.entityService.findMany(
-        'api::site-setting.site-setting'
-      )
-      const defaultCurrency = siteSetting?.default_currency
-
-      const currency = body?.currency.toUpperCase() || defaultCurrency || null
-
-      const findAmountType = await strapi.entityService.findMany(
-        'api::amount-type.amount-type',
-        {
-          filters: { slug: 'CASH' },
-        }
-      )
-
-      // 如果沒有找到 amount_type 就回 400
-      if (!findAmountType.length) {
-        return `amount_type ${amount_type} is not found`
-      }
-
-      const amount_type_id = findAmountType[0].id
-
-      const balances =
-        (await strapi.entityService.findMany('api::balance.balance', {
-          filters: {
-            user: body.user_id,
-            currency,
-            amount_type: amount_type_id,
-          },
-        })) || []
-      const findBalance = balances[0] || null
-
-      // 沒有 balance 就新增初始值 0
-      const createBalanceResult = !!findBalance
-        ? null
-        : await strapi.entityService.create('api::balance.balance', {
-            data: {
-              amount: 0,
-              user: body.user_id,
-              currency,
-              amount_type: amount_type_id,
-            },
-          })
-
-      // 計算修改後的 balance
-      const newBalance = Number(findBalance?.amount || 0) - Number(body.amount)
-
-      // 預防用戶金額不夠領
-      if (Number(body.amount) < 0) {
-        return "amount can't < 0"
-      }
-      if (newBalance < 0) {
-        return 'Insufficient balance'
-      }
-
-      const status = 'PENDING'
-
-      /**
-       * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
-       * 創建一筆 Transaction Record
-       */
-
-      const createTxnResult = await strapi.entityService.create(
-        'api::transaction-record.transaction-record',
-        {
-          data: {
-            type: 'WITHDRAW',
-            title: `user_id #${
-              body.user_id
-            } withdraw $${body.amount.toLocaleString()} ${currency}`,
-            description: '',
-            amount: body.amount,
-            by: 'USER',
-            user: body.user_id, // connect
-            status,
-            currency,
-          },
-        }
-      )
-      return createTxnResult
     } catch (err) {
       return err
     }

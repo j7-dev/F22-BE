@@ -1,21 +1,10 @@
-const { nanoid } = require('nanoid')
-
 module.exports = {
-  async beforeCreate(event) {
-    const { result, params } = event
-    const data = params?.data
-    data.uuid = nanoid()
-    if (!data?.display_name) {
-      data.display_name = data.username
-    }
-  },
   async afterCreate(event) {
     const { result } = event
     const created_user_id = result?.id
 
-    // 取得支援的幣別
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
+    const currencies = await strapi.entityService.findMany(
+      'api::currency.currency'
     )
     const supportCurrencies = siteSetting?.support_currencies || []
 
@@ -27,7 +16,8 @@ module.exports = {
       }
     )
 
-    supportCurrencies.forEach(async (currency) => {
+    currencies.forEach(async (currency) => {
+      const { id: currency_id } = currency
       amountTypeIds.forEach(async (amountType) => {
         const { id: amount_type_id } = amountType
         const createResult = await strapi.entityService.create(
@@ -36,7 +26,7 @@ module.exports = {
             data: {
               amount: 0,
               user: created_user_id,
-              currency,
+              currency: currency_id,
               amount_type: amount_type_id,
             },
           }
