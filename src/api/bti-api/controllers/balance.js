@@ -10,7 +10,7 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
 
-      //TODO: auto_token from DB
+      //TODO: get player_info by token from DB to get user id
       if(auth_token == "0"){
         ctx.body = {
           error_code: "-3",
@@ -19,6 +19,7 @@ module.exports = {
         return;
       }
       
+      //then get balance by user id
       const query = ctx.request.query
       try {
         const result = await strapi
