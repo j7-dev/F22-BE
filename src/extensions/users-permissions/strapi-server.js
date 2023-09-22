@@ -48,14 +48,15 @@ module.exports = (plugin) => {
     ctx.body = sanitizeOutput(user)
   }
 
-  plugin.controllers.user.find = async (ctx) => {
-    const users = await strapi.entityService.findMany(
-      'plugin::users-permissions.user',
-      { ...ctx.params, populate: ['role'] }
-    )
+  // 會讓refine的filter失效
+  // plugin.controllers.user.find = async (ctx) => {
+  //   const users = await strapi.entityService.findMany(
+  //     'plugin::users-permissions.user',
+  //     { ...ctx.params, populate: ['role'] }
+  //   )
 
-    ctx.body = users.map((user) => sanitizeOutput(user))
-  }
+  //   ctx.body = users.map((user) => sanitizeOutput(user))
+  // }
 
   return plugin
 }

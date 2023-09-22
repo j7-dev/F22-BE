@@ -124,12 +124,6 @@
       "target": "api::vip.vip",
       "inversedBy": "users"
     },
-    "commission": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::commission.commission",
-      "inversedBy": "users"
-    },
     "balances": {
       "type": "relation",
       "relation": "oneToMany",
@@ -140,6 +134,12 @@
       "type": "string",
       "unique": true,
       "default": " "
+    },
+    "commission": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::commission.commission",
+      "inversedBy": "agents"
     }
   }
 }
