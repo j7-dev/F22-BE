@@ -33,6 +33,16 @@
           "localized": true
         }
       }
+    },
+    "post_type": {
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      },
+      "type": "string",
+      "required": true,
+      "default": "post"
     }
   }
 }

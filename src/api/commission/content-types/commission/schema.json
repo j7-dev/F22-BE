@@ -44,6 +44,10 @@
     "currency": {
       "type": "string",
       "required": true
+    },
+    "amount_type": {
+      "type": "string",
+      "required": true
     }
   }
 }
