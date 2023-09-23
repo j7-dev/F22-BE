@@ -16,7 +16,7 @@
     }
   },
   "attributes": {
-    "label": {
+    "title": {
       "type": "string",
       "required": true,
       "pluginOptions": {

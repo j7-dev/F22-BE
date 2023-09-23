@@ -4,7 +4,8 @@
   "info": {
     "singularName": "discount",
     "pluralName": "discounts",
-    "displayName": "Discount"
+    "displayName": "Discount",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -30,6 +31,15 @@
       "type": "decimal",
       "required": false,
       "min": 0
+    },
+    "amount_type": {
+      "type": "string",
+      "required": true,
+      "default": "CASH"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
     }
   }
 }

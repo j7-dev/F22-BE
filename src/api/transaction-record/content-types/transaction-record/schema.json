@@ -77,6 +77,10 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "amount_type": {
+      "type": "string",
+      "required": true
     }
   }
 }
