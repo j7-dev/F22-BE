@@ -71,7 +71,7 @@ module.exports = {
             reserve_id: reserve_id,
             req_id: reserve_id,
             purchase_id: null,
-            url: "test",
+            url: ctx.request.url,
             type: "reserve",
           },
         }
