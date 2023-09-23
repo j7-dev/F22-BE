@@ -18,6 +18,7 @@ module.exports = {
       'api::site-setting.site-setting'
     )
     const supportCurrencies = siteSetting?.support_currencies || []
+    const supportAmountTypes = siteSetting?.support_amount_types || []
 
     // 取得全 amount type id
     const amountTypeIds = await strapi.entityService.findMany(
@@ -28,8 +29,7 @@ module.exports = {
     )
 
     supportCurrencies.forEach(async (currency) => {
-      amountTypeIds.forEach(async (amountType) => {
-        const { id: amount_type_id } = amountType
+      supportAmountTypes.forEach(async (amount_type) => {
         const createResult = await strapi.entityService.create(
           'api::balance.balance',
           {
@@ -37,7 +37,7 @@ module.exports = {
               amount: 0,
               user: created_user_id,
               currency,
-              amount_type: amount_type_id,
+              amount_type,
             },
           }
         )
