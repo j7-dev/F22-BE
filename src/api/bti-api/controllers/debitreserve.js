@@ -9,6 +9,7 @@ module.exports = {
     try {
       // 取的 query string 的 auth_token
       const { cust_id, reserve_id, amount, req_id, agent_id, customer_id, purchase_id, extsessionID } = ctx.request.query;
+      const trx_id = reserve_id + "_" + cust_id + "_" + req_id;
       console.log(ctx.request.query);
       // 取得 reserve_id 的所有 record
       const reserve = await strapi.entityService.findMany(
@@ -29,8 +30,8 @@ module.exports = {
         return;
       }
 
-      var reserve_amount = 0;
-      var debitreserve_amount = 0;
+      var accepted_reserve_amount = 0;
+      var accepted_debitreserve_amount = 0;
       var available_amount = 0;
 
       for (const item of reserve) {
@@ -44,23 +45,32 @@ module.exports = {
             error_code: "0",
             error_message: "No Error",
             trx_id: item.trx_id,
-            balance: item.balance
+            balance: 0
           };
           return;
         }
 
         if (item.type === "reserve") {
-          reserve_amount += item.amount;
+          accepted_reserve_amount += item.amount;
         }
 
         if (item.type === "debitreserve") {
-          debitreserve_amount += item.amount;
+          accepted_debitreserve_amount += item.amount;
         }
       }
-      console.log(reserve_amount);
-      console.log(debitreserve_amount);
-      available_amount = reserve_amount - debitreserve_amount;
+      console.log(accepted_reserve_amount);
+      console.log(accepted_debitreserve_amount);
+      available_amount = accepted_reserve_amount - accepted_debitreserve_amount;
       console.log(available_amount);
+      if(amount > available_amount){
+        ctx.body = {
+          error_code: "0",
+          error_message: "Total DebitReserve amount larger than Reserve amount",
+          trx_id: trx_id,
+          balance: 0
+        };
+        return;
+      }
 
       const result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
