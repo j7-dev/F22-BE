@@ -14,12 +14,12 @@ module.exports = {
       //TODO: check reserve record if exist
 
       const parameters = {
-        "type": "reserve",
-        "by": "bti",
-        "title": reserve_id,
-        "amount": amount,
-        "user_id": cust_id,
-        "currency": "KRW"
+        user_id: cust_id,
+        amount: amount,
+        title: '手動調整',
+        type: 'MANUAL',
+        by: 'ADMIN',
+        currency: 'KRW'
       };
 
       const result = await strapi
@@ -34,7 +34,8 @@ module.exports = {
       }
 
       // 取得 reserve_id 的所有 record
-      const entries = await strapi.entityService.findMany(
+      var entries = [];
+      entries = await strapi.entityService.findMany(
         "api::bti-requests-singular.bti-requests-singular",
         {
           fields: ["ID", "RESERVE_ID", "TRX_ID", "CUST_ID", "AMOUNT"],
@@ -42,12 +43,21 @@ module.exports = {
         }
       );
 
-      if (entries.id !== undefined) {
+      if (entries.length > 0) {
+        const parameters ={
+          "user_id":cust_id
+        };
+
+        const get_user_balance_result = await strapi
+          .service('api::wallet-api.wallet-api')
+          .get(parameters);
+          console.log(get_user_balance_result);
+
         ctx.body = {
           error_code: "0",
           error_message: "No Error",
-          trx_id: entries,
-          balance: 0
+          trx_id: entries[0].trx_id,
+          balance: get_user_balance_result
         };
         return;
       }
