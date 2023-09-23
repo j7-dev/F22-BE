@@ -10,31 +10,47 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } = ctx.request.query;
 
-      const result = await strapi.entityService.create(
+      // 取得 req_id 的所有 record
+      const reserve = await strapi.entityService.findMany(
+        "api::bti-requests-singular.bti-requests-singular",
+        {
+          fields: ["id", "trx_id", "cust_id", "amount", "type", "reserve_id", "req_id", "after_balance"],
+          filters: { req_id },
+        }
+      );
+
+      console.log(reserve);
+      if (reserve.length > 0) {
+        //TODO:get balance by user id
+
+        ctx.body = {
+          error_code: "0",
+          error_message: "ReserveID Not Exist",
+          balance: 0,
+          trx_id: reserve[0].trx_id
+        };
+        return;
+      }
+
+      const create_bti_request_result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
+            trx_id: req_id + "_" + cust_id + "_" + purchase_id,
             cust_id: cust_id,
             amount: amount,
-            agent_id: agent_id,
-            customer_id: customer_id,
             req_id: req_id,
             purchase_id: purchase_id,
-            url: "test",
+            url: ctx.request.url,
             type: "creditcustomer",
           },
         }
       )
 
       ctx.body = {
-        status: "200",
-        message: "post creditcustomer success",
-        data: {
-          error_code: "error_code",
-          error_message: "error_message",
-          balance: 0,
-          trx_id: purchase_id
-        },
+        error_code: "0",
+        error_message: "No Error",
+        balance: 0
       };
     } catch (err) {
       ctx.body = err;
