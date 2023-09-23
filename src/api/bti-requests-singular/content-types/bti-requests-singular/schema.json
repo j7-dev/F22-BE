@@ -38,9 +38,6 @@
     },
     "after_balance": {
       "type": "decimal"
-    },
-    "status": {
-      "type": "string"
     }
   }
 }
