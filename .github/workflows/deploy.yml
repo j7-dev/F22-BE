@@ -31,4 +31,4 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Yarn build and start
-        run: ssh staging 'cd /var/www/html/f22 && pm2 stop f22 && git fetch origin && git reset --hard origin/master && yarn install && yarn build && pm2 start f22'
+        run: ssh staging 'cd /var/www/html/f22 && pm2 stop f22 && git reset --hard origin/master && yarn install && yarn build && pm2 start f22'

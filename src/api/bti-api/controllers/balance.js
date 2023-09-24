@@ -5,12 +5,13 @@
  */
 
 module.exports = {
-  validatetoken: async (ctx, next) => {
+  balance: async (ctx, next) => {
     var formattedInfos = {};
     try {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
 
+      //parameter check
       if (auth_token === undefined) {
         ctx.body = {
           error_code: "-3",
@@ -50,43 +51,42 @@ module.exports = {
           user_id: info.user_id.id,
           currency: "KRW"
         }));
-
-        //get balance by user id
-        try {
-          const result = await strapi
-            .service('api::wallet-api.wallet-api')
-            .get(formattedInfos[0])
-
-          ctx.body = {
-            error_code: "0",
-            error_message: "No error",
-            cust_id: formattedInfos.id,
-            balance: parseFloat(result[0].amount),
-            cust_login: formattedInfos.id,
-            city: "KR",
-            country: "KR",
-            currency_code: "KRW"
-          };
-        } catch (err) {
-          ctx.body = {
-            error_code: "-2",
-            error_message: "CustomerNotFound",
-            err: err
-          };
-          return;
-        }
-
-
       } catch (err) {
         ctx.body = {
-          error_code: "-1",
-          error_message: "GeneralError",
+          error_code: "-3",
+          error_message: "TokenNotValid",
           err: err
         };
         return;
       }
+
+      //get balance by user id
+      try {
+        const result = await strapi
+          .service('api::wallet-api.wallet-api')
+          .get(formattedInfos[0])
+
+        ctx.body = {
+          status: "success",
+          balance: parseFloat(result[0].amount),
+          data: result,
+        }
+      } catch (err) {
+        ctx.body = {
+          error_code: "-3",
+          error_message: "TokenNotValid",
+          err: err
+        };
+        return;
+      }
+
     } catch (err) {
-      ctx.body = err;
+      ctx.body = {
+        error_code: "-3",
+        error_message: "TokenNotValid",
+        err: err
+      };
+      return;
     }
   },
 };

@@ -18,14 +18,5 @@ module.exports = {
         middlewares: [],
       },
     },
-    {
-      method: 'POST',
-      path: '/wallet-api/cash/withdraw',
-      handler: 'cash.withdraw',
-      config: {
-        policies: [],
-        middlewares: [],
-      },
-    },
   ],
 }

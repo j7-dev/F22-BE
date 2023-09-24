@@ -14,6 +14,7 @@ module.exports = createCoreController(
             fields: ['id'],
           }
         )
+        console.log('⭐  main:  allUser', allUser)
 
         for (let i = 0; i < qty; i++) {
           const randomUser = faker.helpers.arrayElement(allUser)
@@ -31,6 +32,7 @@ module.exports = createCoreController(
               },
             }
           )
+          console.log('⭐  createResult', createResult)
         }
 
         ctx.body = {

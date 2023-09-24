@@ -74,10 +74,7 @@
     },
     "gender": {
       "type": "enumeration",
-      "enum": [
-        "MALE",
-        "FEMALE"
-      ]
+      "enum": ["MALE", "FEMALE"]
     },
     "birthday": {
       "type": "date"
