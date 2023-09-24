@@ -1,76 +1,76 @@
 module.exports = {
   routes: [
     {
-      method: "GET",
-      path: "/bti-api/balance",
-      handler: "balance.balance",
+      method: 'GET',
+      path: '/bti-api/balance',
+      handler: 'balance.balance',
       config: {
         policies: [],
         middlewares: [],
       },
     },
     {
-      method: "GET",
-      path: "/bti-api/validatetoken",
-      handler: "validatetoken.validatetoken",
+      method: 'GET',
+      path: '/bti-api/validatetoken',
+      handler: 'validatetoken.validatetoken',
       config: {
         policies: [],
         middlewares: [],
       },
     },
     {
-      method: "POST",
-      path: "/bti-api/reserve",
-      handler: "reserve.reserve",
+      method: 'POST',
+      path: '/bti-api/reserve',
+      handler: 'reserve.reserve',
       config: {
         policies: [],
         middlewares: [],
       },
     },
     {
-      method: "POST",
-      path: "/bti-api/debitreserve",
-      handler: "debitreserve.debitreserve",
+      method: 'POST',
+      path: '/bti-api/debitreserve',
+      handler: 'debitreserve.debitreserve',
       config: {
         policies: [],
         middlewares: [],
-      }
+      },
     },
     {
-      method: "GET",
-      path: "/bti-api/cancelreserve",
-      handler: "cancelreserve.cancelreserve",
+      method: 'GET',
+      path: '/bti-api/cancelreserve',
+      handler: 'cancelreserve.cancelreserve',
       config: {
         policies: [],
         middlewares: [],
-      }
+      },
     },
     {
-      method: "GET",
-      path: "/bti-api/commitreserve",
-      handler: "commitreserve.commitreserve",
+      method: 'GET',
+      path: '/bti-api/commitreserve',
+      handler: 'commitreserve.commitreserve',
       config: {
         policies: [],
         middlewares: [],
-      }
+      },
     },
     {
-      method: "POST",
-      path: "/bti-api/creditcustomer",
-      handler: "creditcustomer.creditcustomer",
+      method: 'POST',
+      path: '/bti-api/creditcustomer',
+      handler: 'creditcustomer.creditcustomer',
       config: {
         policies: [],
         middlewares: [],
-      }
+      },
     },
     {
-      method: "POST",
-      path: "/bti-api/debitcustomer",
-      handler: "debitcustomer.debitcustomer",
+      method: 'POST',
+      path: '/bti-api/debitcustomer',
+      handler: 'debitcustomer.debitcustomer',
       config: {
         policies: [],
         middlewares: [],
-      }
-    }
-  ]
-};
+      },
+    },
+  ],
+}
