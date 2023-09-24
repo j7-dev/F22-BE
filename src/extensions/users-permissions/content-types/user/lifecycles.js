@@ -10,11 +10,38 @@ module.exports = {
       data.display_name = data.username
     }
 
-    console.log('⭐  beforeCreate  agent', data?.agent)
-    const agent = data?.agent || undefined
+    // const roleId = data?.role
+    // const role = await strapi.entityService.findOne(
+    //   'plugin::users-permissions.role',
+    //   roleId,
+    //   {
+    //     fields: ['type'],
+    //   }
+    // )
+    // const roleType = role?.type
 
-    if (agent) {
-    }
+    // if (roleType === 'authenticated') {
+    //   // 一般會員，建立 與 agent 和 top_agent 的關聯
+    // }
+
+    // if (roleType === 'agent' && data?.top_agent) {
+    //   // 代理，建立 與 top_agent 的關聯
+    //   const entry = await strapi.entityService.create(
+    //     'api::user-relationship.user-relationship',
+    //     {
+    //       data: {
+    //         level_diff: 1,
+    //         user: data?.id,
+    //         parent_user: data?.top_agent,
+    //       },
+    //     }
+    //   )
+    //   console.log('⭐  beforeCreate  entry', entry)
+    // }
+
+    // if (roleType === 'top_agent') {
+    //   // 總代理，不用建立關聯
+    // }
   },
   async afterCreate(event) {
     const result = event?.result

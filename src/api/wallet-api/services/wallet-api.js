@@ -107,11 +107,12 @@ module.exports = () => ({
             title: body.title,
             description: body.description,
             amount: body.amount,
+            currency,
+            amount_type,
             by: body.by,
             user: body.user_id, // connect
             bet_record: body.bet_record_id, // connect
             status,
-            currency,
           },
         }
       )

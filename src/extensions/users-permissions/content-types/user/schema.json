@@ -140,6 +140,16 @@
       "relation": "manyToOne",
       "target": "api::commission.commission",
       "inversedBy": "agents"
+    },
+    "agent": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "top_agent": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
