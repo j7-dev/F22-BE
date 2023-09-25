@@ -15,45 +15,99 @@ module.exports = {
       const reserve = await strapi.entityService.findMany(
         "api::bti-requests-singular.bti-requests-singular",
         {
-          fields: ["ID", "RESERVE_ID", "TRX_ID","CUST_ID","AMOUNT"],
+          fields: ["id", "trx_id", "cust_id", "amount", "type", "reserve_id", "req_id","after_balance"],
           filters: { reserve_id },
         }
       );
       console.log(reserve);
-      if(reserve.id == undefined){
-          ctx.body = {
-            error_code: "0",
-            error_message: "ReserveID Not Exist",
-            trx_id: 0,
-            balance: 0
-        };
+      if (reserve.length == 0) {
+        ctx.body = formatAsKeyValueText({
+          error_code: "0",
+          error_message: "ReserveID Not Exist",
+          trx_id: 0,
+          balance: 0
+        });
         return;
       }
 
+      var reserve_amount = 0;
+      var debitreserve_amount = 0;
+      var available_amount = 0;
+
+      for (const item of reserve) {
+        console.log(item);
+        console.log(item.type);
+        console.log("---");
+        console.log(item.req_id);
+        console.log(req_id);
+        if (item.req_id === req_id) {
+          ctx.body = formatAsKeyValueText({
+            error_code: "0",
+            error_message: "No Error",
+            trx_id: item.trx_id,
+            balance: item.after_balance
+          });
+          return;
+        }
+
+        if (item.type === "reserve") {
+          reserve_amount += item.amount;
+        }
+
+        if (item.type === "debitreserve") {
+          debitreserve_amount += item.amount;
+        }
+      }
+      console.log(reserve_amount);
+      console.log(debitreserve_amount);
+      available_amount = reserve_amount - debitreserve_amount;
+      console.log(available_amount);
+
+      if(available_amount<amount){
+        ctx.body = formatAsKeyValueText({
+          error_code: "0",
+          error_message: "Total DebitReserve amount larger than Reserve amount"
+        });
+        return;
+      }
       const result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: reserve_id,
+            trx_id: cust_id + "_" + reserve_id + "_" + req_id,
             cust_id: cust_id,
             amount: amount,
             reserve_id: reserve_id,
-            req_id: reserve_id,
-            purchase_id: null,
-            url: "test",
+            req_id: req_id,
+            purchase_id: purchase_id,
+            url: ctx.request.url,
             type: "debitreserve",
           },
         }
       )
 
-      ctx.body = {
-          error_code: "error_code",
-          error_message: "error_message",
-          trx_id: reserve_id,
-          balance: amount
-      };
+      ctx.body = formatAsKeyValueText({
+        error_code: "0",
+        error_message: "No Error",
+        trx_id: reserve_id + "_" + cust_id + "_" + req_id,
+        balance: reserve[0].after_balance
+      });
     } catch (err) {
       ctx.body = err;
     }
   },
 };
+
+function formatAsKeyValueText(data) {
+  let plainText = '';
+  let isFirstLine = true;
+
+  for (const key in data) {
+    if (!isFirstLine) {
+      plainText += '\n'; // Add newline if it's not the first line
+    }
+    plainText += `${key}=${data[key]}`;
+    isFirstLine = false;
+  }
+  return plainText;
+}

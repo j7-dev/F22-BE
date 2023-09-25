@@ -10,26 +10,19 @@ module.exports = {
     try {
       // 取的 query string 的 auth_token
       const { cust_id, reserve_id, amount, agent_id, customer_id, extsessionID } = ctx.request.query;
+      var check_balance_result;
 
-      //TODO: check user if exist
-      if(cust_id == "invalidcustid"){
-        ctx.body = {
-            error_code: "-2",
-            error_message: "Invalid Customer",
-            balance: 0.00,
-            trx_id: 123456789
-        };
-        return;
-      }
+      //check user if exist
+      try {
+        check_balance_result = await strapi
+          .service('api::wallet-api.wallet-api')
+          .get({ user_id: cust_id })
 
-      //TODO: check user balance
-      if(amount>=9999){
-        ctx.body = {
-            error_code: "-4",
-            error_message: "Insufficient Amount",
-            balance: 100.00,
-            trx_id: 123456789
-        };
+      } catch (err) {
+        ctx.body = formatAsKeyValueText({
+          error_code: "-2",
+          error_message: "Invalid Customer"
+        });
         return;
       }
 
@@ -37,44 +30,91 @@ module.exports = {
       const entries = await strapi.entityService.findMany(
         "api::bti-requests-singular.bti-requests-singular",
         {
-          fields: ["ID", "RESERVE_ID", "TRX_ID","CUST_ID","AMOUNT"],
+          fields: ["id", "reserve_id", "trx_id", "cust_id", "amount","type","after_balance"],
           filters: { reserve_id },
         }
       );
-      
-      if(entries.id !== undefined){
-          ctx.body = {
+
+      for (const entry of entries) {
+        if(entry.type ==="reserve"){
+          ctx.body = formatAsKeyValueText({
             error_code: "0",
             error_message: "No Error",
-            trx_id: entries,
-            balance: 0
-        };
+            trx_id: entry.trx_id,
+            balance: entry.after_balance
+          });
+          return;
+        }
+      }
+
+      console.log("reserve - start update balance");
+      const body = {
+        user_id: cust_id,
+        amount: -amount,
+        title: 'bti-reserve',
+        type: 'MANUAL',
+        by: 'ADMIN',
+        currency: 'KRW'
+      }
+
+      var krw_amount=0;
+      try{
+        const update_balance_result = await strapi.service('api::wallet-api.wallet-api').add(body)
+
+        for (const balance of update_balance_result.balances) {
+          if(balance.currency = "KRW"){
+            krw_amount = balance.amount;
+          }
+        }
+      } catch (err) {
+        ctx.body = formatAsKeyValueText({
+          error_code: "-4",
+          error_message: "Insufficient fund",
+          balance: check_balance_result[0].amount
+        });
         return;
       }
-      const result = await strapi.entityService.create(
+      console.log("reserve - end update balance");
+
+      const create_reserve_result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: reserve_id,
+            trx_id: cust_id + "_" + reserve_id,
             cust_id: cust_id,
             amount: amount,
             reserve_id: reserve_id,
-            req_id: reserve_id,
+            req_id: null,
             purchase_id: null,
-            url: "test",
-            type: "reserve",
+            url: ctx.request.url,
+            after_balance: krw_amount,
+            type: "reserve"
           },
         }
       )
 
-      ctx.body = {
-          error_code: "0",
-          error_message: "No Error",
-          trx_id: reserve_id,
-          balance: amount
-      };
+      ctx.body = formatAsKeyValueText({
+        error_code: "0",
+        error_message: "No Error",
+        trx_id: cust_id + "_" + reserve_id,
+        balance: krw_amount
+      });
     } catch (err) {
       ctx.body = err;
     }
   },
 };
+
+function formatAsKeyValueText(data) {
+  let plainText = '';
+  let isFirstLine = true;
+
+  for (const key in data) {
+    if (!isFirstLine) {
+      plainText += '\n'; // Add newline if it's not the first line
+    }
+    plainText += `${key}=${data[key]}`;
+    isFirstLine = false;
+  }
+  return plainText;
+}

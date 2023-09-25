@@ -7,28 +7,20 @@
 module.exports = {
   validatetoken: async (ctx, next) => {
     var formattedInfos = {}
-    ctx.type = 'text/plain'
+    ctx.type = 'text/plain';
+
     try {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query
 
-      //TODO: auto_token from DB
-      if (auth_token == '0') {
-        ctx.body = {
-          error_code: '-3',
-          error_message: 'TokenNotValid',
-        }
-        return
-      }
-
       //get user info by token
       try {
-        const session_id = auth_token
+        const token = auth_token
         const infos = await strapi.entityService.findMany(
           'api::bti-token-info.bti-token-info',
           {
             filters: {
-              session_id,
+              token,
             },
             populate: ['user_id'],
             sort: { createdAt: 'desc' },
@@ -37,10 +29,10 @@ module.exports = {
 
         //DB result validation
         if (infos == undefined) {
-          ctx.body = {
+          ctx.body = formatAsKeyValueText({
             error_code: '-3',
             error_message: 'TokenNotValid',
-          }
+          });
           return
         }
 
@@ -49,7 +41,7 @@ module.exports = {
           id: info.id,
           session_id: info.session_id,
           created_at: info.createdAt,
-          user_id: info.user_id.id,
+          user_id: info.user_id,
           currency: 'KRW',
         }))
 
@@ -59,34 +51,49 @@ module.exports = {
             .service('api::wallet-api.wallet-api')
             .get(formattedInfos[0])
 
-          ctx.body = {
+          const jsonData = {
             error_code: '0',
             error_message: 'No error',
-            cust_id: formattedInfos[0].id,
+            cust_id: formattedInfos[0].user_id.id,
             balance: parseFloat(result[0].amount),
-            cust_login: formattedInfos[0].id,
+            cust_login: formattedInfos[0].user_id.username,
             city: 'KR',
             country: 'KR',
             currency_code: 'KRW',
           }
+
+          ctx.body = formatAsKeyValueText(jsonData);
+
         } catch (err) {
-          ctx.body = {
-            error_code: '-2',
-            error_message: 'CustomerNotFound',
-            err: err,
-          }
+          ctx.body = formatAsKeyValueText({
+            error_code: '-3',
+            error_message: 'TokenNotValid'
+          });
           return
         }
       } catch (err) {
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           error_code: '-1',
-          error_message: 'GeneralError',
-          err: err,
-        }
+          error_message: 'GeneralError'
+        });
         return
       }
     } catch (err) {
       ctx.body = err
     }
   },
+}
+
+function formatAsKeyValueText(data) {
+  let plainText = '';
+  let isFirstLine = true;
+
+  for (const key in data) {
+    if (!isFirstLine) {
+      plainText += '\n'; // Add newline if it's not the first line
+    }
+    plainText += `${key}=${data[key]}`;
+    isFirstLine = false;
+  }
+  return plainText;
 }

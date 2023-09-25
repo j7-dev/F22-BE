@@ -3,7 +3,7 @@
 module.exports = {
   async add(ctx) {
     const body = ctx.request.body
-
+    console.log(body);
     const result = await strapi.service('api::wallet-api.wallet-api').add(body)
     // respond
     ctx.body = {
