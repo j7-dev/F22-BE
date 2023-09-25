@@ -23,29 +23,25 @@ module.exports = {
       }
     }
 
-    try {
-      const transactions = await strapi.entityService.findMany(
-        'api::evo-transaction.evo-transaction',
-        {
-          filters,
-          populate: ['user_id'],
-          sort: { createdAt: 'desc' },
-        }
-      )
-
-      const formattedTransactions = transactions.map((transaction) => ({
-        ...transaction,
-        amount: transaction?.amount?.toString(),
-        user_id: transaction?.user_id?.id,
-      }))
-
-      ctx.body = {
-        status: '200',
-        message: 'get evo transactions success',
-        data: formattedTransactions,
+    const transactions = await strapi.entityService.findMany(
+      'api::evo-transaction.evo-transaction',
+      {
+        filters,
+        populate: ['user_id'],
+        sort: { createdAt: 'desc' },
       }
-    } catch (err) {
-      ctx.body = err
+    )
+
+    const formattedTransactions = transactions.map((transaction) => ({
+      ...transaction,
+      amount: transaction?.amount?.toString(),
+      user_id: transaction?.user_id?.id,
+    }))
+
+    ctx.body = {
+      status: '200',
+      message: 'get evo transactions success',
+      data: formattedTransactions,
     }
   },
 }

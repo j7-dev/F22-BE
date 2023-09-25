@@ -208,86 +208,83 @@ module.exports = () => ({
   withdraw: async (body) => {
     // 只做創建 transaction record 狀態=PENDING
     // afterUpdate 且 狀態=APPROVED 才做 balance 的更新
-    try {
-      // 如果沒有帶參數就回 400
-      const requiredFields = ['amount', 'user_id']
 
-      for (const field of requiredFields) {
-        if (body[field] === undefined) {
-          return `${field} is required`
-        }
+    // 如果沒有帶參數就回 400
+    const requiredFields = ['amount', 'user_id']
+
+    for (const field of requiredFields) {
+      if (body[field] === undefined) {
+        return `${field} is required`
       }
+    }
 
-      // 取得幣別
-      const siteSetting = await strapi.entityService.findMany(
-        'api::site-setting.site-setting'
-      )
-      const defaultCurrency = siteSetting?.default_currency
-      const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
+    // 取得幣別
+    const siteSetting = await strapi.entityService.findMany(
+      'api::site-setting.site-setting'
+    )
+    const defaultCurrency = siteSetting?.default_currency
+    const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
 
-      const currency = body?.currency.toUpperCase() || defaultCurrency || null
-      const amount_type = body?.amount_type || defaultAmountType
+    const currency = body?.currency.toUpperCase() || defaultCurrency || null
+    const amount_type = body?.amount_type || defaultAmountType
 
-      const balances =
-        (await strapi.entityService.findMany('api::balance.balance', {
-          filters: {
+    const balances =
+      (await strapi.entityService.findMany('api::balance.balance', {
+        filters: {
+          user: body.user_id,
+          currency,
+          amount_type,
+        },
+      })) || []
+    const findBalance = balances[0] || null
+
+    // 沒有 balance 就新增初始值 0
+    const createBalanceResult = !!findBalance
+      ? null
+      : await strapi.entityService.create('api::balance.balance', {
+          data: {
+            amount: 0,
             user: body.user_id,
             currency,
             amount_type,
           },
-        })) || []
-      const findBalance = balances[0] || null
+        })
 
-      // 沒有 balance 就新增初始值 0
-      const createBalanceResult = !!findBalance
-        ? null
-        : await strapi.entityService.create('api::balance.balance', {
-            data: {
-              amount: 0,
-              user: body.user_id,
-              currency,
-              amount_type,
-            },
-          })
+    // 計算修改後的 balance
+    const newBalance = Number(findBalance?.amount || 0) - Number(body.amount)
 
-      // 計算修改後的 balance
-      const newBalance = Number(findBalance?.amount || 0) - Number(body.amount)
-
-      // 預防用戶金額不夠領
-      if (Number(body.amount) < 0) {
-        return "amount can't < 0"
-      }
-      if (newBalance < 0) {
-        return 'Insufficient balance'
-      }
-
-      const status = 'PENDING'
-
-      /**
-       * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
-       * 創建一筆 Transaction Record
-       */
-
-      const createTxnResult = await strapi.entityService.create(
-        'api::transaction-record.transaction-record',
-        {
-          data: {
-            type: 'WITHDRAW',
-            title: `user_id #${
-              body.user_id
-            } withdraw $${body.amount.toLocaleString()} ${currency}`,
-            description: '',
-            amount: body.amount,
-            by: 'USER',
-            user: body.user_id, // connect
-            status,
-            currency,
-          },
-        }
-      )
-      return createTxnResult
-    } catch (err) {
-      return err
+    // 預防用戶金額不夠領
+    if (Number(body.amount) < 0) {
+      return "amount can't < 0"
     }
+    if (newBalance < 0) {
+      return 'Insufficient balance'
+    }
+
+    const status = 'PENDING'
+
+    /**
+     * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
+     * 創建一筆 Transaction Record
+     */
+
+    const createTxnResult = await strapi.entityService.create(
+      'api::transaction-record.transaction-record',
+      {
+        data: {
+          type: 'WITHDRAW',
+          title: `user_id #${
+            body.user_id
+          } withdraw $${body.amount.toLocaleString()} ${currency}`,
+          description: '',
+          amount: body.amount,
+          by: 'USER',
+          user: body.user_id, // connect
+          status,
+          currency,
+        },
+      }
+    )
+    return createTxnResult
   },
 })

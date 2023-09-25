@@ -24,31 +24,27 @@ module.exports = {
       }
     }
 
-    try {
-      const transactions = await strapi.entityService.findMany(
-        'api::pp-transaction.pp-transaction',
-        {
-          filters,
-          populate: ['user_id'],
-          sort: { createdAt: 'desc' },
-        }
-      )
-
-      const formattedTransactions = transactions.map((transaction) => ({
-        ...transaction,
-        amount: transaction?.amount?.toString(),
-        timestamp: Number(transaction?.timestamp),
-        user_id: transaction?.user_id?.id,
-        transaction_id: transaction?.id,
-      }))
-
-      ctx.body = {
-        status: '200',
-        message: 'get pp transactions success',
-        data: formattedTransactions,
+    const transactions = await strapi.entityService.findMany(
+      'api::pp-transaction.pp-transaction',
+      {
+        filters,
+        populate: ['user_id'],
+        sort: { createdAt: 'desc' },
       }
-    } catch (err) {
-      ctx.body = err
+    )
+
+    const formattedTransactions = transactions.map((transaction) => ({
+      ...transaction,
+      amount: transaction?.amount?.toString(),
+      timestamp: Number(transaction?.timestamp),
+      user_id: transaction?.user_id?.id,
+      transaction_id: transaction?.id,
+    }))
+
+    ctx.body = {
+      status: '200',
+      message: 'get pp transactions success',
+      data: formattedTransactions,
     }
   },
 }

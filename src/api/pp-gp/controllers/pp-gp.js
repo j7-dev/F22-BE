@@ -70,19 +70,15 @@ module.exports = {
     }
     const queryString = new URLSearchParams(queryParams).toString()
 
-    try {
-      const getResult = await axios.post(
-        `${apiUrl}/getCasinoGames?${queryString}`,
-        null,
-        {
-          family: 4,
-        }
-      )
+    const getResult = await axios.post(
+      `${apiUrl}/getCasinoGames?${queryString}`,
+      null,
+      {
+        family: 4,
+      }
+    )
 
-      ctx.body = getResult?.data
-    } catch (err) {
-      ctx.body = err.response.data
-    }
+    ctx.body = getResult?.data
   },
 
   opengame: async (ctx, next) => {
