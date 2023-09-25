@@ -87,10 +87,21 @@ module.exports = {
 
   opengame: async (ctx, next) => {
     const query = ctx.request.query
+    const user_id = ctx.state.user.id
+    if (!user_id) throw new Error("can't get user_id")
+
+    const siteSetting = await strapi.entityService.findMany(
+      'api::site-setting.site-setting'
+    )
+    const defaultCurrency = siteSetting?.default_currency
+
+    const currency = (query?.currency || '')?.toUpperCase() || defaultCurrency
+
+    const token = nanoid()
     const params = {
       ...query,
       secureLogin,
-      token: nanoid(),
+      token,
     }
     const hash = getHash(params)
     const queryString = objectToQueryString({
@@ -98,18 +109,26 @@ module.exports = {
       hash,
     })
 
-    try {
-      const getResult = await axios.post(
-        `${apiUrl}/game/url?${queryString}`,
-        null,
-        {
-          family: 4,
-        }
-      )
+    const getResult = await axios.post(
+      `${apiUrl}/game/url?${queryString}`,
+      null,
+      {
+        family: 4,
+      }
+    )
 
-      ctx.body = getResult?.data
-    } catch (err) {
-      ctx.body = err.response.data
-    }
+    // save token to pp-token-info
+    const createPpTokenInfoResult = await strapi.entityService.create(
+      'api::pp-token-info.pp-token-info',
+      {
+        data: {
+          token,
+          user_id: user_id,
+          currency,
+        },
+      }
+    )
+
+    ctx.body = getResult?.data
   },
 }
