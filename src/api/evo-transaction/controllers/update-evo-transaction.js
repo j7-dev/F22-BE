@@ -32,28 +32,24 @@ module.exports = {
     const currency =
       body?.data?.currency.toUpperCase() || defaultCurrency || null
 
-    try {
-      const updateResult = await strapi.entityService.update(
-        'api::evo-transaction.evo-transaction',
-        findTxn?.id,
-        {
-          data: {
-            ...body?.data,
-            currency,
-          },
-        }
-      )
-
-      ctx.body = {
-        status: '200',
-        message: 'update evo transactions success',
+    const updateResult = await strapi.entityService.update(
+      'api::evo-transaction.evo-transaction',
+      findTxn?.id,
+      {
         data: {
-          ...updateResult,
-          amount: updateResult?.amount?.toString(),
+          ...body?.data,
+          currency,
         },
       }
-    } catch (err) {
-      ctx.body = err
+    )
+
+    ctx.body = {
+      status: '200',
+      message: 'update evo transactions success',
+      data: {
+        ...updateResult,
+        amount: updateResult?.amount?.toString(),
+      },
     }
   },
 }

@@ -24,12 +24,8 @@ module.exports = {
       },
     })
 
-    try {
-      const getResult = await instance.get(`/${username}/tablelist`)
-      ctx.body = getResult?.data
-    } catch (err) {
-      ctx.body = err
-    }
+    const getResult = await instance.get(`/${username}/tablelist`)
+    ctx.body = getResult?.data
   },
   opengame: async (ctx, next) => {
     const apiUrl = process?.env?.EVO_OPEN_GAME_API_URL
@@ -37,14 +33,10 @@ module.exports = {
     const token = process?.env?.EVO_TOKEN
     const body = ctx?.request?.body
 
-    try {
-      const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
-        family: 4,
-      })
+    const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
+      family: 4,
+    })
 
-      ctx.body = getResult?.data
-    } catch (err) {
-      ctx.body = err.response.data
-    }
+    ctx.body = getResult?.data
   },
 }

@@ -1,0 +1,30 @@
+{
+  "kind": "collectionType",
+  "collectionName": "golf_login_infos",
+  "info": {
+    "singularName": "golf-login-info",
+    "pluralName": "golf-login-infos",
+    "displayName": "golf_login_info",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "login_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    }
+  }
+}

@@ -5,45 +5,37 @@ module.exports = {
     const query = ctx.request.query
 
     // 如果沒有帶參數就回 400
-    const requiredFields = ['user_id', 'reference']
+    const requiredFields = ['login_id', 'bet_id']
 
     for (const field of requiredFields) {
       if (query?.[field] === undefined) {
         return ctx.badRequest(`${field} is required`)
       }
     }
-
-    const filters = {
-      user_id: query.user_id,
-      reference: query.reference,
-      transaction_id: query.transaction_id,
-    }
-    for (let key in filters) {
-      if (filters.hasOwnProperty(key) && filters[key] === undefined) {
-        delete filters[key]
-      }
-    }
-
     const transactions = await strapi.entityService.findMany(
-      'api::pp-transaction.pp-transaction',
+      'api::golf-transaction.golf-transaction',
       {
-        filters,
+        filters: {
+          login_id: query.login_id,
+          bet_id: query.bet_id,
+        },
         populate: ['user_id'],
         sort: { createdAt: 'desc' },
       }
     )
 
     const formattedTransactions = transactions.map((transaction) => ({
-      ...transaction,
-      amount: transaction?.amount?.toString(),
-      timestamp: Number(transaction?.timestamp),
       user_id: transaction?.user_id?.id,
-      transaction_id: transaction?.id,
+      login_id: transaction?.login_id,
+      bet_id: transaction?.bet_id,
+      currency: transaction?.currency,
+      amount: transaction?.amount?.toString(),
+      transaction_type: transaction?.transaction_type,
     }))
 
     ctx.body = {
       status: '200',
-      message: 'get pp transactions success',
+      message: 'get golf transactions success',
       data: formattedTransactions,
     }
   },
