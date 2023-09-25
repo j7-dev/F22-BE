@@ -2,6 +2,15 @@ module.exports = {
   routes: [
     {
       method: 'GET',
+      path: '/bti-api/balance',
+      handler: 'balance.balance',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'GET',
       path: '/bti-api/validatetoken',
       handler: 'validatetoken.validatetoken',
       config: {
