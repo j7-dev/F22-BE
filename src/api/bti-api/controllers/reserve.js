@@ -9,59 +9,48 @@ module.exports = {
     try {
       // 取的 query string 的 auth_token
       const { cust_id, reserve_id, amount, agent_id, customer_id, extsessionID } = ctx.request.query;
+
       //TODO: check user if exist
-      //TODO: check balance if enough
-      //TODO: check reserve record if exist
-
-      const parameters = {
-        user_id: cust_id,
-        amount: amount,
-        title: '手動調整',
-        type: 'MANUAL',
-        by: 'ADMIN',
-        currency: 'KRW'
-      };
-
-      const result = await strapi
-        .service('api::wallet-api.wallet-api')
-        .add(parameters)
-
-      // respond
-      ctx.body = {
-        status: '200',
-        message: 'updateBalance success',
-        data: result,
-      }
-
-      // 取得 reserve_id 的所有 record
-      var entries = [];
-      entries = await strapi.entityService.findMany(
-        "api::bti-requests-singular.bti-requests-singular",
-        {
-          fields: ["ID", "RESERVE_ID", "TRX_ID", "CUST_ID", "AMOUNT"],
-          filters: { reserve_id },
-        }
-      );
-
-      if (entries.length > 0) {
-        const parameters ={
-          "user_id":cust_id
-        };
-
-        const get_user_balance_result = await strapi
-          .service('api::wallet-api.wallet-api')
-          .get(parameters);
-          console.log(get_user_balance_result);
-
+      if(cust_id == "invalidcustid"){
         ctx.body = {
-          error_code: "0",
-          error_message: "No Error",
-          trx_id: entries[0].trx_id,
-          balance: get_user_balance_result
+            error_code: "-2",
+            error_message: "Invalid Customer",
+            balance: 0.00,
+            trx_id: 123456789
         };
         return;
       }
-      const create_bti_request_result = await strapi.entityService.create(
+
+      //TODO: check user balance
+      if(amount>=9999){
+        ctx.body = {
+            error_code: "-4",
+            error_message: "Insufficient Amount",
+            balance: 100.00,
+            trx_id: 123456789
+        };
+        return;
+      }
+
+      // 取得 reserve_id 的所有 record
+      const entries = await strapi.entityService.findMany(
+        "api::bti-requests-singular.bti-requests-singular",
+        {
+          fields: ["ID", "RESERVE_ID", "TRX_ID","CUST_ID","AMOUNT"],
+          filters: { reserve_id },
+        }
+      );
+      
+      if(entries.id !== undefined){
+          ctx.body = {
+            error_code: "0",
+            error_message: "No Error",
+            trx_id: entries,
+            balance: 0
+        };
+        return;
+      }
+      const result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
@@ -71,19 +60,17 @@ module.exports = {
             reserve_id: reserve_id,
             req_id: reserve_id,
             purchase_id: null,
-            url: ctx.request.url,
+            url: "test",
             type: "reserve",
           },
         }
       )
 
       ctx.body = {
-        error_code: "0",
-        error_message: "No Error",
-        trx_id: reserve_id,
-        balance: amount,
-        result: result,
-        create_bti_request_result:create_bti_request_result
+          error_code: "0",
+          error_message: "No Error",
+          trx_id: reserve_id,
+          balance: amount
       };
     } catch (err) {
       ctx.body = err;

@@ -14,11 +14,14 @@
     "@strapi/plugin-users-permissions": "4.12.4",
     "@strapi/strapi": "4.12.4",
     "better-sqlite3": "8.5.0",
+    "crypto": "^1.0.1",
     "dayjs": "^1.11.9",
     "mysql": "^2.18.1",
     "mysql2": "^3.6.0",
     "node-device-detector": "^2.0.16",
-    "strapi-provider-email-smtp": "^1.0.3"
+    "strapi-provider-email-smtp": "^1.0.3",
+    "winston": "^3.10.0",
+    "winston-daily-rotate-file": "^4.7.1"
   },
   "author": {
     "name": "A Strapi developer"

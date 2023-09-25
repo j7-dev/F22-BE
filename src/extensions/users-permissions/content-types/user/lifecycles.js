@@ -1,8 +1,11 @@
+const { nanoid } = require('nanoid')
+
 module.exports = {
   async afterCreate(event) {
     const { result } = event
     const created_user_id = result?.id
 
+    // 取得支援的幣別
     const siteSetting = await strapi.entityService.findMany(
       'api::site-setting.site-setting'
     )
