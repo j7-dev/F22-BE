@@ -45,6 +45,20 @@ module.exports = (plugin) => {
     ctx.body = sanitizeOutput(user)
   }
 
+  plugin.services.isUserExist = {
+    async byUserId(user_id) {
+      if (!user_id) throw new Error('user_id is required')
+      const getUserResult = await strapi.entityService.findOne(
+        'plugin::users-permissions.user',
+        user_id,
+        {
+          fields: ['id'],
+        }
+      )
+      return !!getUserResult
+    },
+  }
+
   // 會讓refine的filter失效
   // plugin.controllers.user.find = async (ctx) => {
   //   const users = await strapi.entityService.findMany(
