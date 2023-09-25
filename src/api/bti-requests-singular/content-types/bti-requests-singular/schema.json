@@ -35,9 +35,6 @@
     },
     "type": {
       "type": "string"
-    },
-    "after_balance": {
-      "type": "decimal"
     }
   }
 }
