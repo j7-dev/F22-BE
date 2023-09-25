@@ -24,7 +24,7 @@ module.exports = {
       try {
         const session_id = auth_token;
         const infos = await strapi.entityService.findMany(
-          'api::evo-session-info.evo-session-info',
+          'api::bti-token-info.bti-token-info',
           {
             filters: {
               session_id,
