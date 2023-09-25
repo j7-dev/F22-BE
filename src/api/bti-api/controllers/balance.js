@@ -7,6 +7,7 @@
 module.exports = {
   balance: async (ctx, next) => {
     var formattedInfos = {};
+    ctx.type = 'text/plain';
     try {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;

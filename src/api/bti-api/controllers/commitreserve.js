@@ -6,6 +6,7 @@
 
 module.exports = {
   commitreserve: async (ctx, next) => {
+    ctx.type = 'text/plain';
     try {
       // 取的 query string 的 auth_token
       const { cust_id, reserve_id, agent_id, customer_id, purchase_id } = ctx.request.query;

@@ -6,6 +6,7 @@
 
 module.exports = {
   cancelreserve: async (ctx, next) => {
+    ctx.type = 'text/plain';
     try {
       // 取的 query string 的 auth_token
       const { cust_id, reserve_id, agent_id, customer_id } = ctx.request.query;

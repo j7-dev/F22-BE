@@ -7,6 +7,7 @@
 module.exports = {
   validatetoken: async (ctx, next) => {
     var formattedInfos = {};
+    ctx.type = 'text/plain';
     try {
       // 取的 query string 的 auth_token
       const { auth_token } = ctx.request.query;
@@ -56,13 +57,13 @@ module.exports = {
           const result = await strapi
             .service('api::wallet-api.wallet-api')
             .get(formattedInfos[0])
-
+          
           ctx.body = {
             error_code: "0",
             error_message: "No error",
-            cust_id: formattedInfos.id,
+            cust_id: formattedInfos[0].id,
             balance: parseFloat(result[0].amount),
-            cust_login: formattedInfos.id,
+            cust_login: formattedInfos[0].id,
             city: "KR",
             country: "KR",
             currency_code: "KRW"
