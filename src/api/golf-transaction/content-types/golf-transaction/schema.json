@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "golf_transactions",
+  "info": {
+    "singularName": "golf-transaction",
+    "pluralName": "golf-transactions",
+    "displayName": "golf_transaction"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "login_id": {
+      "type": "string",
+      "unique": false,
+      "required": true
+    },
+    "bet_id": {
+      "type": "string"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "transaction_type": {
+      "type": "enumeration",
+      "enum": [
+        "BET",
+        "CANCEL"
+      ],
+      "required": true
+    }
+  }
+}
