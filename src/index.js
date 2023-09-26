@@ -31,6 +31,6 @@ module.exports = {
         top_agent_id: 45,
       })
 
-    console.log('⭐  bootstrap  result', result)
+    console.log('⭐  bootstrap  result', start)
   },
 }
