@@ -1,6 +1,5 @@
 'use strict'
 const { removeUndefinedKeys } = require('./utils')
-const authenticatedRoleId = 1
 
 module.exports = ({ strapi }) => ({
   async getOnlineMembers(args) {

@@ -20,17 +20,20 @@ module.exports = {
   async bootstrap({ strapi }) {
     //test
 
-    const start = dayjs()
-      .subtract(7, 'day')
-      .startOf('day')
-      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-    const end = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const startD = dayjs().subtract(7, 'day').startOf('day')
+    const start = startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const endD = dayjs()
+    const end = endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+
     const result = await strapi
       .service('plugin::utility.members')
       .getMembersByAgent({
         top_agent_id: 45,
       })
 
-    console.log('⭐  bootstrap  result', start)
+    console.log(
+      '⭐  bootstrap  result',
+      startD.endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    )
   },
 }

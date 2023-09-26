@@ -25,5 +25,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/dashboard/home',
+      handler: 'dashboard.home',
+      config: {
+        policies: [],
+      },
+    },
   ],
 }
