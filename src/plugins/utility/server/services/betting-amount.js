@@ -1,5 +1,5 @@
 'use strict'
-const omitBy = require('lodash/omitBy')
+const { removeUndefinedKeys } = require('./utils')
 const round = require('lodash/round')
 
 // 有效投注 amount_type = 'CASH'
@@ -28,7 +28,7 @@ module.exports = ({ strapi }) => ({
       },
     }
 
-    const filters = omitBy(defaultFilters, (value) => value === undefined)
+    const filters = removeUndefinedKeys(defaultFilters)
 
     const winRecords = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
@@ -66,7 +66,7 @@ module.exports = ({ strapi }) => ({
       },
     }
 
-    const filters = omitBy(defaultFilters, (value) => value === undefined)
+    const filters = removeUndefinedKeys(defaultFilters)
 
     const winRecords = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',

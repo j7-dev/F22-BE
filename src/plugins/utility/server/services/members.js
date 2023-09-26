@@ -1,5 +1,6 @@
 'use strict'
-const omitBy = require('lodash/omitBy')
+const { removeUndefinedKeys } = require('./utils')
+const authenticatedRoleId = 1
 
 module.exports = ({ strapi }) => ({
   async getOnlineMembers(args) {
@@ -13,7 +14,7 @@ module.exports = ({ strapi }) => ({
       },
     }
 
-    const filters = omitBy(defaultFilters, (value) => value === undefined)
+    const filters = removeUndefinedKeys(defaultFilters)
 
     const allLoginRecords = await strapi.entityService.findMany(
       'api::login-detail.login-detail',
@@ -49,6 +50,35 @@ module.exports = ({ strapi }) => ({
     return members.length
   },
   async getMembersByAgent(args) {
-    return ''
+    const start = args?.start
+    const end = args?.end
+    const agent_id = args?.agent_id
+    const top_agent_id = args?.top_agent_id
+    const fields = args?.fields || '*'
+    const role_type = args?.role_type
+
+    const defaultFilters = {
+      top_agent: top_agent_id,
+      agent: agent_id,
+      createdAt: {
+        $gt: start,
+        $lt: end,
+      },
+      role: {
+        type: role_type,
+      },
+    }
+
+    const filters = removeUndefinedKeys(defaultFilters)
+
+    const allMembers = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields,
+        filters,
+      }
+    )
+
+    return allMembers
   },
 })
