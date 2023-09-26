@@ -48,7 +48,6 @@ module.exports = {
           ctx.body = formatAsKeyValueText({
             error_code: "0",
             error_message: "No Error",
-            trx_id: item.trx_id,
             balance: current_balance
           });
           return;
@@ -68,7 +67,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: Math.floor(new Date().getTime()),
+            trx_id: Math.floor(new Date().getTime()).toString(),
             cust_id: cust_id,
             reserve_id: reserve_id,
             url: ctx.request.url,
