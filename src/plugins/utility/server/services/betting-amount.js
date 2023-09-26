@@ -1,23 +1,26 @@
 'use strict'
-const omitBy = require('lodash/omitBy')
+const { removeUndefinedKeys } = require('./utils')
 const round = require('lodash/round')
 
 // 有效投注 amount_type = 'CASH'
 // 一班投注 amount_type = any
 
 module.exports = ({ strapi }) => ({
-  async getWin(args) {
+  async get(args) {
     const start = args?.start
     const end = args?.end
     const user_id = args?.user_id
     const amount_type = args?.amount_type
     const currency = args?.currency
+    const betResult = args?.type
+    const type = args?.type
 
     const defaultFilters = {
-      type: 'BET',
+      type: type ? type : 'CREDIT',
       status: 'SUCCESS',
       amount: {
-        $gt: 0,
+        $gt: betResult === 'WIN' ? 0 : undefined,
+        $lt: betResult === 'LOSS' ? 0 : undefined,
       },
       user: user_id,
       currency,
@@ -28,7 +31,7 @@ module.exports = ({ strapi }) => ({
       },
     }
 
-    const filters = omitBy(defaultFilters, (value) => value === undefined)
+    const filters = removeUndefinedKeys(defaultFilters)
 
     const winRecords = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
@@ -38,49 +41,38 @@ module.exports = ({ strapi }) => ({
       }
     )
 
-    const totalWin = winRecords.reduce((acc, cur) => {
+    const total = winRecords.reduce((acc, cur) => {
       return Number(acc) + Number(cur.amount)
     }, 0)
 
+    return total
+  },
+  async getWin(args) {
+    const totalWin = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getWin({
+        ...args,
+        betResult: 'WIN',
+      })
     return totalWin
   },
   async getLoss(args) {
-    const start = args?.start
-    const end = args?.end
-    const user_id = args?.user_id
-    const amount_type = args?.amount_type
-    const currency = args?.currency
+    const totalLoss = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getWin({
+        ...args,
+        betResult: 'LOSS',
+      })
 
-    const defaultFilters = {
-      type: 'BET',
-      status: 'SUCCESS',
-      amount: {
-        $lt: 0,
-      },
-      user: user_id,
-      currency,
-      amount_type,
-      createdAt: {
-        $gt: start,
-        $lt: end,
-      },
-    }
+    return Math.abs(totalLoss)
+  },
+  async getPlace(args) {
+    const total = await strapi.service('plugin::utility.bettingAmount').getWin({
+      ...args,
+      type: 'PLACE',
+    })
 
-    const filters = omitBy(defaultFilters, (value) => value === undefined)
-
-    const winRecords = await strapi.entityService.findMany(
-      'api::transaction-record.transaction-record',
-      {
-        fields: ['amount'],
-        filters,
-      }
-    )
-
-    const totalWin = winRecords.reduce((acc, cur) => {
-      return Number(acc) + Number(cur.amount)
-    }, 0)
-
-    return Math.abs(totalWin)
+    return Math.abs(total)
   },
   async getWinLossRatio(args) {
     const totalWin = await strapi

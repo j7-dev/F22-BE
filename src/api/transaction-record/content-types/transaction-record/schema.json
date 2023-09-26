@@ -19,7 +19,9 @@
         "DEPOSIT",
         "WITHDRAW",
         "MANUAL",
-        "COUPON"
+        "COUPON",
+        "DEBIT",
+        "CREDIT"
       ],
       "default": "BET",
       "required": true

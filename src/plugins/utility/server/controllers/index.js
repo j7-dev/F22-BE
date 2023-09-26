@@ -1,7 +1,9 @@
-'use strict';
+'use strict'
 
-const myController = require('./my-controller');
+const bettingAmount = require('./betting-amount')
+const dashboard = require('./dashboard')
 
 module.exports = {
-  myController,
-};
+  bettingAmount,
+  dashboard,
+}
