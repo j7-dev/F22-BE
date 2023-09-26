@@ -14,10 +14,10 @@ module.exports = {
 
       //parameter check
       if (auth_token === undefined) {
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           error_code: "-3",
           error_message: "TokenNotValid"
-        };
+        });
         return;
       }
 
@@ -37,10 +37,10 @@ module.exports = {
 
         //DB result validation
         if (infos == undefined) {
-          ctx.body = {
+          ctx.body = formatAsKeyValueText({
             error_code: "-3",
             error_message: "TokenNotValid"
-          };
+          });
           return;
         }
 
@@ -53,11 +53,10 @@ module.exports = {
           currency: "KRW"
         }));
       } catch (err) {
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           error_code: "-3",
-          error_message: "TokenNotValid",
-          err: err
-        };
+          error_message: "TokenNotValid"
+        });
         return;
       }
 
@@ -67,27 +66,38 @@ module.exports = {
           .service('api::wallet-api.wallet-api')
           .get(formattedInfos[0])
 
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           status: "success",
-          balance: parseFloat(result[0].amount),
-          data: result,
-        }
+          balance: parseFloat(result[0].amount)
+        });
       } catch (err) {
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           error_code: "-3",
-          error_message: "TokenNotValid",
-          err: err
-        };
+          error_message: "TokenNotValid"
+        });
         return;
       }
 
     } catch (err) {
-      ctx.body = {
+      ctx.body = formatAsKeyValueText({
         error_code: "-3",
-        error_message: "TokenNotValid",
-        err: err
-      };
+        error_message: "TokenNotValid"
+      });
       return;
     }
   },
 };
+
+function formatAsKeyValueText(data) {
+  let plainText = '';
+  let isFirstLine = true;
+
+  for (const key in data) {
+    if (!isFirstLine) {
+      plainText += '\n'; // Add newline if it's not the first line
+    }
+    plainText += `${key}=${data[key]}`;
+    isFirstLine = false;
+  }
+  return plainText;
+}
