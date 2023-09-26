@@ -1,4 +1,5 @@
 'use strict'
+const dayjs = require('dayjs')
 
 module.exports = {
   /**
@@ -18,5 +19,19 @@ module.exports = {
    */
   async bootstrap({ strapi }) {
     //test
+
+    const start = dayjs()
+      .subtract(7, 'day')
+      .startOf('day')
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const end = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    const result = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getWin({
+        start,
+        end,
+      })
+
+    console.log('⭐  bootstrap  result', result)
   },
 }

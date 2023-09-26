@@ -24,16 +24,6 @@
       "default": "BET",
       "required": true
     },
-    "by": {
-      "type": "enumeration",
-      "enum": [
-        "SYSTEM",
-        "ADMIN",
-        "USER"
-      ],
-      "default": "SYSTEM",
-      "required": true
-    },
     "title": {
       "type": "string",
       "required": true
@@ -79,6 +69,10 @@
       "target": "plugin::users-permissions.user"
     },
     "amount_type": {
+      "type": "string",
+      "required": true
+    },
+    "by": {
       "type": "string",
       "required": true
     }

@@ -18,4 +18,8 @@ module.exports = ({ env }) => ({
       defaultReplyTo: 'service@yc-tech.co',
     },
   },
+  utility: {
+    enabled: true,
+    resolve: './src/plugins/utility',
+  },
 })
