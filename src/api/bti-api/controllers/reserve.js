@@ -96,7 +96,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: Math.floor(new Date().getTime()),
+        trx_id: Math.floor(new Date().getTime()).toString(),
         balance: krw_amount
       });
     } catch (err) {
