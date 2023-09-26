@@ -80,7 +80,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: cust_id + reserve_id,
+            trx_id: Math.floor(new Date().getTime()),
             cust_id: cust_id,
             amount: amount,
             reserve_id: reserve_id,
@@ -96,7 +96,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: cust_id + reserve_id,
+        trx_id: Math.floor(new Date().getTime()),
         balance: krw_amount
       });
     } catch (err) {

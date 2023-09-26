@@ -33,6 +33,7 @@ module.exports = {
       var reserve_amount = 0;
       var debitreserve_amount = 0;
       var available_amount = 0;
+      var reserve_afterbalance = 0;
 
       for (const item of reserve) {
         if (item.req_id === req_id) {
@@ -47,6 +48,7 @@ module.exports = {
 
         if (item.type === "reserve") {
           reserve_amount += item.amount;
+          reserve_afterbalance = item.after_balance;
         }
 
         if (item.type === "debitreserve") {
@@ -55,20 +57,28 @@ module.exports = {
       }
       available_amount = reserve_amount - debitreserve_amount;
 
-      if(available_amount<amount){
+      if(available_amount+0.01<amount){
         ctx.body = formatAsKeyValueText({
           error_code: "0",
-          error_message: "Total DebitReserve amount larger than Reserve amount"
+          error_message: "Total DebitReserve amount larger than Reserve amount",
+          trx_id: Math.floor(new Date().getTime()),
+          balance: reserve_afterbalance
         });
         return;
       }
+
+      var final_amount = amount;
+      if(available_amount+0.01 === amount){
+        final_amount = amount - 0.01
+      }
+
       const result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: cust_id + reserve_id + req_id,
+            trx_id: Math.floor(new Date().getTime()),
             cust_id: cust_id,
-            amount: amount,
+            amount: final_amount,
             reserve_id: reserve_id,
             req_id: req_id,
             purchase_id: purchase_id,
@@ -81,7 +91,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: cust_id + reserve_id + req_id,
+        trx_id: Math.floor(new Date().getTime()),
         balance: reserve[0].after_balance
       });
     } catch (err) {
