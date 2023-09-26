@@ -35,11 +35,6 @@ module.exports = {
       var available_amount = 0;
 
       for (const item of reserve) {
-        console.log(item);
-        console.log(item.type);
-        console.log("---");
-        console.log(item.req_id);
-        console.log(req_id);
         if (item.req_id === req_id) {
           ctx.body = formatAsKeyValueText({
             error_code: "0",
@@ -58,10 +53,7 @@ module.exports = {
           debitreserve_amount += item.amount;
         }
       }
-      console.log(reserve_amount);
-      console.log(debitreserve_amount);
       available_amount = reserve_amount - debitreserve_amount;
-      console.log(available_amount);
 
       if(available_amount<amount){
         ctx.body = formatAsKeyValueText({
@@ -74,7 +66,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: cust_id + "_" + reserve_id + "_" + req_id,
+            trx_id: cust_id + reserve_id + req_id,
             cust_id: cust_id,
             amount: amount,
             reserve_id: reserve_id,
@@ -89,7 +81,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: reserve_id + "_" + cust_id + "_" + req_id,
+        trx_id: cust_id + reserve_id + req_id,
         balance: reserve[0].after_balance
       });
     } catch (err) {
