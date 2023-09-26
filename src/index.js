@@ -26,10 +26,11 @@ module.exports = {
       .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
     const end = dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
     const result = await strapi
-      .service('plugin::utility.bettingAmount')
-      .getWin({
+      .service('plugin::utility.members')
+      .getOnlineMembers({
         start,
         end,
+        user_id: 1,
       })
 
     console.log('⭐  bootstrap  result', result)

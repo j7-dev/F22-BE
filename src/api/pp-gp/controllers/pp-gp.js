@@ -3,7 +3,6 @@
  * A set of functions called "actions" for `pp-gp`
  */
 const axios = require('axios').default
-const _ = require('lodash')
 const crypto = require('crypto')
 const { nanoid } = require('nanoid')
 const apiUrl = process?.env?.PP_OPEN_GAME_API_URL
