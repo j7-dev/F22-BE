@@ -20,12 +20,12 @@ module.exports = {
       );
       console.log(result);
       if (result.length > 0) {
-        ctx.body = {
+        ctx.body = formatAsKeyValueText({
           error_code: "0",
           error_message: "No Error",
           balance: result[0].after_balance,
           trx_id: result[0].trx_id
-        };
+        });
         return;
       }
 
@@ -58,7 +58,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: cust_id + "_" + purchase_id + "_" + req_id,
+            trx_id: cust_id + purchase_id + req_id,
             cust_id: cust_id,
             amount: amount,
             req_id: req_id,

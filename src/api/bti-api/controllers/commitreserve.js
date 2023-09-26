@@ -68,7 +68,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: cust_id + "_" + reserve_id+"_"+purchase_id,
+            trx_id: cust_id + reserve_id + purchase_id,
             cust_id: cust_id,
             reserve_id: reserve_id,
             agent_id: agent_id,
