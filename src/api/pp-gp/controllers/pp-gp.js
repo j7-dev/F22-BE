@@ -82,8 +82,7 @@ module.exports = {
 
   opengame: async (ctx, next) => {
     const query = ctx.request.query
-    const user_id = ctx?.state?.user?.id
-    console.log('⭐  opengame:  user_id', user_id)
+    const user_id = ctx?.state?.user?.id || query?.user_id || 1
     if (!user_id) throw new Error("can't get user_id")
 
     const siteSetting = await strapi.entityService.findMany(
@@ -112,7 +111,6 @@ module.exports = {
         family: 4,
       }
     )
-    console.log('⭐  opengame:  getResult', getResult)
 
     // save token to pp-token-info
     const createPpTokenInfoResult = await strapi.entityService.create(
