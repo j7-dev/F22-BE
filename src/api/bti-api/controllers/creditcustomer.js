@@ -65,12 +65,13 @@ module.exports = {
         return;
       }
       console.log("creditcustomer - end update balance");
+      var trx_id = Math.floor(new Date().getTime()).toString();
 
       const create_bti_request_result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: Math.floor(new Date().getTime()).toString(),
+            trx_id: trx_id,
             cust_id: cust_id,
             amount: amount,
             agent_id: agent_id,
@@ -87,7 +88,8 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        balance: krw_amount
+        balance: krw_amount,
+        trx_id: trx_id
       });
     } catch (err) {
       ctx.body = err;
