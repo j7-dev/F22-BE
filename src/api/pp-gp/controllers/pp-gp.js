@@ -112,8 +112,6 @@ module.exports = {
       }
     )
 
-    console.log('⭐  opengame  url', `${apiUrl}/game/url?${queryString}`)
-
     // save token to pp-token-info
     const createPpTokenInfoResult = await strapi.entityService.create(
       'api::pp-token-info.pp-token-info',

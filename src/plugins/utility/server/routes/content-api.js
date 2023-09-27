@@ -27,8 +27,16 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/dashboard/home',
-      handler: 'dashboard.home',
+      path: '/statistic/recent',
+      handler: 'statistic.recent',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/statistic/important',
+      handler: 'statistic.important',
       config: {
         policies: [],
       },

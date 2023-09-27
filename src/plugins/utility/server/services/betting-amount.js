@@ -48,28 +48,28 @@ module.exports = ({ strapi }) => ({
     return total
   },
   async getWin(args) {
-    const totalWin = await strapi
-      .service('plugin::utility.bettingAmount')
-      .getWin({
-        ...args,
-        betResult: 'WIN',
-      })
+    const totalWin = await strapi.service('plugin::utility.bettingAmount').get({
+      ...args,
+      type: 'CREDIT',
+      betResult: 'WIN',
+    })
     return totalWin
   },
   async getLoss(args) {
     const totalLoss = await strapi
       .service('plugin::utility.bettingAmount')
-      .getWin({
+      .get({
         ...args,
+        type: 'CREDIT',
         betResult: 'LOSS',
       })
 
     return Math.abs(totalLoss)
   },
-  async getPlace(args) {
-    const total = await strapi.service('plugin::utility.bettingAmount').getWin({
+  async getDebit(args) {
+    const total = await strapi.service('plugin::utility.bettingAmount').get({
       ...args,
-      type: 'PLACE',
+      type: 'DEBIT',
     })
 
     return Math.abs(total)

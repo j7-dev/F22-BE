@@ -1,9 +1,9 @@
 'use strict'
 
 const bettingAmount = require('./betting-amount')
-const dashboard = require('./dashboard')
+const statistic = require('./statistic')
 
 module.exports = {
   bettingAmount,
-  dashboard,
+  statistic,
 }
