@@ -89,7 +89,7 @@ module.exports = {
       }
 
       var final_amount = amount;
-      if(available_amount+0.01 == amount-0.01){
+      if(available_amount+0.01 == amount){
         final_amount = amount - 0.01
       }
 
