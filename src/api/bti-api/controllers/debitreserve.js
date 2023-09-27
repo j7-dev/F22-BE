@@ -89,15 +89,16 @@ module.exports = {
       }
 
       var final_amount = amount;
-      if(available_amount+0.01 === amount){
+      if(available_amount+0.01 == amount-0.01){
         final_amount = amount - 0.01
       }
 
+      var trx_id = Math.floor(new Date().getTime()).toString();
       const result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: Math.floor(new Date().getTime()).toString(),
+            trx_id: trx_id,
             cust_id: cust_id,
             amount: final_amount,
             reserve_id: reserve_id,
@@ -113,7 +114,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: Math.floor(new Date().getTime()).toString(),
+        trx_id: trx_id,
         balance: reserve[0].after_balance
       });
     } catch (err) {
