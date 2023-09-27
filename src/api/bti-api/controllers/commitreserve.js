@@ -68,7 +68,7 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: Math.floor(new Date().getTime()),
+            trx_id: Math.floor(new Date().getTime()).toString(),
             cust_id: cust_id,
             reserve_id: reserve_id,
             agent_id: agent_id,

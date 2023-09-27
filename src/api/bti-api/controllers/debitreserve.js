@@ -21,10 +21,11 @@ module.exports = {
       );
       console.log(reserve);
       if (reserve.length == 0) {
+        
         ctx.body = formatAsKeyValueText({
           error_code: "0",
           error_message: "ReserveID Not Exist",
-          trx_id: 0,
+          trx_id: Math.floor(new Date().getTime()).toString(),
           balance: 0
         });
         return;
@@ -54,6 +55,26 @@ module.exports = {
         if (item.type === "debitreserve") {
           debitreserve_amount += item.amount;
         }
+
+        if (item.type === "cancelreserve") {
+          ctx.body = formatAsKeyValueText({
+            error_code: "0",
+            error_message: "Already cancelled reserve",
+            trx_id: Math.floor(new Date().getTime()).toString(),
+            balance: reserve_afterbalance
+          });
+          return;
+        }
+
+        if (item.type === "commitreserve") {
+          ctx.body = formatAsKeyValueText({
+            error_code: "0",
+            error_message: "Already committed reserve",
+            trx_id: Math.floor(new Date().getTime()).toString(),
+            balance: reserve_afterbalance
+          });
+          return;
+        }
       }
       available_amount = reserve_amount - debitreserve_amount;
 
@@ -61,7 +82,7 @@ module.exports = {
         ctx.body = formatAsKeyValueText({
           error_code: "0",
           error_message: "Total DebitReserve amount larger than Reserve amount",
-          trx_id: Math.floor(new Date().getTime()),
+          trx_id: Math.floor(new Date().getTime()).toString(),
           balance: reserve_afterbalance
         });
         return;
@@ -76,13 +97,14 @@ module.exports = {
         'api::bti-requests-singular.bti-requests-singular',
         {
           data: {
-            trx_id: Math.floor(new Date().getTime()),
+            trx_id: Math.floor(new Date().getTime()).toString(),
             cust_id: cust_id,
             amount: final_amount,
             reserve_id: reserve_id,
             req_id: req_id,
             purchase_id: purchase_id,
             url: ctx.request.url,
+            after_balance: reserve_afterbalance,
             type: "debitreserve",
           },
         }
@@ -91,7 +113,7 @@ module.exports = {
       ctx.body = formatAsKeyValueText({
         error_code: "0",
         error_message: "No Error",
-        trx_id: Math.floor(new Date().getTime()),
+        trx_id: Math.floor(new Date().getTime()).toString(),
         balance: reserve[0].after_balance
       });
     } catch (err) {

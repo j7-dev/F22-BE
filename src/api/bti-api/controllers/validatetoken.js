@@ -51,7 +51,7 @@ module.exports = {
             .service('api::wallet-api.wallet-api')
             .get(formattedInfos[0])
 
-          const jsonData = {
+          ctx.body = formatAsKeyValueText({
             error_code: '0',
             error_message: 'No error',
             cust_id: formattedInfos[0].user_id.id,
@@ -60,9 +60,7 @@ module.exports = {
             city: 'KR',
             country: 'KR',
             currency_code: 'KRW',
-          }
-
-          ctx.body = formatAsKeyValueText(jsonData);
+          });
 
         } catch (err) {
           ctx.body = formatAsKeyValueText({
