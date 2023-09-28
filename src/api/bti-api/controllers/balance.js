@@ -24,12 +24,12 @@ module.exports = {
 
       //get user info by token
       try {
-        const session_id = auth_token;
+        const token = auth_token;
         const infos = await strapi.entityService.findMany(
           'api::bti-token-info.bti-token-info',
           {
             filters: {
-              session_id,
+              token,
             },
             populate: ['user_id'],
             sort: { createdAt: 'desc' },
@@ -46,9 +46,9 @@ module.exports = {
           id: info.id,
           session_id: info.session_id,
           created_at: info.createdAt,
-          user_id: info.user_id.id,
-          currency: "KRW"
-        }));
+          user_id: info.user_id,
+          currency: 'KRW'
+        }))
       } catch (err) {
         return;
       }
