@@ -149,8 +149,8 @@ module.exports = () => ({
     const defaultCurrency = siteSetting?.default_currency
 
     const currency = query?.currency || defaultCurrency || null
-    console.log("GetBalance");
-      console.log(query);
+    console.log('GetBalance')
+    console.log(query)
     // 如果沒有帶參數就回 400
     const requiredFields = ['user_id']
 
@@ -223,10 +223,12 @@ module.exports = () => ({
     const siteSetting = await strapi.entityService.findMany(
       'api::site-setting.site-setting'
     )
+
     const defaultCurrency = siteSetting?.default_currency
     const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
 
-    const currency = body?.currency.toUpperCase() || defaultCurrency || null
+    const currency =
+      (body?.currency || '').toUpperCase() || defaultCurrency || null
     const amount_type = body?.amount_type || defaultAmountType
 
     const balances =
@@ -278,11 +280,12 @@ module.exports = () => ({
             body.user_id
           } withdraw $${body.amount.toLocaleString()} ${currency}`,
           description: '',
-          amount: body.amount,
+          amount: body?.amount,
+          currency,
+          amount_type,
           by: 'USER',
           user: body.user_id, // connect
           status,
-          currency,
         },
       }
     )
