@@ -13,14 +13,31 @@ module.exports = ({ strapi }) => ({
         endD: dayjs(query?.end),
       }) || []
 
-    const winLossRatio = await Promise.all(
+    // const winLossRatio = await Promise.all(
+    //   dateArr.map(async (dateItem) => {
+    //     const value = await strapi
+    //       .service('plugin::utility.bettingAmount')
+    //       .getWinLossRatio({
+    //         start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //         end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //       })
+
+    //     const payload = {
+    //       date: dateItem.startD.format('YYYY/MM/DD (dd)'),
+    //       value,
+    //     }
+    //     return payload
+    //   })
+    // )
+
+    const dpWd = await Promise.all(
       dateArr.map(async (dateItem) => {
-        const value = await strapi
-          .service('plugin::utility.bettingAmount')
-          .getWinLossRatio({
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          })
+        const value = await strapi.service('plugin::utility.dpWd').getDpWd({
+          currency,
+          amount_type: 'CASH',
+          start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        })
 
         const payload = {
           date: dateItem.startD.format('YYYY/MM/DD (dd)'),
@@ -29,6 +46,7 @@ module.exports = ({ strapi }) => ({
         return payload
       })
     )
+
     const validBet = await Promise.all(
       dateArr.map(async (dateItem) => {
         const value = await strapi
@@ -48,19 +66,42 @@ module.exports = ({ strapi }) => ({
       })
     )
 
-    const bettingAmount = await Promise.all(
+    // const bettingAmount = await Promise.all(
+    //   dateArr.map(async (dateItem) => {
+    //     const value = await strapi
+    //       .service('plugin::utility.bettingAmount')
+    //       .get({
+    //         currency,
+    //         start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //         end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //       })
+
+    //     const payload = {
+    //       date: dateItem.startD.format('YYYY/MM/DD (dd)'),
+    //       value,
+    //     }
+    //     return payload
+    //   })
+    // )
+
+    const numberOfRegistrants = await Promise.all(
       dateArr.map(async (dateItem) => {
-        const value = await strapi
-          .service('plugin::utility.bettingAmount')
-          .get({
-            currency,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          })
+        const value = await strapi.entityService.findMany(
+          'plugin::users-permissions.user',
+          {
+            fields: ['id'],
+            filters: {
+              createdAt: {
+                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+              },
+            },
+          }
+        )
 
         const payload = {
           date: dateItem.startD.format('YYYY/MM/DD (dd)'),
-          value,
+          value: value.length,
         }
         return payload
       })
@@ -104,9 +145,11 @@ module.exports = ({ strapi }) => ({
     )
 
     const data = {
-      winLossRatio,
+      // winLossRatio,
+      dpWd,
       validBet,
-      bettingAmount,
+      // bettingAmount,
+      numberOfRegistrants,
       onlineMembers,
       totalDeposit,
     }
