@@ -1,6 +1,12 @@
 const { nanoid } = require('nanoid')
 
 module.exports = {
+  async beforeCreate(event) {
+    const { params } = event
+    const { data } = params
+    data.uuid = nanoid()
+    data.confirmed = false
+  },
   async afterCreate(event) {
     const { result } = event
     const created_user_id = result?.id
@@ -10,7 +16,7 @@ module.exports = {
       'api::site-setting.site-setting'
     )
 
-    const supportCurrencies = siteSetting?.support_currencies || []
+    const supportCurrencies = siteSetting?.support_currencies || ['KRW']
     const supportAmountTypes = siteSetting?.support_amount_types || ['CASH']
 
     supportCurrencies.forEach(async (currency) => {
