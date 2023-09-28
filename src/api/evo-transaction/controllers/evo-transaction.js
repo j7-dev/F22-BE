@@ -17,7 +17,7 @@ module.exports = createCoreController(
       )
       const defaultCurrency = siteSetting?.default_currency
       const currency =
-        body.data.currency.toUpperCase() || defaultCurrency || null
+        (body?.data?.currency || '').toUpperCase() || defaultCurrency || null
 
       // 如果沒有帶參數就回 400
       const requiredFields = ['user_id', 'session_id']

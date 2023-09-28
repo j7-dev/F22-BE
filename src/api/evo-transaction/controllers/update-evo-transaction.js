@@ -30,7 +30,7 @@ module.exports = {
     const defaultCurrency = siteSetting?.default_currency
 
     const currency =
-      body?.data?.currency.toUpperCase() || defaultCurrency || null
+      (body?.data?.currency || '').toUpperCase() || defaultCurrency || null
 
     const updateResult = await strapi.entityService.update(
       'api::evo-transaction.evo-transaction',
