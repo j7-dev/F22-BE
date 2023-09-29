@@ -15,41 +15,25 @@
     "status": {
       "type": "enumeration",
       "enum": [
-        "PENDING",
-        "COMPLETE",
-        "CANCEL"
-      ],
-      "default": "PENDING",
-      "required": true
-    },
-    "result": {
-      "type": "enumeration",
-      "enum": [
-        "BET",
+        "DRAW",
         "WIN",
-        "LOSE"
+        "LOSE",
+        "CANCEL",
+        "GAMING"
       ],
-      "default": "BET",
       "required": true
     },
-    "game_provider": {
-      "type": "string",
-      "required": true
-    },
-    "game": {
-      "type": "string",
-      "required": true
-    },
-    "amount": {
+    "stake": {
       "type": "decimal",
-      "required": true,
-      "min": 0
+      "required": true
     },
-    "transaction_record": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::transaction-record.transaction-record",
-      "mappedBy": "bet_record"
+    "actual_stake": {
+      "type": "decimal",
+      "required": true
+    },
+    "winloss": {
+      "type": "decimal",
+      "required": true
     },
     "currency": {
       "type": "string",
@@ -58,6 +42,33 @@
     "amount_type": {
       "type": "string",
       "required": true
+    },
+    "game_provider": {
+      "type": "string",
+      "required": true
+    },
+    "game_provider_game_id": {
+      "type": "string"
+    },
+    "game_provider_transaction_id": {
+      "type": "string"
+    },
+    "debit_txn": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction-record.transaction-record",
+      "inversedBy": "debit_bet_record"
+    },
+    "meta": {
+      "type": "component",
+      "repeatable": true,
+      "component": "general.meta-data"
+    },
+    "credit_txn": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::transaction-record.transaction-record",
+      "inversedBy": "credit_bet_record"
     }
   }
 }

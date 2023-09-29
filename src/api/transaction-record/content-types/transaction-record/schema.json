@@ -49,12 +49,6 @@
       "default": "PENDING",
       "required": true
     },
-    "bet_record": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::bet-record.bet-record",
-      "inversedBy": "transaction_record"
-    },
     "user": {
       "type": "relation",
       "relation": "manyToOne",
@@ -77,6 +71,18 @@
     "by": {
       "type": "string",
       "required": true
+    },
+    "debit_bet_record": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::bet-record.bet-record",
+      "inversedBy": "debit_txn"
+    },
+    "credit_bet_record": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::bet-record.bet-record",
+      "inversedBy": "credit_txn"
     }
   }
 }
