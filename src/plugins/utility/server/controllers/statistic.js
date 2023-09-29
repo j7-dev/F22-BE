@@ -1,12 +1,15 @@
 'use strict'
 const { countByDate } = require('../services/utils')
+const { removeUndefinedKeys } = require('../services/utils')
 const dayjs = require('dayjs')
-const currency = 'KRW'
-const amount_type = 'CASH'
+const deafault_currency = 'KRW'
+const deafault_amount_type = 'CASH'
 
 module.exports = ({ strapi }) => ({
   async recent(ctx) {
     const query = ctx.request.query
+    const currency = query?.currency || deafault_currency
+    const amount_type = query?.amount_type || deafault_amount_type
     const dateArr =
       countByDate({
         startD: dayjs(query?.start),
@@ -34,7 +37,7 @@ module.exports = ({ strapi }) => ({
       dateArr.map(async (dateItem) => {
         const value = await strapi.service('plugin::utility.dpWd').getDpWd({
           currency,
-          amount_type: 'CASH',
+          amount_type,
           start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
           end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
         })
@@ -53,7 +56,7 @@ module.exports = ({ strapi }) => ({
           .service('plugin::utility.bettingAmount')
           .get({
             currency,
-            amount_type: 'CASH',
+            amount_type,
             start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
             end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
           })
@@ -161,6 +164,9 @@ module.exports = ({ strapi }) => ({
     }
   },
   async important(ctx) {
+    const query = ctx.request.query
+    const currency = query?.currency || deafault_currency
+    const amount_type = query?.amount_type || deafault_amount_type
     const dateArr = [
       {
         // today
@@ -222,6 +228,7 @@ module.exports = ({ strapi }) => ({
       const roleType = args?.roleType
       const countType = args?.countType
       const format = args?.format
+      const populate = args?.populate || []
 
       const resultArr = await Promise.all(
         dateArr.map(async (dateItem) => {
@@ -235,16 +242,19 @@ module.exports = ({ strapi }) => ({
                   $lte: dateItem.end,
                 }
 
+          const default_where = {
+            role: {
+              type: roleType,
+            },
+            createdAt,
+          }
+
           const [entities, count] = await strapi.db
             .query('plugin::users-permissions.user')
             .findWithCount({
               select: ['id'],
-              where: {
-                role: {
-                  type: roleType,
-                },
-                createdAt,
-              },
+              where: removeUndefinedKeys(default_where),
+              populate,
             })
 
           const value = format
@@ -274,7 +284,6 @@ module.exports = ({ strapi }) => ({
       const countType = args?.countType
       const format = args?.format
       const status = args?.status || 'SUCCESS'
-      const amount_type = args?.amount_type || '*'
 
       const resultArr = await Promise.all(
         dateArr.map(async (dateItem) => {
@@ -339,56 +348,72 @@ module.exports = ({ strapi }) => ({
       return resultObj
     }
 
-    const agentInfo_topAgent = await getMembersByRoleAndDate({
-      roleType: 'top_agent',
-      format: 'COUNT',
-    })
-    const agentInfo_agent = await getMembersByRoleAndDate({
-      roleType: 'agent',
-      format: 'COUNT',
-    })
-
-    const newMembers_totalMembers = await getMembersByRoleAndDate({
-      roleType: 'agent',
-      format: 'COUNT',
-    })
-
-    const newMembers_amountForDepositMembers = await getTxnByDate({
-      type: 'DEPOSIT',
-      format: (entities) => {
-        const user_ids = entities.map((entity) => entity.user.id)
-        const unique_user_ids = Array.from(new Set(user_ids))
-        return unique_user_ids.length
+    const allNewUsers = await getMembersByRoleAndDate({
+      populate: {
+        role: {
+          select: ['id', 'type'],
+        },
       },
-      countType: 'NEW_USER',
     })
 
-    const turnoverInfo_total = await getTxnByDate({
+    const agentInfo_newTopAgent = Object.keys(allNewUsers).reduce(
+      (acc, key) => {
+        const user_ids = allNewUsers[key]
+          .filter((user) => user?.role?.type === 'top_agent')
+          .map((user) => user?.id)
+        acc[key] = user_ids.length
+        return acc
+      },
+      {}
+    )
+
+    const agentInfo_newAgent = Object.keys(allNewUsers).reduce((acc, key) => {
+      const user_ids = allNewUsers[key]
+        .filter((user) => user?.role?.type === 'agent')
+        .map((user) => user?.id)
+      acc[key] = user_ids.length
+      return acc
+    }, {})
+
+    const newMembers_newMembers = Object.keys(allNewUsers).reduce(
+      (acc, key) => {
+        const user_ids = allNewUsers[key]
+          .filter((user) => user?.role?.type === 'authenticated')
+          .map((user) => user?.id)
+        acc[key] = user_ids.length
+        return acc
+      },
+      {}
+    )
+
+    const debitTxns = await getTxnByDate({
       type: 'DEBIT',
-      format: (entities) => {
-        const totalAmount = entities.reduce((acc, cur) => {
-          acc += cur.amount
-          return acc
-        }, 0)
-
-        return totalAmount
-      },
+      status: 'SUCCESS',
     })
 
-    const turnoverInfo_totalMember = await getTxnByDate({
-      type: 'DEBIT',
-      format: (entities) => {
-        const user_ids = entities.map((entity) => entity.user.id)
+    const turnoverInfo_total = Object.keys(debitTxns).reduce((acc, key) => {
+      const value = debitTxns[key].reduce((a, c) => {
+        a += c.amount
+        return a
+      }, 0)
+      acc[key] = value
+      return acc
+    }, {})
 
+    const turnoverInfo_totalMember = Object.keys(debitTxns).reduce(
+      (acc, key) => {
+        const user_ids = debitTxns[key].map((txn) => txn?.user?.id)
         const unique_user_ids = Array.from(new Set(user_ids))
-
-        return unique_user_ids.length
+        acc[key] = unique_user_ids.length
+        return acc
       },
-    })
+      {}
+    )
 
+    // TODO bettingInfo
     const bettingInfo_validBetAmount = await getTxnByDate({
       type: 'DEBIT',
-      amount_type: 'CASH',
+      amount_type,
       format: (entities) => {
         const totalAmount = entities.reduce((acc, cur) => {
           acc += cur.amount
@@ -399,64 +424,95 @@ module.exports = ({ strapi }) => ({
       },
     })
 
-    const depositInfo_total = await getTxnByDate({
+    // Deposit info
+    const depositTxns = await getTxnByDate({
       type: 'DEPOSIT',
-      amount_type: 'CASH',
-      format: (entities) => {
-        const totalAmount = entities.reduce((acc, cur) => {
-          acc += cur.amount
-          return acc
-        }, 0)
-
-        return totalAmount
-      },
+      status: 'SUCCESS',
+      amount_type,
     })
 
-    const depositInfo_totalMember = await getTxnByDate({
-      type: 'DEPOSIT',
-      format: (entities) => {
-        const user_ids = entities.map((entity) => entity.user.id)
+    const newMembers_amountForDepositMembers = Object.keys(depositTxns).reduce(
+      (acc, key) => {
+        const new_user_ids = allNewUsers[key].map((user) => user?.id)
+
+        const new_user_deposits = depositTxns?.[key]?.filter((txn) =>
+          new_user_ids.includes(txn?.user?.id)
+        )
+
+        const amount = new_user_deposits.reduce((a, c) => {
+          a += c.amount
+          return a
+        }, 0)
+        acc[key] = amount
+        return acc
+      },
+      {}
+    )
+
+    const depositInfo_total = Object.keys(depositTxns).reduce((acc, key) => {
+      const value = depositTxns[key].reduce((a, c) => {
+        a += c.amount
+        return a
+      }, 0)
+      acc[key] = value
+      return acc
+    }, {})
+
+    const depositInfo_totalMember = Object.keys(depositTxns).reduce(
+      (acc, key) => {
+        const user_ids = depositTxns[key].map((txn) => txn?.user?.id)
         const unique_user_ids = Array.from(new Set(user_ids))
-        return unique_user_ids.length
+        acc[key] = unique_user_ids.length
+        return acc
       },
-    })
+      {}
+    )
 
-    const depositInfo_totalQty = await getTxnByDate({
-      type: 'DEPOSIT',
-      format: 'COUNT',
-    })
+    const depositInfo_totalQty = Object.keys(depositTxns).reduce((acc, key) => {
+      const countTxns = depositTxns[key].length
+      acc[key] = countTxns
+      return acc
+    }, {})
 
-    const withdrawInfo_total = await getTxnByDate({
+    // Withdraw info
+    const withdrawTxns = await getTxnByDate({
       type: 'WITHDRAW',
-      amount_type: 'CASH',
-      format: (entities) => {
-        const totalAmount = entities.reduce((acc, cur) => {
-          acc += cur.amount
-          return acc
-        }, 0)
-
-        return totalAmount
-      },
+      status: 'SUCCESS',
+      amount_type,
     })
 
-    const withdrawInfo_totalMember = await getTxnByDate({
-      type: 'WITHDRAW',
-      format: (entities) => {
-        const user_ids = entities.map((entity) => entity.user.id)
+    const withdrawInfo_total = Object.keys(withdrawTxns).reduce((acc, key) => {
+      const value = withdrawTxns[key].reduce((a, c) => {
+        a += c.amount
+        return a
+      }, 0)
+      acc[key] = value
+      return acc
+    }, {})
+
+    const withdrawInfo_totalMember = Object.keys(withdrawTxns).reduce(
+      (acc, key) => {
+        const user_ids = withdrawTxns[key].map((txn) => txn?.user?.id)
         const unique_user_ids = Array.from(new Set(user_ids))
-        return unique_user_ids.length
+        acc[key] = unique_user_ids.length
+        return acc
       },
-    })
+      {}
+    )
 
-    const withdrawInfo_totalQty = await getTxnByDate({
-      type: 'DEPOSIT',
-      format: 'COUNT',
-    })
+    const withdrawInfo_totalQty = Object.keys(withdrawTxns).reduce(
+      (acc, key) => {
+        const countTxns = withdrawTxns[key].length
+        acc[key] = countTxns
+        return acc
+      },
+      {}
+    )
 
     const data = {
-      agentInfo_topAgent,
-      agentInfo_agent,
-      newMembers_totalMembers,
+      agentInfo_newTopAgent,
+      agentInfo_newAgent,
+      newMembers_newMembers,
       newMembers_amountForDepositMembers,
       turnoverInfo_total,
       turnoverInfo_totalMember, // 有投注的人數
