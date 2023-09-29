@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2023-09-29T03:20:58.969Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="p7nFvh3Ztikb-o8wnFox" version="21.8.1" type="github" pages="3">
+<mxfile host="app.diagrams.net" modified="2023-09-29T03:41:36.478Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/118.0" etag="kZ1dMNru1jcQBOFq_Xh6" version="21.8.1" type="github" pages="3">
   <diagram name="Main System" id="efa7a0a1-bf9b-a30e-e6df-94a7791c09e9">
-    <mxGraphModel dx="4499" dy="1791" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
+    <mxGraphModel dx="4366" dy="1722" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="826" pageHeight="1169" background="none" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -1450,7 +1450,7 @@
             <mxRectangle width="120" height="46" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1138" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;BET | DEPOSIT | WITHDRAW | MANUAL | COUPON&lt;/font&gt;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1135" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1138" value="DEPOSIT | WITHDRAW | MANUAL | COUPON | DEBIT | CREDIT" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1135" vertex="1">
           <mxGeometry x="240" width="520" height="46" as="geometry">
             <mxRectangle width="520" height="46" as="alternateBounds" />
           </mxGeometry>
@@ -2069,7 +2069,7 @@
         <mxCell id="JA4_q4VAuaDKWuVmDtCK-1693" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1396" vertex="1">
           <mxGeometry y="57" width="810" height="27" as="geometry" />
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1694" value="status" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" parent="JA4_q4VAuaDKWuVmDtCK-1693" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1694" value="status*" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" parent="JA4_q4VAuaDKWuVmDtCK-1693" vertex="1">
           <mxGeometry width="280" height="27" as="geometry">
             <mxRectangle width="280" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2097,7 +2097,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-16" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-13">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-16" value="投注金額" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-13">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2115,7 +2115,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-36" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-33">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-36" value="真實投注金額" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-33">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2123,7 +2123,7 @@
         <mxCell id="IioWi3aVf6yQb5EtpMbc-37" style="shape=tableRow;horizontal=0;startSize=0;swimlaneHead=0;swimlaneBody=0;strokeColor=inherit;top=0;left=0;bottom=0;right=0;collapsible=0;dropTarget=0;fillColor=none;points=[[0,0.5],[1,0.5]];portConstraint=eastwest;fontSize=16;" vertex="1" parent="JA4_q4VAuaDKWuVmDtCK-1396">
           <mxGeometry y="138" width="810" height="27" as="geometry" />
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-38" value="winlost" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-37">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-38" value="winloss" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;align=left;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-37">
           <mxGeometry width="280" height="27" as="geometry">
             <mxRectangle width="280" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2133,7 +2133,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-40" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-37">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-40" value="結算贏了多少錢&amp;nbsp; -10就是輸了10元" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-37">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2187,7 +2187,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1688" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1685" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1688" value="GP的名字" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1685" vertex="1">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2205,7 +2205,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1692" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1689" vertex="1">
+        <mxCell id="JA4_q4VAuaDKWuVmDtCK-1692" value="玩哪個遊戲" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" parent="JA4_q4VAuaDKWuVmDtCK-1689" vertex="1">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2223,7 +2223,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-4" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-1">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-4" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;對應GP那邊的transaction_id，好像每個GP叫法不同&lt;br&gt;&lt;/font&gt;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-1">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2241,7 +2241,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-57" value="投注的 transaction_record" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-54">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-57" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;投注的 transaction_record_id &lt;font style=&quot;font-size: 12px;&quot;&gt;可以從 wallet-api/add取得&lt;/font&gt;&lt;/font&gt;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-54">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2259,7 +2259,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-53" value="結算的 transaction_record" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-50">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-53" value="&lt;font style=&quot;font-size: 12px;&quot;&gt;結算的 transaction_record_id 可以從 wallet-api/add取得&lt;/font&gt;" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-50">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
@@ -2277,7 +2277,7 @@
             <mxRectangle width="157" height="27" as="alternateBounds" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="IioWi3aVf6yQb5EtpMbc-63" value="" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-60">
+        <mxCell id="IioWi3aVf6yQb5EtpMbc-63" value="紀錄額外資訊" style="shape=partialRectangle;html=1;whiteSpace=wrap;connectable=0;strokeColor=inherit;overflow=hidden;fillColor=none;top=0;left=0;bottom=0;right=0;pointerEvents=1;fontSize=16;" vertex="1" parent="IioWi3aVf6yQb5EtpMbc-60">
           <mxGeometry x="437" width="373" height="27" as="geometry">
             <mxRectangle width="373" height="27" as="alternateBounds" />
           </mxGeometry>
