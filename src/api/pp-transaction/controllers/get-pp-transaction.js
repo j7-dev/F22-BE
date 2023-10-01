@@ -17,8 +17,9 @@ module.exports = {
       user_id: query.user_id,
       reference: query.reference,
       transaction_id: query.transaction_id,
+      bonusCode: query?.bonusCode,
     }
-    for (let key in filters) {
+    for (const key in filters) {
       if (filters.hasOwnProperty(key) && filters[key] === undefined) {
         delete filters[key]
       }
@@ -39,6 +40,7 @@ module.exports = {
       timestamp: Number(transaction?.timestamp),
       user_id: transaction?.user_id?.id,
       transaction_id: transaction?.id,
+      bonusCode: transaction?.bonusCode || null,
     }))
 
     ctx.body = {
