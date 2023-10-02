@@ -23,9 +23,7 @@ module.exports = () => ({
     }
 
     // 取得幣別
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
+    const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
     const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
     const amount_type = body?.amount_type || defaultAmountType
@@ -143,9 +141,7 @@ module.exports = () => ({
     return result
   },
   get: async (query) => {
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
+    const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
 
     const currency = query?.currency || defaultCurrency || null
@@ -218,10 +214,7 @@ module.exports = () => ({
     }
 
     // 取得幣別
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
-
+    const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
     const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
 

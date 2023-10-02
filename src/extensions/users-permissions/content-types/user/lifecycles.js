@@ -12,10 +12,7 @@ module.exports = {
     const created_user_id = result?.id
 
     // 取得支援的幣別
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
-
+    const siteSetting = global.appData.siteSetting
     const supportCurrencies = siteSetting?.support_currencies || ['KRW']
     const supportAmountTypes = siteSetting?.support_amount_types || ['CASH']
 

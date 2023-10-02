@@ -12,9 +12,7 @@ module.exports = createCoreController(
     async create(ctx) {
       const body = ctx.request.body
 
-      const siteSetting = await strapi.entityService.findMany(
-        'api::site-setting.site-setting'
-      )
+      const siteSetting = global.appData.siteSetting
       const defaultCurrency = siteSetting?.default_currency
       const currency =
         (body?.data?.currency || '').toUpperCase() || defaultCurrency || null
