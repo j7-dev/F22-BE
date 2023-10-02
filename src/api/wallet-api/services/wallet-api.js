@@ -5,7 +5,7 @@
  */
 
 module.exports = () => ({
-  add: async (body) => {
+  addBalacne: async (body) => {
     // 如果沒有帶參數就回 400
     const requiredFields = [
       'type',
@@ -65,10 +65,8 @@ module.exports = () => ({
       return 'Insufficient balance'
     }
 
-    let status = 'PENDING'
-
     // 更新 balance
-    await strapi.db.transaction(
+    return await strapi.db.transaction(
       async ({ trx, rollback, commit, onCommit, onRollback }) => {
         // Update the user balance
 
@@ -82,18 +80,19 @@ module.exports = () => ({
           }
         )
         if (updateResult?.id) {
-          status = 'SUCCESS'
+          return updateResult
         } else {
-          status = 'FAILED'
           throw new Error(
             `update balance failed ${JSON.stringify(updateResult)}`
           )
         }
       }
     )
-
-    // const updatedBalanceAmount =
-    //   status === 'SUCCESS' ? newBalance : findBalance?.amount
+  },
+  add: async (body) => {
+    const updateResult = await strapi
+      .service('api::wallet-api.wallet-api')
+      .addBalacne(body)
 
     /**
      * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
@@ -108,12 +107,12 @@ module.exports = () => ({
           title: body.title,
           description: body.description,
           amount: body.amount,
-          amount_type,
-          currency,
+          amount_type: updateResult?.amount_type,
+          currency: updateResult?.currency,
           by: body.by,
           user: body.user_id, // connect
           bet_record: body.bet_record_id, // connect
-          status,
+          status: updateResult?.id ? 'SUCCESS' : 'FAILED',
         },
       }
     )
