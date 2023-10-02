@@ -18,6 +18,12 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }) {
-    //test
+    const siteSetting = await strapi.entityService.findMany(
+      'api::site-setting.site-setting'
+    )
+    // 將 siteSetting 設定到 global 全域變數
+    global.appData = {
+      siteSetting,
+    }
   },
 }
