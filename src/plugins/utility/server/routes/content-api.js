@@ -49,5 +49,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-uuid',
+      handler: 'helper.updateAllUserUUID',
+      config: {
+        policies: [],
+      },
+    },
   ],
 }
