@@ -73,7 +73,10 @@
     },
     "gender": {
       "type": "enumeration",
-      "enum": ["MALE", "FEMALE"]
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ]
     },
     "birthday": {
       "type": "date"
@@ -128,7 +131,7 @@
     },
     "uuid": {
       "type": "string",
-      "unique": true,
+      "unique": false,
       "default": " "
     },
     "commission": {
