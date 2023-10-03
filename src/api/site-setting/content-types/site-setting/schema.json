@@ -40,6 +40,12 @@
     "support_amount_types": {
       "type": "json",
       "required": true
+    },
+    "support_payments": {
+      "type": "json"
+    },
+    "support_game_providers": {
+      "type": "json"
     }
   }
 }

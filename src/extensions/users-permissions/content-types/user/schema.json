@@ -149,6 +149,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "allow_payments": {
+      "type": "json"
+    },
+    "allow_game_providers": {
+      "type": "json"
     }
   }
 }

@@ -41,5 +41,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-payments-gp',
+      handler: 'helper.updateAllUserPaymentsGP',
+      config: {
+        policies: [],
+      },
+    },
   ],
 }
