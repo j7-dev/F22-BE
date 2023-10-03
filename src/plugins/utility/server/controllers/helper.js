@@ -8,10 +8,6 @@ module.exports = ({ strapi }) => ({
     const result = await strapi.db
       .query('plugin::users-permissions.user')
       .updateMany({
-        where: {
-          allow_payments: null,
-          allow_game_providers: null,
-        },
         data: {
           allow_payments: support_payments,
           allow_game_providers: support_game_providers,
