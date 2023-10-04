@@ -3,6 +3,14 @@ module.exports = {
   routes: [
     {
       method: 'GET',
+      path: '/betting-records',
+      handler: 'bettingRecords.get',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
       path: '/betting-amount/win',
       handler: 'bettingAmount.getWin',
       config: {
