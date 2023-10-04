@@ -10,12 +10,12 @@ module.exports = createCoreController(
   'api::evo-transaction.evo-transaction',
   ({ strapi }) => ({
     async create(ctx) {
-      const body = ctx.request.body
+      const body = ctx.request.body?.data
 
       const siteSetting = global.appData.siteSetting
       const defaultCurrency = siteSetting?.default_currency
       const currency =
-        (body?.data?.currency || '').toUpperCase() || defaultCurrency || null
+        (body?.currency || '').toUpperCase() || defaultCurrency || null
 
       // 如果沒有帶參數就回 400
       const requiredFields = ['user_id', 'session_id']
