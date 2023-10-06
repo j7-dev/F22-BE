@@ -45,7 +45,7 @@ module.exports = {
       //get balance by user id
       const userBalanceArray = await strapi
         .service('api::wallet-api.wallet-api')
-        .get({user_id: userInfo.id});
+        .get({user_id: userInfo.user_id.id});
 
       const userBalance = userBalanceArray[0];
 
