@@ -85,9 +85,7 @@ module.exports = {
     const user_id = query?.user_id || 1
     if (!user_id) throw new Error("can't get user_id")
 
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
+    const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
 
     const currency = (query?.currency || '')?.toUpperCase() || defaultCurrency

@@ -24,9 +24,7 @@ module.exports = {
       return ctx.badRequest('transaction not found')
     }
     const findTxn = findTxns[0]
-    const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
-    )
+    const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
 
     const currency =

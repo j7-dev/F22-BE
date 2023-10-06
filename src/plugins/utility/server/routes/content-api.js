@@ -3,6 +3,14 @@ module.exports = {
   routes: [
     {
       method: 'GET',
+      path: '/betting-records',
+      handler: 'bettingRecords.get',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
       path: '/betting-amount/win',
       handler: 'bettingAmount.getWin',
       config: {
@@ -37,6 +45,22 @@ module.exports = {
       method: 'GET',
       path: '/statistic/important',
       handler: 'statistic.important',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-payments-gp',
+      handler: 'helper.updateAllUserPaymentsGP',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-uuid',
+      handler: 'helper.updateAllUserUUID',
       config: {
         policies: [],
       },

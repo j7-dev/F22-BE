@@ -18,6 +18,23 @@ module.exports = {
    * run jobs, or perform some special logic.
    */
   async bootstrap({ strapi }) {
-    //test
+    const siteSetting = await strapi.entityService.findMany(
+      'api::site-setting.site-setting'
+    )
+    const gameProvider = {
+      EVO: {
+        txn: 'api::evo-transaction.evo-transaction',
+      },
+      PP: {
+        txn: 'api::pp-transaction.pp-transaction',
+      },
+    }
+    // 將 siteSetting 設定到 global 全域變數
+    global.appData = {
+      siteSetting,
+      gameProvider,
+    }
+
+    // TODO 開遊戲前確認每個人身上的權限能不能開
   },
 }

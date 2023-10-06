@@ -73,7 +73,10 @@
     },
     "gender": {
       "type": "enumeration",
-      "enum": ["MALE", "FEMALE"]
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ]
     },
     "birthday": {
       "type": "date"
@@ -128,7 +131,7 @@
     },
     "uuid": {
       "type": "string",
-      "unique": true,
+      "unique": false,
       "default": " "
     },
     "commission": {
@@ -146,6 +149,12 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "allow_payments": {
+      "type": "json"
+    },
+    "allow_game_providers": {
+      "type": "json"
     }
   }
 }
