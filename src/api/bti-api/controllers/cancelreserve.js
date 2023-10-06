@@ -81,8 +81,8 @@ module.exports = {
           user_id: cust_id,
           amount: reserves[0].amount,
           title: 'bti-cancelreserve',
-          type: 'MANUAL',
-          by: 'ADMIN',
+          type: 'CREDIT',
+          by: 'bti-api',
           currency: 'KRW'
         }
 

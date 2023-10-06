@@ -12,14 +12,14 @@ module.exports = {
       const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } = ctx.request.query;
 
       // 取得 req_id 的所有 record
-      const reserve = await strapi.entityService.findMany(
+      const existCreditcustomerArray = await strapi.entityService.findMany(
         "api::bti-requests-singular.bti-requests-singular",
         {
           fields: ["id", "trx_id", "cust_id", "amount", "type", "reserve_id", "req_id", "after_balance"],
           filters: { req_id },
         }
       );
-      console.log(reserve);
+      
       var current_balance = 0;
       try {
         const result = await strapi
@@ -31,12 +31,12 @@ module.exports = {
         return;
       }
 
-      if (reserve.length > 0) {
+      if (existCreditcustomerArray.length > 0) {
         ctx.body = formatAsKeyValueText({
           error_code: "0",
           error_message: "No Error",
-          balance: reserve[0].after_balance,
-          trx_id: reserve[0].trx_id
+          balance: existCreditcustomerArray[0].after_balance,
+          trx_id: existCreditcustomerArray[0].trx_id
         });
         return;
       }
@@ -46,8 +46,8 @@ module.exports = {
         user_id: cust_id,
         amount: amount,
         title: 'bti-creditcustomer',
-        type: 'MANUAL',
-        by: 'ADMIN',
+        type: 'CREDIT',
+        by: 'bti-api',
         currency: 'KRW',
         allowNegative: true
       }

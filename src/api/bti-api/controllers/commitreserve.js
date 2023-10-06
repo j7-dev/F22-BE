@@ -87,8 +87,8 @@ module.exports = {
         user_id: cust_id,
         amount: available_amount,
         title: 'bti-commitreserve',
-        type: 'MANUAL',
-        by: 'ADMIN',
+        type: 'CREDIT',
+        by: 'bti-api',
         currency: 'KRW'
       }
 
