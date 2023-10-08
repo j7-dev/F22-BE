@@ -16,7 +16,6 @@ module.exports = {
   //   const RESOURCE = global.appData?.gameProvider?.[GAME_PROVIDER]?.txn
   //   // 取得 event.result
   //   const { result } = event
-  //   const isFinish = result?.is_finish ?? false
   //   const transaction_type = result?.transaction_type || '' // DEBIT / CREDIT /CANCEL
   //   // 找出對應 transaction_ref_id 把同遊戲的所有交易都找出來
   //   const allTxns = await strapi.entityService.findMany(RESOURCE, {
@@ -76,7 +75,6 @@ module.exports = {
   //         isFinish,
   //         winLoss,
   //       }), // DRAW | WIN | LOSE | CANCEL | GAMING
-  //       is_finish: isFinish,
   //       stake: allDebitTxnAmount,
   //       actual_stake: allDebitTxnAmount,
   //       currency: result.currency,
@@ -102,7 +100,6 @@ module.exports = {
   //         isFinish,
   //         winLoss,
   //       }), // DRAW | WIN | LOSE | CANCEL | GAMING
-  //       is_finish: isFinish,
   //       stake: allDebitTxnAmount,
   //       actual_stake: allDebitTxnAmount,
   //     }

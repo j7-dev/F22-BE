@@ -34,10 +34,6 @@
       ],
       "required": true
     },
-    "is_finish": {
-      "type": "boolean",
-      "required": true
-    },
     "amount": {
       "type": "decimal",
       "required": true

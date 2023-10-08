@@ -8,6 +8,7 @@ module.exports = ({ strapi }) => ({
    */
   async get(ctx) {
     const query = ctx.request.query
+    console.log('⭐  query:', query)
     const result = await strapi
       .service('plugin::utility.bettingRecords')
       .get(query)

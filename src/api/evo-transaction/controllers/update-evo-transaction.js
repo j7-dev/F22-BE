@@ -5,7 +5,7 @@ module.exports = {
     const body = ctx.request.body
 
     // 如果沒有帶參數就回 400
-    const requiredFields = ['transaction_id', 'transaction_type', 'is_finish']
+    const requiredFields = ['transaction_id', 'transaction_type']
 
     for (const field of requiredFields) {
       if (body.data[field] === undefined) {

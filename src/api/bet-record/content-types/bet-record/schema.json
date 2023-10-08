@@ -33,7 +33,7 @@
     },
     "winloss": {
       "type": "decimal",
-      "required": true
+      "required": false
     },
     "currency": {
       "type": "string",
@@ -47,28 +47,22 @@
       "type": "string",
       "required": true
     },
-    "game_provider_game_id": {
-      "type": "string"
-    },
     "game_provider_transaction_id": {
       "type": "string"
-    },
-    "debit_txn": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::transaction-record.transaction-record",
-      "inversedBy": "debit_bet_record"
     },
     "meta": {
       "type": "component",
       "repeatable": true,
       "component": "general.meta-data"
     },
-    "credit_txn": {
+    "is_finish": {
+      "type": "boolean",
+      "default": false
+    },
+    "user": {
       "type": "relation",
       "relation": "oneToOne",
-      "target": "api::transaction-record.transaction-record",
-      "inversedBy": "credit_bet_record"
+      "target": "plugin::users-permissions.user"
     }
   }
 }

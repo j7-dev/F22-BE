@@ -72,18 +72,6 @@
       "type": "string",
       "required": true
     },
-    "debit_bet_record": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::bet-record.bet-record",
-      "inversedBy": "debit_txn"
-    },
-    "credit_bet_record": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::bet-record.bet-record",
-      "inversedBy": "credit_txn"
-    },
     "balance_after_mutate": {
       "type": "decimal"
     }
