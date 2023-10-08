@@ -4,9 +4,10 @@
   "version": "0.1.0",
   "description": "A Strapi application",
   "scripts": {
-    "develop": "strapi develop",
-    "start": "strapi start",
-    "build": "strapi build",
+    "dev": "env-cmd -f ./env/.env.dev strapi develop",
+    "develop": "env-cmd -f ./env/.env.dev strapi develop",
+    "start": "env-cmd -f ./env/.env.prod strapi start",
+    "build": "env-cmd -f ./env/.env.prod strapi build",
     "strapi": "strapi"
   },
   "dependencies": {
@@ -36,6 +37,7 @@
   "license": "MIT",
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
-    "@types/lodash-es": "^4.17.9"
+    "@types/lodash-es": "^4.17.9",
+    "env-cmd": "^10.1.0"
   }
 }
