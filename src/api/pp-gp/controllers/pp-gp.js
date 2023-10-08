@@ -95,6 +95,7 @@ module.exports = {
       ...query,
       secureLogin,
       token,
+      lobbyUrl: 'https://f22-fe.vercel.app/slot', // TODO
     }
     const hash = getHash(params)
     const queryString = objectToQueryString({
