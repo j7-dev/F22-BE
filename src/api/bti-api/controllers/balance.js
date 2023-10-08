@@ -6,69 +6,67 @@
 
 module.exports = {
   balance: async (ctx, next) => {
-    var formattedInfos = {};
-    ctx.type = 'text/plain';
+    var userInfo;
+
     try {
       // 取的 query string 的 auth_token
-      const { auth_token } = ctx.request.query;
+      const { token } = ctx.request.query
 
-      ctx.body = {
-        status: "failure",
-        balance: "0"
-      };
-
-      //parameter check
-      if (auth_token === undefined) {
-        return;
+      if (token == undefined) {
+        ctx.body = {
+          status: 'failure',
+          balance: '0'
+        };
+        return
       }
 
       //get user info by token
-      try {
-        const token = auth_token;
-        const infos = await strapi.entityService.findMany(
-          'api::bti-token-info.bti-token-info',
-          {
-            filters: {
-              token,
-            },
-            populate: ['user_id'],
-            sort: { createdAt: 'desc' },
-          }
-        )
-
-        //DB result validation
-        if (infos == undefined) {
-          return;
+      const userInfoArray = await strapi.entityService.findMany(
+        'api::bti-token-info.bti-token-info',
+        {
+          filters: {
+            token,
+          },
+          populate: ['user_id'],
+          sort: { createdAt: 'desc' },
         }
+      );
 
-        //format DB result
-        formattedInfos = infos.map((info) => ({
-          id: info.id,
-          session_id: info.session_id,
-          created_at: info.createdAt,
-          user_id: info.user_id,
-          currency: 'KRW'
-        }))
-      } catch (err) {
-        return;
+      userInfo = userInfoArray[0];
+
+      if (userInfo == undefined) {
+        ctx.body = {
+          status: 'failure',
+          balance: '0'
+        };
+        return
       }
 
       //get balance by user id
-      try {
-        const result = await strapi
-          .service('api::wallet-api.wallet-api')
-          .get(formattedInfos[0])
+      const userBalanceArray = await strapi
+        .service('api::wallet-api.wallet-api')
+        .get({user_id: userInfo.user_id.id});
 
+      const userBalance = userBalanceArray[0];
+
+      if (userBalance == undefined) {
         ctx.body = {
-          status: "success",
-          balance: result[0].amount
+          status: 'failure',
+          balance: '0'
         };
-      } catch (err) {
-        return;
+        return
       }
 
+      ctx.body = {
+        status: 'success',
+        balance: userBalance.amount
+      };
     } catch (err) {
-      return;
+      ctx.body = {
+        status: 'failure',
+        balance: '0'
+      };
+      return
     }
-  },
+  }
 };

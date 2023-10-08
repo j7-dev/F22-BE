@@ -52,8 +52,8 @@ module.exports = {
         user_id: cust_id,
         amount: -amount,
         title: 'bti-reserve',
-        type: 'MANUAL',
-        by: 'ADMIN',
+        type: 'DEBIT',
+        by: 'bti-api',
         currency: 'KRW'
       }
 
@@ -69,7 +69,7 @@ module.exports = {
       } catch (err) {
         ctx.body = formatAsKeyValueText({
           error_code: "-4",
-          error_message: "Insufficient fund",
+          error_message: "Insufficient Fund",
           balance: check_balance_result[0].amount
         });
         return;
