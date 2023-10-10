@@ -25,7 +25,7 @@
     },
     "ratio": {
       "type": "json",
-      "required": true
+      "required": false
     },
     "discount_limit": {
       "type": "decimal",
@@ -34,6 +34,10 @@
     },
     "amount_type": {
       "type": "string"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
     }
   }
 }

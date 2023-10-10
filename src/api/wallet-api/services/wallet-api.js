@@ -148,6 +148,11 @@ module.exports = () => ({
   get: async (query) => {
     const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
+    const support_currencies = siteSetting?.support_currencies || [
+      defaultCurrency,
+    ]
+    const support_amount_types = siteSetting?.support_amount_types || []
+
     const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
 
     const currency = query?.currency || defaultCurrency || null
@@ -172,6 +177,8 @@ module.exports = () => ({
         },
       }
     )
+
+    // 如果沒有 支援幣別 & amount type 的 balance 就新增初始值 0
 
     const findBalance = balances.find(
       (balance) => balance.currency === currency
