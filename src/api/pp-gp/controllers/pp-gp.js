@@ -25,17 +25,8 @@ function getHash(obj) {
   // 取得物件的所有鍵並按字母順序排序
   const sortedKeys = Object.keys(obj).sort()
 
-  // 建立一個新的 URL 物件
-  const url = new URL(apiUrl)
-
-  // 遍歷排序後的鍵列表，將每個鍵值對設定為 URL 物件的 searchParams
-  sortedKeys.forEach((key) => {
-    const value = obj[key]
-    url.searchParams.set(key, value)
-  })
-
-  // 使用 toString() 方法獲取完整的 URL 查詢字串
-  const queryString = url.searchParams.toString()
+  // 不要使用 new URL toString() URL轉百分比會出錯
+  const queryString = sortedKeys.map((key) => `${key}=${obj[key]}`).join(`&`)
 
   // 結合 secret key
   const stringToHash = `${queryString}${secretKey}`
