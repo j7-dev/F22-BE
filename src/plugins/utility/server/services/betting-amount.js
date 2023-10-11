@@ -80,6 +80,20 @@ module.exports = ({ strapi }) => ({
     return Math.abs(total)
   },
   // 取得贏虧
+  async getWinLoss(args) {
+    const totalWin = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getWin(args)
+
+    const totalLoss = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getLoss(args)
+
+    const winLoss = totalWin - totalLoss
+
+    return winLoss
+  },
+  // 取得贏虧比
   async getWinLossRatio(args) {
     const totalWin = await strapi
       .service('plugin::utility.bettingAmount')

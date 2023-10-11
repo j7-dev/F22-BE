@@ -17,6 +17,11 @@ module.exports = ({ strapi }) => ({
 
     return txns
   },
+  /**
+   *
+   * @param {"user_id", "gameProviderNames"} = args
+   * @returns
+   */
   async getTxns(args) {
     const defaultCurrency = global.appData?.siteSetting?.default_currency
     const defaultAmountType = global.appData?.siteSetting?.default_amount_type
@@ -80,8 +85,9 @@ LIMIT 10;`
             amount_type: txn?.amount_type || defaultAmountType,
             stake: txn?.amount, // NOTE 須注意是不是每家的 txn 都有這個
             actual_stake: txn?.amount,
-            winloss: txn?.amount, // FIXME 只是先
+            // winloss: txn?.amount, // FIXME 只是先
             game_provider_transaction_id: txn.id,
+            user_id,
           }
         })
 
