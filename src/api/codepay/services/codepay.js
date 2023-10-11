@@ -90,6 +90,7 @@ module.exports = () => ({
 
     const msg = newsendResult?.data?.detail?.msg
 
+    // ref: https://api.codepay.co.kr/codepay_redoc_v1.0.0
     if (msg.startsWith('succ')) {
       // 成功 add balance
       const addResult = await strapi.service('api::wallet-api.wallet-api').add({

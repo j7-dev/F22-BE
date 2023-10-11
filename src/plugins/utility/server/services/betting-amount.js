@@ -47,6 +47,7 @@ module.exports = ({ strapi }) => ({
 
     return total
   },
+  //取贏
   async getWin(args) {
     const totalWin = await strapi.service('plugin::utility.bettingAmount').get({
       ...args,
@@ -55,6 +56,8 @@ module.exports = ({ strapi }) => ({
     })
     return totalWin
   },
+
+  // 取輸
   async getLoss(args) {
     const totalLoss = await strapi
       .service('plugin::utility.bettingAmount')
@@ -66,6 +69,8 @@ module.exports = ({ strapi }) => ({
 
     return Math.abs(totalLoss)
   },
+
+  // 取得入金
   async getDebit(args) {
     const total = await strapi.service('plugin::utility.bettingAmount').get({
       ...args,
@@ -74,6 +79,7 @@ module.exports = ({ strapi }) => ({
 
     return Math.abs(total)
   },
+  // 取得贏虧
   async getWinLossRatio(args) {
     const totalWin = await strapi
       .service('plugin::utility.bettingAmount')

@@ -19,7 +19,14 @@ module.exports = {
    */
   async bootstrap({ strapi }) {
     const siteSetting = await strapi.entityService.findMany(
-      'api::site-setting.site-setting'
+      'api::site-setting.site-setting',
+      {
+        populate: {
+          default_vip: {
+            fields: ['id', 'label'],
+          },
+        },
+      }
     )
     const gameProvider = {
       EVO: {
