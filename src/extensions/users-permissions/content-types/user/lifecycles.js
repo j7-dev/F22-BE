@@ -7,12 +7,16 @@ module.exports = {
     const siteSetting = global.appData.siteSetting
     const support_payments = siteSetting?.support_payments || []
     const support_game_providers = siteSetting?.support_game_providers || []
+    const default_vip_id = siteSetting?.default_vip?.id || null
     data.uuid = nanoid()
     // 預設全部支付方式都開放
     data.allow_payments = support_payments
     // 預設全部遊戲商都開放
     data.allow_game_providers = support_game_providers
     data.confirmed = false
+    if (default_vip_id) {
+      data.vip = default_vip_id
+    }
   },
   async afterCreate(event) {
     const { result } = event
