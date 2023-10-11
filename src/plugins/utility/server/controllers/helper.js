@@ -39,7 +39,7 @@ module.exports = ({ strapi }) => ({
       data: result,
     }
   },
-  // TODO 幫所有沒有vip 的用戶都加上 vip
+  // 幫所有沒有vip 的用戶都加上 vip
   async updateAllUserVip(ctx) {
     const body = ctx.request.body
     const entries = await strapi.entityService.findMany(

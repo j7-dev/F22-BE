@@ -11,7 +11,6 @@ module.exports = {
     const apiUrl = process.env?.EVO_API_URL
     const username = process.env?.EVO_CASINO_KEY
     const password = process.env?.EVO_TOKEN
-    console.log('⭐  apiUrl:', { apiUrl, username, password })
 
     const instance = axios.create({
       baseURL: apiUrl,
@@ -33,6 +32,8 @@ module.exports = {
     const key = process?.env?.EVO_CASINO_KEY
     const token = process?.env?.EVO_TOKEN
     const body = ctx?.request?.body
+
+    console.log('⭐  apiUrl:', `${apiUrl}/${key}/${token}`)
 
     const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
       family: 4,
