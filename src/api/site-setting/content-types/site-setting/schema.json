@@ -46,6 +46,11 @@
     },
     "support_game_providers": {
       "type": "json"
+    },
+    "default_vip": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::vip.vip"
     }
   }
 }
