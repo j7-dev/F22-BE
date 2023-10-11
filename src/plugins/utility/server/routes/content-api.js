@@ -65,5 +65,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-vip',
+      handler: 'helper.updateAllUserVip',
+      config: {
+        policies: [],
+      },
+    },
   ],
 }

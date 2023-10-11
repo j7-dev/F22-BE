@@ -39,4 +39,38 @@ module.exports = ({ strapi }) => ({
       data: result,
     }
   },
+  // TODO 幫所有沒有vip 的用戶都加上 vip
+  async updateAllUserVip(ctx) {
+    const body = ctx.request.body
+    const entries = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id'],
+        filters: {
+          vip: null,
+        },
+      }
+    )
+
+    const result = await Promise.all(
+      entries.map(async (entry) => {
+        const updateResult = await strapi.entityService.update(
+          'plugin::users-permissions.user',
+          entry.id,
+          {
+            data: {
+              vip: body?.vip_id || null,
+            },
+          }
+        )
+        return updateResult
+      })
+    )
+
+    ctx.body = {
+      status: '200',
+      message: 'users vip updated',
+      data: result,
+    }
+  },
 })
