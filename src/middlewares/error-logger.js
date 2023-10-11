@@ -49,7 +49,11 @@ module.exports = (config, { strapi }) => {
       await next()
     } catch (error) {
       // 如果发生错误，使用 logger.error 记录错误消息
-      logger.error('API Error:', error)
+      const errorLog = {
+        code: error.code,
+        message: error.message,
+      }
+      logger.error('API Error:', errorLog)
 
       // 将错误消息发送给客户端
       ctx.status = error.status || 500
