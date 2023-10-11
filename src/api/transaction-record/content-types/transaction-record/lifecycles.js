@@ -55,4 +55,84 @@ module.exports = {
       }
     }
   },
+
+  async afterCreate(event) {
+    const { result } = event
+    /**
+	id: 102,
+  type: 'DEPOSIT',
+  by: 'USER',
+  title: 'smtbet7 deposit 1 KRW',
+  description: null,
+  amount: 1,
+  status: 'SUCCESS',
+  createdAt: '2023-10-11T10:13:40.642Z',
+  updatedAt: '2023-10-11T10:13:40.642Z',
+  currency: 'KRW',
+  amount_type: 'CASH',
+  balance_after_mutate: 48272
+		 */
+    const txn_id = result?.id
+    const status = result?.status
+    const deposit_amount = result?.amount
+    const type = result?.type
+
+    const theTxn = await strapi.entityService.findOne(
+      'api::transaction-record.transaction-record',
+      txn_id,
+      {
+        populate: {
+          user: {
+            fields: ['id'],
+            populate: {
+              vip: {
+                fields: ['id', 'label'],
+                populate: ['deposit_bonus', 'discount'],
+              },
+            },
+          },
+        },
+      }
+    )
+    // TODO 返水
+    // const discount = theTxn?.user?.vip?.discount
+    // console.log('⭐  discount:', discount)
+    // const discount_ratio = discount?.ratio
+    // console.log('⭐  discount_ratio:', discount_ratio)
+
+    const deposit_bonus = theTxn?.user?.vip?.deposit_bonus
+    console.log('⭐  deposit_bonus:', deposit_bonus)
+    const deposit_bonus_extra_ratio = deposit_bonus?.extra_ratio
+    console.log('⭐  deposit_bonus_extra_ratio:', deposit_bonus_extra_ratio)
+    const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
+
+    // TODO 存款紅利判斷 案類型 不同規則
+    const deposit_type = deposit_bonus?.deposit_type
+    if (
+      !!deposit_bonus &&
+      type === 'DEPOSIT' &&
+      status === 'SUCCESS' &&
+      deposit_amount >= min_deposit_amount
+    ) {
+      const bonus_rate = deposit_bonus?.bonus_rate / 100
+      const calculate_bonus = bonus_rate * deposit_amount
+      const max_bonus_amount = deposit_bonus?.max_bonus_amount || 0
+      const bonus = !!max_bonus_amount
+        ? calculate_bonus > max_bonus_amount
+          ? max_bonus_amount
+          : calculate_bonus
+        : calculate_bonus
+
+      // 將 bonus 寫入 balance
+      const result = await strapi.service('api::wallet-api.wallet-api').add({
+        user_id: theTxn?.user?.id,
+        amount: bonus,
+        title: `deposit_bonus ${deposit_bonus.label} #${deposit_bonus.id}`,
+        type: 'COUPON',
+        by: 'SYSTEM',
+        currency: deposit_bonus.currency,
+        amount_type: deposit_bonus.amount_type,
+      })
+    }
+  },
 }
