@@ -11,6 +11,7 @@ module.exports = {
     const apiUrl = process.env?.EVO_API_URL
     const username = process.env?.EVO_CASINO_KEY
     const password = process.env?.EVO_TOKEN
+    console.log('⭐  apiUrl:', { apiUrl, username, password })
 
     const instance = axios.create({
       baseURL: apiUrl,
