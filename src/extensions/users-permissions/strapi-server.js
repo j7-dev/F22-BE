@@ -78,8 +78,13 @@ module.exports = (plugin) => {
         end: dayjs().toISOString(),
       })
 
+    const allBalances = await strapi
+      .service('plugin::utility.utils')
+      .handleBalances(user?.balances || [], user_id)
+
     ctx.body = sanitizeOutput({
       ...user,
+      balances: allBalances,
       deposit,
       validBetAmount,
     })

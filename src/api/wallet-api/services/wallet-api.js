@@ -1,65 +1,4 @@
 'use strict'
-const differenceBy = require('lodash/differenceBy')
-const cloneDeep = require('lodash/cloneDeep')
-const uniqBy = require('lodash/uniqBy')
-/**
- * wallet-api service
- */
-
-async function handleBalances(balances, user_id) {
-  const newBalances = cloneDeep(balances)
-  const siteSetting = global.appData.siteSetting
-  const defaultCurrency = siteSetting?.default_currency
-  const support_currencies = siteSetting?.support_currencies || [
-    defaultCurrency,
-  ]
-  const support_amount_types = siteSetting?.support_amount_types || []
-  const allTypes = support_currencies
-    .map((c) => {
-      return support_amount_types.map((t) => {
-        return {
-          currency: c,
-          amount_type: t,
-        }
-      })
-    })
-    .flat()
-
-  const currentTypes = newBalances.map((b) => ({
-    currency: b.currency,
-    amount_type: b.amount_type,
-  }))
-  const uniqueCurrentTypes = uniqBy(currentTypes, (c) => {
-    return `${c.currency}-${c.amount_type}`
-  })
-
-  // 判斷目前 Balance 與網站 support 的幣別 & amount type 差異
-  const diff =
-    differenceBy(allTypes, uniqueCurrentTypes, (t) => {
-      return `${t.currency}-${t.amount_type}`
-    }) || []
-
-  if (diff.length === 0 || !diff) return newBalances
-
-  const createdBalances = await Promise.all(
-    diff.map(async (d) => {
-      const createResult = await strapi.entityService.create(
-        'api::balance.balance',
-        {
-          data: {
-            amount: 0,
-            user: user_id,
-            currency: d.currency,
-            amount_type: d.amount_type,
-          },
-        }
-      )
-      return createResult
-    })
-  )
-
-  return [...newBalances, ...createdBalances]
-}
 
 module.exports = () => ({
   // addBalance 僅更新 balance ，不會創建 transaction record
@@ -81,7 +20,9 @@ module.exports = () => ({
       })) || []
 
     // 如果沒有 支援幣別 & amount type 的 balance 就新增初始值 0
-    const allBalances = await handleBalances(balances, body.user_id)
+    const allBalances = await strapi
+      .service('plugin::utility.utils')
+      .handleBalances(balances, body.user_id)
 
     const findBalance = allBalances.find(
       (b) => b.currency === currency && b.amount_type === amount_type
@@ -225,7 +166,9 @@ module.exports = () => ({
     )
 
     // 如果沒有 支援幣別 & amount type 的 balance 就新增初始值 0
-    const allBalances = await handleBalances(balances, query.user_id)
+    const allBalances = await strapi
+      .service('plugin::utility.utils')
+      .handleBalances(balances, query.user_id)
 
     const formattedBalances = allBalances.map((balance) => {
       return {
@@ -270,7 +213,9 @@ module.exports = () => ({
       })) || []
 
     // 如果沒有 支援幣別 & amount type 的 balance 就新增初始值 0
-    const allBalances = await handleBalances(balances, body.user_id)
+    const allBalances = await strapi
+      .service('plugin::utility.utils')
+      .handleBalances(balances, body.user_id)
     const findBalance = allBalances.find(
       (b) => b.currency === currency && b.amount_type === amount_type
     )
