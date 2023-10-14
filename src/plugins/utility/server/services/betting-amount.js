@@ -6,6 +6,18 @@ const round = require('lodash/round')
 // 一班投注 amount_type = any
 
 module.exports = ({ strapi }) => ({
+  /**
+   * 取得交易紀錄
+   * @param object args
+   * @param string args?.user_id
+   * @param string args?.amount_type
+   * @param string args?.currency
+   * @param string args?.type
+   * @param string args?.start
+   * @param string args?.end
+   * @param string args?.betResult
+   * @returns
+   */
   async get(args) {
     const start = args?.start
     const end = args?.end

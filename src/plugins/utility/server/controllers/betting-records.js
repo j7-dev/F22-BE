@@ -3,12 +3,11 @@
 module.exports = ({ strapi }) => ({
   /**
    *
-   * @param user_id?: number,
-   * @param gameProviderNames?: string[]
+   * @param user_id?: number
+   * @param gameProviderName?: string
    */
   async get(ctx) {
     const query = ctx.request.query
-    console.log('⭐  query:', query)
     const result = await strapi
       .service('plugin::utility.bettingRecords')
       .get(query)

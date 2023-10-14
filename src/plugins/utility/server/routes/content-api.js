@@ -1,6 +1,7 @@
 module.exports = {
   type: 'content-api',
   routes: [
+    // betting-records
     {
       method: 'GET',
       path: '/betting-records',
@@ -9,6 +10,32 @@ module.exports = {
         policies: [],
       },
     },
+    // dp-wd
+    {
+      method: 'GET',
+      path: '/dp-wd/dp',
+      handler: 'dpWd.getDeposit',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/dp-wd/wd',
+      handler: 'dpWd.getWithdraw',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/dp-wd/user-info',
+      handler: 'dpWd.getDpWdInfosByUser',
+      config: {
+        policies: [],
+      },
+    },
+    // betting-amount
     {
       method: 'GET',
       path: '/betting-amount/win',
@@ -49,6 +76,7 @@ module.exports = {
         policies: [],
       },
     },
+    // helper
     {
       method: 'POST',
       path: '/helper/update-all-user-payments-gp',

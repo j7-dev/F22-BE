@@ -1,18 +1,33 @@
+// @ts-nocheck
 'use strict'
 const { removeUndefinedKeys } = require('./utils')
-const round = require('lodash/round')
-
-// 有效投注 amount_type = 'CASH'
-// 一班投注 amount_type = any
+const dayjs = require('dayjs')
 
 module.exports = ({ strapi }) => ({
+  /**
+   *
+   * @param args
+   * @param args.start: Date ISO String
+   * @param args.end: Date ISO String
+   * @param args.user_id: string
+   * @param args.amount_type?: string
+   * @param args.currency?: string
+   * @param args.type?: string
+   * @returns total: number
+   */
   async get(args) {
-    const start = args?.start
-    const end = args?.end
-    const user_id = args?.user_id
-    const amount_type = args?.amount_type
-    const currency = args?.currency
-    const type = args?.type
+    const siteSetting = global.appData.siteSetting
+    const defaultCurrency = siteSetting?.default_currency
+    const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
+
+    const {
+      start,
+      end = dayjs().endOf('day').toISOString(),
+      user_id,
+      amount_type = defaultAmountType,
+      currency = defaultCurrency,
+      type,
+    } = args
 
     const defaultFilters = {
       type,
@@ -21,9 +36,12 @@ module.exports = ({ strapi }) => ({
       currency,
       amount_type,
       createdAt: {
-        $gt: start,
         $lt: end,
       },
+    }
+
+    if (start) {
+      defaultFilters.createdAt.$gt = start
     }
 
     const filters = removeUndefinedKeys(defaultFilters)
@@ -49,7 +67,7 @@ module.exports = ({ strapi }) => ({
     })
     return Number(total)
   },
-  async getWithDraw(args) {
+  async getWithdraw(args) {
     const total = await strapi.service('plugin::utility.dpWd').get({
       ...args,
       type: 'WITHDRAW',
@@ -63,7 +81,7 @@ module.exports = ({ strapi }) => ({
       .getDeposit(args)
     const withdrawTotal = await strapi
       .service('plugin::utility.dpWd')
-      .getWithDraw(args)
+      .getWithdraw(args)
 
     return Number(depositTotal) - Number(withdrawTotal)
   },
