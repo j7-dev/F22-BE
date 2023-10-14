@@ -81,22 +81,10 @@
     "birthday": {
       "type": "date"
     },
-    "bank_accounts": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::bank-account.bank-account",
-      "mappedBy": "user"
-    },
     "vip_upgrate_records": {
       "type": "relation",
       "relation": "oneToMany",
       "target": "api::vip-upgrate-record.vip-upgrate-record",
-      "mappedBy": "user"
-    },
-    "user_notes": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::user-note.user-note",
       "mappedBy": "user"
     },
     "login_details": {
@@ -110,12 +98,6 @@
       "relation": "oneToOne",
       "target": "api::user-relationship.user-relationship",
       "inversedBy": "user"
-    },
-    "transaction_records": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::transaction-record.transaction-record",
-      "mappedBy": "user"
     },
     "vip": {
       "type": "relation",
@@ -154,6 +136,15 @@
       "type": "json"
     },
     "allow_game_providers": {
+      "type": "json"
+    },
+    "favorate_games": {
+      "type": "json"
+    },
+    "user_notes": {
+      "type": "json"
+    },
+    "bank_account": {
       "type": "json"
     }
   }

@@ -51,9 +51,8 @@
     },
     "user": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "plugin::users-permissions.user",
-      "inversedBy": "transaction_records"
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     },
     "currency": {
       "type": "string",
