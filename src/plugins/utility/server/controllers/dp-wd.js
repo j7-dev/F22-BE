@@ -45,9 +45,9 @@ module.exports = ({ strapi }) => ({
    */
   async getDpWdInfosByUser(ctx) {
     const query = ctx.request.query
-    const user_id = query?.user_id
-    if (!user_id) {
-      return ctx.badRequest('user_id is required')
+    const { user_ids, ...restQuery } = query
+    if (!user_ids || !user_ids.length) {
+      return ctx.badRequest('user_ids is required')
     }
     const starArr = [
       dayjs().startOf('day').toISOString(),
@@ -55,38 +55,53 @@ module.exports = ({ strapi }) => ({
       undefined, // TODO 取得總數據可以優化，用類似 BALANCE 方式去拿!?
     ]
 
-    const dpArr = await Promise.all(
-      starArr.map(async (start) => {
-        const dp = await strapi.service('plugin::utility.dpWd').getDeposit({
-          ...query,
-          start,
-        })
-        return dp
-      })
-    )
-    const wdArr = await Promise.all(
-      starArr.map(async (start) => {
-        const wd = await strapi.service('plugin::utility.dpWd').getWithdraw({
-          ...query,
-          start,
-        })
-        return wd * -1 // 轉換為正數
-      })
-    )
+    const allUserResult = await Promise.all(
+      user_ids.map(async (user_id) => {
+        const newQuery = {
+          ...restQuery,
+          user_id,
+        }
 
-    const result = {
-      dayDp: dpArr?.[0],
-      monthDp: dpArr?.[1],
-      totalDp: dpArr?.[2],
-      dayWd: wdArr?.[0],
-      monthWd: wdArr?.[1],
-      totalWd: wdArr?.[2],
-    }
+        const dpArr = await Promise.all(
+          starArr.map(async (start) => {
+            const dp = await strapi.service('plugin::utility.dpWd').getDeposit({
+              ...newQuery,
+              start,
+            })
+            return dp
+          })
+        )
+
+        const wdArr = await Promise.all(
+          starArr.map(async (start) => {
+            const wd = await strapi
+              .service('plugin::utility.dpWd')
+              .getWithdraw({
+                ...newQuery,
+                start,
+              })
+            return wd * -1 // 轉換為正數
+          })
+        )
+
+        const result = {
+          user_id: Number(user_id),
+          dayDp: dpArr?.[0],
+          monthDp: dpArr?.[1],
+          totalDp: dpArr?.[2],
+          dayWd: wdArr?.[0],
+          monthWd: wdArr?.[1],
+          totalWd: wdArr?.[2],
+        }
+
+        return result
+      })
+    )
 
     ctx.body = {
       status: '200',
       message: 'get Deposit success',
-      data: result,
+      data: allUserResult,
     }
   },
 })
