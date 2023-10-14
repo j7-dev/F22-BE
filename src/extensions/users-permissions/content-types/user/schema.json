@@ -138,13 +138,13 @@
     "allow_game_providers": {
       "type": "json"
     },
-    "favorate_games": {
-      "type": "json"
-    },
     "user_notes": {
       "type": "json"
     },
     "bank_account": {
+      "type": "json"
+    },
+    "favorite_games": {
       "type": "json"
     }
   }

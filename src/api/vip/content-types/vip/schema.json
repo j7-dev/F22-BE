@@ -60,12 +60,6 @@
       "min": 0,
       "required": true
     },
-    "upgrade_evaluation_interval": {
-      "type": "integer",
-      "min": 1,
-      "default": 7,
-      "required": true
-    },
     "vip_duration": {
       "type": "integer",
       "default": 30,

@@ -51,6 +51,22 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::vip.vip"
+    },
+    "vip_upgrade_evaluation_interval": {
+      "type": "integer",
+      "default": 30
+    },
+    "vip_upgrade_evaluation_interval_unit": {
+      "type": "enumeration",
+      "enum": [
+        "day",
+        "week",
+        "month",
+        "quarter",
+        "year"
+      ],
+      "required": true,
+      "default": "day"
     }
   }
 }
