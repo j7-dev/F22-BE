@@ -1,4 +1,5 @@
 const userContentType = require('./content-types/user')
+const dayjs = require('dayjs')
 
 module.exports = (plugin) => {
   // support lifecycles
@@ -46,7 +47,42 @@ module.exports = (plugin) => {
       { populate: ['role', 'vip', 'balances'] }
     )
 
-    ctx.body = sanitizeOutput(user)
+    const siteSetting = global.appData.siteSetting
+    const vip_upgrade_evaluation_interval =
+      siteSetting?.vip_upgrade_evaluation_interval || 30
+    const vip_upgrade_evaluation_interval_unit =
+      siteSetting?.vip_upgrade_evaluation_interval_unit || 'day'
+    const user_id = user.id
+
+    const deposit = await strapi.service('plugin::utility.dpWd').getDeposit({
+      user_id,
+      start: dayjs()
+        .subtract(
+          vip_upgrade_evaluation_interval,
+          vip_upgrade_evaluation_interval_unit
+        )
+        .toISOString(),
+      end: dayjs().toISOString(),
+    })
+
+    const validBetAmount = await strapi
+      .service('plugin::utility.bettingAmount')
+      .getDebit({
+        user_id,
+        start: dayjs()
+          .subtract(
+            vip_upgrade_evaluation_interval,
+            vip_upgrade_evaluation_interval_unit
+          )
+          .toISOString(),
+        end: dayjs().toISOString(),
+      })
+
+    ctx.body = sanitizeOutput({
+      ...user,
+      deposit,
+      validBetAmount,
+    })
   }
 
   plugin.services.isUserExist = {
