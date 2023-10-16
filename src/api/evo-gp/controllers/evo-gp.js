@@ -28,10 +28,7 @@ module.exports = {
     ctx.body = getResult?.data
   },
   opengame: async (ctx, next) => {
-    console.log(
-      '⭐  response.request.res.socket.remoteAddress:',
-      ctx?.res?.socket?.remoteAddress
-    )
+    console.log('⭐  response.request.res', ctx?.res)
     const apiUrl = process?.env?.EVO_OPEN_GAME_API_URL
     const key = process?.env?.EVO_CASINO_KEY
     const token = process?.env?.EVO_TOKEN
