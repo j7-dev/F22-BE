@@ -33,7 +33,7 @@ module.exports = {
     const key = process?.env?.EVO_CASINO_KEY
     const token = process?.env?.EVO_TOKEN
     const body = ctx?.request?.body
-    console.log('⭐  body:', body)
+    console.log('⭐  body:', JSON.stringify(body))
 
     console.log('⭐  apiUrl:', `${apiUrl}/${key}/${token}`)
 
