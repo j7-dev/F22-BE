@@ -4,7 +4,8 @@
   "info": {
     "singularName": "token-transaction",
     "pluralName": "token-transactions",
-    "displayName": "token_transaction"
+    "displayName": "token_transaction",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -34,7 +35,7 @@
     },
     "type": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "transaction_type": {
       "type": "enumeration",
@@ -61,11 +62,11 @@
     },
     "start_money": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "end_money": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "rate": {
       "type": "string"
