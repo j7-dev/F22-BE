@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "token_uid_infos",
+  "info": {
+    "singularName": "token-uid-info",
+    "pluralName": "token-uid-infos",
+    "displayName": "token_uid_info"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "kind": "collectionType",
+  "collectionName": "token_transactions",
+  "info": {
+    "singularName": "token-transaction",
+    "pluralName": "token-transactions",
+    "displayName": "token_transaction"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "transaction_id": {
+      "type": "string",
+      "required": true
+    },
+    "gRound": {
+      "type": "string",
+      "required": true
+    },
+    "gtype": {
+      "type": "string",
+      "required": true
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "agent_id": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "transaction_type": {
+      "type": "enumeration",
+      "enum": [
+        "bet",
+        "result",
+        "cancel"
+      ]
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "date": {
+      "type": "string",
+      "required": false
+    },
+    "time": {
+      "type": "string"
+    },
+    "start_money": {
+      "type": "string",
+      "required": true
+    },
+    "end_money": {
+      "type": "string",
+      "required": true
+    },
+    "rate": {
+      "type": "string"
+    },
+    "result": {
+      "type": "string"
+    }
+  }
+}
