@@ -73,6 +73,11 @@
     },
     "balance_after_mutate": {
       "type": "decimal"
+    },
+    "meta": {
+      "type": "component",
+      "repeatable": true,
+      "component": "general.meta-data"
     }
   }
 }
