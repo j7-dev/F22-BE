@@ -29,7 +29,7 @@ module.exports = {
 
     ctx.body = {
       status: '200',
-      message: 'get evo session info success',
+      message: 'get token uid info success',
       data: formattedInfos,
     }
   },
