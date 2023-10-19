@@ -84,8 +84,23 @@ module.exports = ({ strapi }) => ({
           })
         )
 
+        // get one user latest transaction limit 1
+        const txn = await strapi.entityService.findMany(
+          'api::transaction-record.transaction-record',
+          {
+            fields: ['createdAt'],
+            filters: {
+              user: user_id,
+            },
+            sort: 'createdAt:desc',
+            limit: 1,
+          }
+        )
+        console.log('⭐  txn:', txn)
+
         const result = {
           user_id: Number(user_id),
+          lastBetTime: txn?.[0]?.createdAt,
           dayDp: dpArr?.[0],
           monthDp: dpArr?.[1],
           totalDp: dpArr?.[2],
