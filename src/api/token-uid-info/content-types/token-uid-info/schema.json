@@ -4,7 +4,8 @@
   "info": {
     "singularName": "token-uid-info",
     "pluralName": "token-uid-infos",
-    "displayName": "token_uid_info"
+    "displayName": "token_uid_info",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -18,6 +19,11 @@
     },
     "currency": {
       "type": "string",
+      "required": true
+    },
+    "uid": {
+      "type": "string",
+      "unique": true,
       "required": true
     }
   }
