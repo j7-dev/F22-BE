@@ -50,8 +50,12 @@ module.exports = (config, { strapi }) => {
     } catch (error) {
       // 如果发生错误，使用 logger.error 记录错误消息
       const errorLog = {
-        code: error.code,
-        message: error.message,
+        code: ctx?.response?.status,
+        message: error || error?.message || ctx?.response?.message,
+        bodyPayload: ctx?.request?.body,
+        urlParams: ctx?.request?.query,
+        url: `[${ctx?.request?.method}] ${ctx?.request?.url}`,
+        header: ctx?.request?.headers,
       }
       logger.error('API Error:', errorLog)
 
