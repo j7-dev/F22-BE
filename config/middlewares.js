@@ -29,20 +29,21 @@ module.exports = [
       },
     },
   },
-  {
-    name: 'strapi::cors',
-    config: {
-      enabled: false,
-      header: '*',
-      origin: [
-        'be-dev.smtbet7.com',
-        'smtbet7.com',
-        'www.w3schools.com',
-        '*.vercel.app',
-        'f22-fe.vercel.app',
-      ],
-    },
-  },
+  'strapi::cors',
+  // {
+  //   name: 'strapi::cors',
+  //   config: {
+  //     enabled: false,
+  //     header: '*',
+  //     origin: [
+  //       'be-dev.smtbet7.com',
+  //       'smtbet7.com',
+  //       'www.w3schools.com',
+  //       '*.vercel.app',
+  //       'f22-fe.vercel.app',
+  //     ],
+  //   },
+  // },
   'strapi::logger',
   'strapi::query',
   'strapi::body',
