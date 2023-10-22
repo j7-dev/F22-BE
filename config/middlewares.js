@@ -6,7 +6,7 @@ module.exports = [
     config: {
       enabled: true,
       header: '*',
-      origin: ['be-dev.smtbet7.com', 'smtbet7.com'],
+      origin: ['be-dev.smtbet7.com', 'smtbet7.com', 'www.w3schools.com'],
     },
   },
   'strapi::logger',
