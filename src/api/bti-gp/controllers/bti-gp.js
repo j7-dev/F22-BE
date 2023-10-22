@@ -9,11 +9,9 @@ const querystring = require('querystring')
 
 module.exports = {
   opengame: async (ctx, next) => {
-    console.log('⭐  response.request.res', ctx?.res)
     const apiUrl = process?.env?.BTI_OPEN_GAME_API_URL
 
     const query = ctx?.request?.query
-    console.log('⭐  query:', query)
 
     // 如果沒有帶參數就回 400
     const requiredFields = ['user_id']
@@ -50,13 +48,11 @@ module.exports = {
 
     const queryString = querystring.stringify(args)
 
-    console.log('⭐  `${apiUrl}/?${queryString}`:', `${apiUrl}/?${queryString}`)
-
     const getResult = await axios.get(`${apiUrl}/?${queryString}`, {
       family: 4,
     })
-    console.log('⭐  getResult:', getResult)
 
+    ctx.type = 'text/html'
     ctx.body = getResult?.data
   },
 }
