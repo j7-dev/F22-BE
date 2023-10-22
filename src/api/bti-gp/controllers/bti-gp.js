@@ -52,7 +52,7 @@ module.exports = {
       family: 4,
     })
 
-    ctx.type = 'text/html'
+    // ctx.type = 'text/html'
     ctx.body = getResult?.data
   },
 }
