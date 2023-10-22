@@ -6,12 +6,7 @@ module.exports = [
       contentSecurityPolicy: {
         useDefaults: true,
         directives: {
-          'default-src': [
-            'self',
-            '*.smtbet7.com',
-            '*.vercel.app',
-            'f22-fe.vercel.app',
-          ],
+          'default-src': ['self', '*.vercel.app', 'f22-fe.vercel.app'],
           'connect-src': [
             "'self'",
             'https:',
@@ -21,7 +16,7 @@ module.exports = [
           ],
           'frame-ancestors': [
             "'self'",
-            '*.smtbet7.com',
+            '*',
             '*.vercel.app',
             'f22-fe.vercel.app',
           ],
