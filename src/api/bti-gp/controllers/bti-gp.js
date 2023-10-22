@@ -52,7 +52,8 @@ module.exports = {
       family: 4,
     })
 
-    // ctx.type = 'text/html'
+    ctx.type = 'text/html'
+    ctx.set('Access-Control-Allow-Origin', '*')
     ctx.body = getResult?.data
   },
 }
