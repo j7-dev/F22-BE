@@ -53,7 +53,7 @@ module.exports = {
     })
 
     ctx.type = 'text/html'
-    ctx.set('Access-Control-Allow-Origin', '*')
+    ctx.header['Access-Control-Allow-Origin'] = '*'
     ctx.body = getResult?.data
   },
 }

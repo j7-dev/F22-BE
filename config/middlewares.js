@@ -4,7 +4,7 @@ module.exports = [
   {
     name: 'strapi::cors',
     config: {
-      enabled: true,
+      enabled: false,
       header: '*',
       origin: ['be-dev.smtbet7.com', 'smtbet7.com', 'www.w3schools.com'],
     },
