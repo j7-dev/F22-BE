@@ -52,6 +52,16 @@
           "localized": true
         }
       }
+    },
+    "send_to_user_ids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
+    },
+    "hide_to_user_ids": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "plugin::users-permissions.user"
     }
   }
 }
