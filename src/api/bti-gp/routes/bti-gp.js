@@ -9,5 +9,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/bti/token-info',
+      handler: 'bti-gp.tokenInfo',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 }
