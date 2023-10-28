@@ -61,11 +61,11 @@
     "allow_game_providers": {
       "type": "json"
     },
-    "user": {
+    "users": {
       "type": "relation",
-      "relation": "oneToOne",
+      "relation": "oneToMany",
       "target": "plugin::users-permissions.user",
-      "inversedBy": "deposit_bonus"
+      "mappedBy": "deposit_bonus"
     }
   }
 }
