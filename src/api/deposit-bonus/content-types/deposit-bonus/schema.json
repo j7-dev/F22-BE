@@ -29,7 +29,8 @@
         "NORMAL",
         "FIRST",
         "FIRST_BY_DATE"
-      ]
+      ],
+      "default": "NORMAL"
     },
     "bonus_rate": {
       "type": "float",
@@ -38,16 +39,12 @@
     },
     "min_deposit_amount": {
       "type": "decimal",
-      "required": true,
+      "required": false,
       "min": 0
     },
     "max_bonus_amount": {
       "type": "decimal",
       "min": 0,
-      "required": true
-    },
-    "extra_ratio": {
-      "type": "json",
       "required": false
     },
     "currency": {
@@ -57,6 +54,18 @@
     "amount_type": {
       "type": "string",
       "required": true
+    },
+    "rolling_percentage": {
+      "type": "decimal"
+    },
+    "allow_game_providers": {
+      "type": "json"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "deposit_bonus"
     }
   }
 }

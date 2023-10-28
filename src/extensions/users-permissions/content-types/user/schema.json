@@ -146,6 +146,12 @@
     },
     "favorite_games": {
       "type": "json"
+    },
+    "deposit_bonus": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::deposit-bonus.deposit-bonus",
+      "mappedBy": "user"
     }
   }
 }
