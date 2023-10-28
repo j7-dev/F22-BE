@@ -45,6 +45,23 @@ module.exports = {
       if (updateResult?.id) {
         data.status = 'SUCCESS'
         data.balance_after_mutate = updateResult?.amount
+
+        //TODO  發送站內信
+        const createNotification = await strapi.entityService.create(
+          'api::cms-post.cms-post',
+          {
+            data: {
+              title: 'Withdrawal Approved',
+              content: `The Withdrawal ( ${Math.abs(theTxn.amount)} ${
+                theTxn?.currency
+              } ) you submitted on ${
+                theTxn?.createdAt
+              } has been approved \n\n transaction_id: ${theTxn?.id}`,
+              post_type: 'siteNotify',
+              send_to_user_ids: [user_id],
+            },
+          }
+        )
       } else {
         data.status = 'FAILED'
         data.balance_after_mutate = null
