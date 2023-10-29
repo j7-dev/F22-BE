@@ -3,6 +3,7 @@
 const differenceBy = require('lodash/differenceBy')
 const cloneDeep = require('lodash/cloneDeep')
 const uniqBy = require('lodash/uniqBy')
+const intersection = require('lodash/intersection')
 
 // 如果 value 是 undefined，则删除该 key
 const removeUndefinedKeys = (obj) => {
@@ -61,6 +62,7 @@ const handleBalances = async (balances, user_id) => {
       })
     })
     .flat()
+  console.log('⭐  allTypes:', allTypes)
 
   const currentTypes = newBalances.map((b) => ({
     currency: b.currency,
@@ -69,14 +71,19 @@ const handleBalances = async (balances, user_id) => {
   const uniqueCurrentTypes = uniqBy(currentTypes, (c) => {
     return `${c.currency}-${c.amount_type}`
   })
+  console.log('⭐  uniqueCurrentTypes:', uniqueCurrentTypes)
+
+  // 判斷目前 uniqueCurrentTypes 是否包含 allTypes
+  const isInclude =
+    intersection(allTypes, uniqueCurrentTypes).length === allTypes.length
+
+  if (isInclude) return newBalances
 
   // 判斷目前 Balance 與網站 support 的幣別 & amount type 差異
   const diff =
     differenceBy(allTypes, uniqueCurrentTypes, (t) => {
       return `${t.currency}-${t.amount_type}`
     }) || []
-
-  if (diff.length === 0 || !diff) return newBalances
 
   const createdBalances = await Promise.all(
     diff.map(async (d) => {
