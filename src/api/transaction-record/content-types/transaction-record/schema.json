@@ -21,7 +21,8 @@
         "MANUAL",
         "COUPON",
         "DEBIT",
-        "CREDIT"
+        "CREDIT",
+        "TURNOVER_BONUS_TO_CASH"
       ],
       "default": "BET",
       "required": true

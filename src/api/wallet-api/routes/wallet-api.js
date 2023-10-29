@@ -20,6 +20,15 @@ module.exports = {
     },
     {
       method: 'POST',
+      path: '/wallet-api/trunoverbonus-to-cash',
+      handler: 'balance.trunoverBonusToCash',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'POST',
       path: '/wallet-api/cash/withdraw',
       handler: 'cash.withdraw',
       config: {
