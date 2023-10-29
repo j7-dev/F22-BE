@@ -63,12 +63,25 @@
       "relation": "oneToMany",
       "target": "plugin::users-permissions.user"
     },
-    "image": {
+    "feature_image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ],
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "content_images": {
       "allowedTypes": [
         "images"
       ],
       "type": "media",
-      "multiple": false,
+      "multiple": true,
       "pluginOptions": {
         "i18n": {
           "localized": true
