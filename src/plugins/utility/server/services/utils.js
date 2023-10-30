@@ -62,7 +62,6 @@ const handleBalances = async (balances, user_id) => {
       })
     })
     .flat()
-  console.log('⭐  allTypes:', allTypes)
 
   const currentTypes = newBalances.map((b) => ({
     currency: b.currency,
@@ -71,7 +70,6 @@ const handleBalances = async (balances, user_id) => {
   const uniqueCurrentTypes = uniqBy(currentTypes, (c) => {
     return `${c.currency}-${c.amount_type}`
   })
-  console.log('⭐  uniqueCurrentTypes:', uniqueCurrentTypes)
 
   // 判斷目前 uniqueCurrentTypes 是否包含 allTypes
   const isInclude =

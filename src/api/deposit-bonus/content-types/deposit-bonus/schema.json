@@ -58,7 +58,7 @@
     "rolling_percentage": {
       "type": "decimal"
     },
-    "allow_game_providers": {
+    "allow_game_categories": {
       "type": "json"
     },
     "users": {
