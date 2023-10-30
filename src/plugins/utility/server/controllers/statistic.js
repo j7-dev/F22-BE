@@ -2,14 +2,14 @@
 const { countByDate } = require('../services/utils')
 const { removeUndefinedKeys } = require('../services/utils')
 const dayjs = require('dayjs')
-const deafault_currency = 'KRW'
-const deafault_amount_type = 'CASH'
+const default_currency = 'KRW'
+const default_amount_type = 'CASH'
 
 module.exports = ({ strapi }) => ({
   async recent(ctx) {
     const query = ctx.request.query
-    const currency = query?.currency || deafault_currency
-    const amount_type = query?.amount_type || deafault_amount_type
+    const currency = query?.currency || default_currency
+    const amount_type = query?.amount_type || default_amount_type
     const dateArr =
       countByDate({
         startD: dayjs(query?.start),
@@ -165,8 +165,8 @@ module.exports = ({ strapi }) => ({
   },
   async important(ctx) {
     const query = ctx.request.query
-    const currency = query?.currency || deafault_currency
-    const amount_type = query?.amount_type || deafault_amount_type
+    const currency = query?.currency || default_currency
+    const amount_type = query?.amount_type || default_amount_type
     const dateArr = [
       {
         // today
@@ -279,6 +279,44 @@ module.exports = ({ strapi }) => ({
       return resultObj
     }
 
+    const allNewUsers = await getMembersByRoleAndDate({
+      populate: {
+        role: {
+          select: ['id', 'type'],
+        },
+      },
+    })
+
+    const agentInfo_newTopAgent = Object.keys(allNewUsers).reduce(
+      (acc, key) => {
+        const user_ids = allNewUsers[key]
+          .filter((user) => user?.role?.type === 'top_agent')
+          .map((user) => user?.id)
+        acc[key] = user_ids.length
+        return acc
+      },
+      {}
+    )
+
+    const agentInfo_newAgent = Object.keys(allNewUsers).reduce((acc, key) => {
+      const user_ids = allNewUsers[key]
+        .filter((user) => user?.role?.type === 'agent')
+        .map((user) => user?.id)
+      acc[key] = user_ids.length
+      return acc
+    }, {})
+
+    const newMembers_newMembers = Object.keys(allNewUsers).reduce(
+      (acc, key) => {
+        const user_ids = allNewUsers[key]
+          .filter((user) => user?.role?.type === 'authenticated')
+          .map((user) => user?.id)
+        acc[key] = user_ids.length
+        return acc
+      },
+      {}
+    )
+
     const getTxnByDate = async (args) => {
       const type = args?.type
       const countType = args?.countType
@@ -347,44 +385,6 @@ module.exports = ({ strapi }) => ({
 
       return resultObj
     }
-
-    const allNewUsers = await getMembersByRoleAndDate({
-      populate: {
-        role: {
-          select: ['id', 'type'],
-        },
-      },
-    })
-
-    const agentInfo_newTopAgent = Object.keys(allNewUsers).reduce(
-      (acc, key) => {
-        const user_ids = allNewUsers[key]
-          .filter((user) => user?.role?.type === 'top_agent')
-          .map((user) => user?.id)
-        acc[key] = user_ids.length
-        return acc
-      },
-      {}
-    )
-
-    const agentInfo_newAgent = Object.keys(allNewUsers).reduce((acc, key) => {
-      const user_ids = allNewUsers[key]
-        .filter((user) => user?.role?.type === 'agent')
-        .map((user) => user?.id)
-      acc[key] = user_ids.length
-      return acc
-    }, {})
-
-    const newMembers_newMembers = Object.keys(allNewUsers).reduce(
-      (acc, key) => {
-        const user_ids = allNewUsers[key]
-          .filter((user) => user?.role?.type === 'authenticated')
-          .map((user) => user?.id)
-        acc[key] = user_ids.length
-        return acc
-      },
-      {}
-    )
 
     const debitTxns = await getTxnByDate({
       type: 'DEBIT',
@@ -530,6 +530,143 @@ module.exports = ({ strapi }) => ({
       status: '200',
       message: 'get statistic/important success',
       data,
+    }
+  },
+  async daily(ctx) {
+    const query = ctx.request.query
+    const currency = query?.currency || default_currency
+    const amount_type = query?.amount_type || default_amount_type
+    const dateArr =
+      countByDate({
+        startD: dayjs(query?.start),
+        endD: dayjs(query?.end),
+      }) || []
+
+    const dataSource = await Promise.all(
+      dateArr.map(async (dateItem) => {
+        const dpWd = await strapi.service('plugin::utility.dpWd').getDpWd({
+          currency,
+          amount_type,
+          start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        })
+
+        const deposit = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: 'DEPOSIT',
+            currency,
+            amount_type,
+            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          })
+
+        const withdraw = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: 'WITHDRAW',
+            currency,
+            amount_type,
+            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          })
+
+        // 抓取有效投注
+        const validBet = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: 'DEBIT',
+            currency,
+            amount_type,
+            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          })
+
+        // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
+        const payout = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: 'CREDIT',
+            currency,
+            amount_type,
+            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          })
+
+        // 紅利+洗碼
+        const coupon = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: 'COUPON',
+            currency,
+            amount_type,
+            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          })
+
+        //新註冊人數
+        const getRegisterUsersResult = await strapi.entityService.findMany(
+          'plugin::users-permissions.user',
+          {
+            fields: ['id'],
+            filters: {
+              createdAt: {
+                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+              },
+            },
+          }
+        )
+        const numberOfRegistrantUserIds = getRegisterUsersResult.map(
+          (item) => item?.id
+        )
+        const uniqueNumberOfRegistrantUserIds = Array.from(
+          new Set(numberOfRegistrantUserIds)
+        )
+        const numberOfRegistrants = uniqueNumberOfRegistrantUserIds.length
+
+        const debitTxns = await strapi.entityService.findMany(
+          'api::transaction-record.transaction-record',
+          {
+            fields: ['id'],
+            populate: {
+              user: {
+                fields: ['id'],
+              },
+            },
+            filters: {
+              createdAt: {
+                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+              },
+            },
+          }
+        )
+        const debitTxnUserIds = debitTxns.map((txn) => txn?.user?.id)
+        const uniqueDebitTxnUserIds = Array.from(new Set(debitTxnUserIds))
+        const bettingMembers = uniqueDebitTxnUserIds.length
+
+        const payload = {
+          date: dateItem.startD.format('YYYY/MM/DD (dd)'),
+          deposit,
+          withdraw,
+          dpWd,
+          validBet,
+          payout: payout * -1, // 顯示為負數
+          winloss: validBet - payout,
+          coupon,
+          profit: validBet - payout - coupon,
+          numberOfRegistrants,
+          bettingMembers,
+        }
+        return payload
+      })
+    )
+
+    ctx.body = {
+      status: '200',
+      message: 'get statistic/daily success',
+      data: dataSource,
     }
   },
 })

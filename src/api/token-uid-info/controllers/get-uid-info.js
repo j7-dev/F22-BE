@@ -17,7 +17,6 @@ module.exports = {
         sort: { createdAt: 'desc' },
       }
     )
-    console.log('⭐  infos:', infos)
 
     const formattedInfos = infos.map((info) => ({
       // id: info.id,

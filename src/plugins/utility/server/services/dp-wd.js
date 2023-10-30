@@ -79,10 +79,11 @@ module.exports = ({ strapi }) => ({
     const depositTotal = await strapi
       .service('plugin::utility.dpWd')
       .getDeposit(args)
+    // 為負數
     const withdrawTotal = await strapi
       .service('plugin::utility.dpWd')
       .getWithdraw(args)
 
-    return Number(depositTotal) - Number(withdrawTotal)
+    return Number(depositTotal) + Number(withdrawTotal)
   },
 })

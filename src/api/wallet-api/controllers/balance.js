@@ -22,7 +22,7 @@ module.exports = {
   },
   async trunoverBonusToCash(ctx) {
     const body = ctx?.request?.body
-    const user_id = ctx?.state?.user?.id
+    const user_id = ctx?.state?.user?.id || body?.user_id
     if (!user_id) {
       ctx.badRequest("can't find user_id")
     }
@@ -33,11 +33,12 @@ module.exports = {
     const currency = body?.currency || default_currency
 
     // 取得目前 turnover_bonus balance
-    const balances = await strapi.service('api::wallet-api.wallet-api').get({
-      user_id,
-      currency: default_currency,
-      amount_type: 'TURNOVER_BONUS',
-    })
+    const balances =
+      (await strapi.service('api::wallet-api.wallet-api').get({
+        user_id,
+        currency: default_currency,
+        amount_type: 'TURNOVER_BONUS',
+      })) || []
 
     const turnoverBonusBalance = balances?.find(
       (b) => b.amount_type === 'TURNOVER_BONUS'

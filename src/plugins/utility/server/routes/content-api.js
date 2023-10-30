@@ -60,6 +60,7 @@ module.exports = {
         policies: [],
       },
     },
+    // statistic
     {
       method: 'GET',
       path: '/statistic/recent',
@@ -72,6 +73,14 @@ module.exports = {
       method: 'GET',
       path: '/statistic/important',
       handler: 'statistic.important',
+      config: {
+        policies: [],
+      },
+    },
+    {
+      method: 'GET',
+      path: '/statistic/daily',
+      handler: 'statistic.daily',
       config: {
         policies: [],
       },

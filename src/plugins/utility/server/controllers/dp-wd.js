@@ -96,7 +96,6 @@ module.exports = ({ strapi }) => ({
             limit: 1,
           }
         )
-        console.log('⭐  txn:', txn)
 
         const result = {
           user_id: Number(user_id),
