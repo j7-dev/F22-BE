@@ -23,24 +23,14 @@ const removeUndefinedKeys = (obj) => {
 
 // 依照日期區間拆分
 const countByDate = ({ startD, endD }) => {
-  const diff = endD.diff(startD, 'day')
+  const diff = endD.diff(startD, 'day') + 1
 
-  const data =
-    diff > 1
-      ? new Array(diff).fill(0).map((item, index) => {
-          return {
-            startD:
-              index === 0 ? startD : startD.add(index, 'day').startOf('day'),
-            endD:
-              index === diff - 1 ? endD : startD.add(index, 'day').endOf('day'),
-          }
-        })
-      : [
-          {
-            startD,
-            endD,
-          },
-        ]
+  const data = new Array(diff).fill(0).map((item, index) => {
+    return {
+      startD: index === 0 ? startD : startD.add(index, 'day').startOf('day'),
+      endD: index === diff - 1 ? endD : startD.add(index, 'day').endOf('day'),
+    }
+  })
 
   return data
 }

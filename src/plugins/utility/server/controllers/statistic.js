@@ -21,8 +21,8 @@ module.exports = ({ strapi }) => ({
     //     const value = await strapi
     //       .service('plugin::utility.bettingAmount')
     //       .getWinLossRatio({
-    //         start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-    //         end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //         start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+    //         end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
     //       })
 
     //     const payload = {
@@ -38,8 +38,8 @@ module.exports = ({ strapi }) => ({
         const value = await strapi.service('plugin::utility.dpWd').getDpWd({
           currency,
           amount_type,
-          start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+          end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
         })
 
         const payload = {
@@ -57,8 +57,8 @@ module.exports = ({ strapi }) => ({
           .get({
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         const payload = {
@@ -75,8 +75,8 @@ module.exports = ({ strapi }) => ({
     //       .service('plugin::utility.bettingAmount')
     //       .get({
     //         currency,
-    //         start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-    //         end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+    //         start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+    //         end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
     //       })
 
     //     const payload = {
@@ -95,8 +95,8 @@ module.exports = ({ strapi }) => ({
             fields: ['id'],
             filters: {
               createdAt: {
-                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
             },
           }
@@ -115,8 +115,8 @@ module.exports = ({ strapi }) => ({
         const value = await strapi
           .service('plugin::utility.members')
           .getOnlineMembers({
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         const payload = {
@@ -135,8 +135,8 @@ module.exports = ({ strapi }) => ({
             type: 'DEPOSIT',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         const payload = {
@@ -171,8 +171,8 @@ module.exports = ({ strapi }) => ({
       {
         // today
         label: 'today',
-        start: dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-        end: dayjs().endOf('day').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        start: dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        end: dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
       {
         // yesterday
@@ -180,17 +180,17 @@ module.exports = ({ strapi }) => ({
         start: dayjs()
           .subtract(1, 'day')
           .startOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
         end: dayjs()
           .subtract(1, 'day')
           .endOf('day')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
       {
         // this week
         label: 'thisWeek',
-        start: dayjs().startOf('week').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-        end: dayjs().endOf('week').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        start: dayjs().startOf('week').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        end: dayjs().endOf('week').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
       {
         // last week
@@ -198,17 +198,17 @@ module.exports = ({ strapi }) => ({
         start: dayjs()
           .subtract(1, 'week')
           .startOf('week')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
         end: dayjs()
           .subtract(1, 'week')
           .endOf('week')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
       {
         // this month
         label: 'thisMonth',
-        start: dayjs().startOf('month').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-        end: dayjs().endOf('month').format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+        start: dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        end: dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
       {
         // last month
@@ -216,11 +216,11 @@ module.exports = ({ strapi }) => ({
         start: dayjs()
           .subtract(1, 'month')
           .startOf('month')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
         end: dayjs()
           .subtract(1, 'month')
           .endOf('month')
-          .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
       },
     ]
 
@@ -534,6 +534,7 @@ module.exports = ({ strapi }) => ({
   },
   async daily(ctx) {
     const query = ctx.request.query
+    console.log('⭐  query:', query)
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
     const dateArr =
@@ -547,8 +548,8 @@ module.exports = ({ strapi }) => ({
         const dpWd = await strapi.service('plugin::utility.dpWd').getDpWd({
           currency,
           amount_type,
-          start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-          end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+          start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+          end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
         })
 
         const deposit = await strapi
@@ -557,8 +558,8 @@ module.exports = ({ strapi }) => ({
             type: 'DEPOSIT',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         const withdraw = await strapi
@@ -567,8 +568,8 @@ module.exports = ({ strapi }) => ({
             type: 'WITHDRAW',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         // 抓取有效投注
@@ -578,8 +579,8 @@ module.exports = ({ strapi }) => ({
             type: 'DEBIT',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
@@ -589,8 +590,8 @@ module.exports = ({ strapi }) => ({
             type: 'CREDIT',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         // 紅利+洗碼
@@ -600,8 +601,8 @@ module.exports = ({ strapi }) => ({
             type: 'COUPON',
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-            end: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
         //新註冊人數
@@ -611,8 +612,8 @@ module.exports = ({ strapi }) => ({
             fields: ['id'],
             filters: {
               createdAt: {
-                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
             },
           }
@@ -636,8 +637,8 @@ module.exports = ({ strapi }) => ({
             },
             filters: {
               createdAt: {
-                $gte: dateItem.startD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
-                $lte: dateItem.endD.format('YYYY-MM-DDTHH:mm:ss.SSS[Z]'),
+                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
             },
           }
@@ -667,6 +668,202 @@ module.exports = ({ strapi }) => ({
       status: '200',
       message: 'get statistic/daily success',
       data: dataSource,
+    }
+  },
+  async today(ctx) {
+    const query = ctx.request.query
+    const currency = query?.currency || default_currency
+    const amount_type = query?.amount_type || default_amount_type
+    const start = dayjs().startOf('year').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+
+    // deposit
+    const dpTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['id', 'amount'],
+        filters: {
+          type: 'DEPOSIT',
+          status: 'SUCCESS',
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+        populate: {
+          user: {
+            fields: ['id'],
+          },
+        },
+      }
+    )
+
+    const dpAmount = dpTxns.reduce((acc, cur) => {
+      acc += cur.amount
+      return acc
+    }, 0)
+    const dpUserIds = dpTxns.map((txn) => txn?.user?.id)
+    const uniqueDpUserIds = Array.from(new Set(dpUserIds))
+    const dpUsers = uniqueDpUserIds.length
+
+    // withdraw
+    const wdTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['id', 'amount'],
+        filters: {
+          type: 'WITHDRAW',
+          status: 'SUCCESS',
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+        populate: {
+          user: {
+            fields: ['id'],
+          },
+        },
+      }
+    )
+
+    const wdAmount =
+      wdTxns.reduce((acc, cur) => {
+        acc += cur.amount
+        return acc
+      }, 0) * -1
+    const wdUserIds = wdTxns.map((txn) => txn?.user?.id)
+    const uniqueWdUserIds = Array.from(new Set(wdUserIds))
+    const wdUsers = uniqueWdUserIds.length
+
+    // dpWd
+    const dpWd = dpAmount - wdAmount
+
+    // coupon
+    const couponTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['id', 'amount'],
+        filters: {
+          type: 'COUPON',
+          status: 'SUCCESS',
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+        populate: {
+          user: {
+            fields: ['id'],
+          },
+        },
+      }
+    )
+
+    const couponAmount = couponTxns.reduce((acc, cur) => {
+      acc += cur.amount
+      return acc
+    }, 0)
+
+    // TODO
+    const balance = 0
+
+    const table1 = {
+      balance,
+      couponAmount,
+      dpAmount,
+      dpUsers,
+      wdAmount,
+      wdUsers,
+      dpWd,
+    }
+
+    // 抓取有效投注
+    const validBet = await strapi.service('plugin::utility.bettingAmount').get({
+      type: 'DEBIT',
+      currency,
+      amount_type,
+      start,
+      end,
+    })
+
+    // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
+    const payout = await strapi.service('plugin::utility.bettingAmount').get({
+      type: 'CREDIT',
+      currency,
+      amount_type,
+      start,
+      end,
+    })
+
+    // 紅利+洗碼
+    const coupon = await strapi.service('plugin::utility.bettingAmount').get({
+      type: 'COUPON',
+      currency,
+      amount_type,
+      start,
+      end,
+    })
+
+    //新註冊人數
+    const getRegisterUsersResult = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id'],
+        filters: {
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+      }
+    )
+    const numberOfRegistrantUserIds = getRegisterUsersResult.map(
+      (item) => item?.id
+    )
+    const uniqueNumberOfRegistrantUserIds = Array.from(
+      new Set(numberOfRegistrantUserIds)
+    )
+    const numberOfRegistrants = uniqueNumberOfRegistrantUserIds.length
+
+    const debitTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['id'],
+        populate: {
+          user: {
+            fields: ['id'],
+          },
+        },
+        filters: {
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+      }
+    )
+    const debitTxnUserIds = debitTxns.map((txn) => txn?.user?.id)
+    const uniqueDebitTxnUserIds = Array.from(new Set(debitTxnUserIds))
+    const bettingMembers = uniqueDebitTxnUserIds.length
+
+    const payload = {
+      deposit,
+      withdraw,
+      dpWd,
+      validBet,
+      payout: payout * -1, // 顯示為負數
+      winloss: validBet - payout,
+      coupon,
+      profit: validBet - payout - coupon,
+      numberOfRegistrants,
+      bettingMembers,
+    }
+
+    ctx.body = {
+      status: '200',
+      message: 'get statistic/today success',
+      data: payload,
     }
   },
 })
