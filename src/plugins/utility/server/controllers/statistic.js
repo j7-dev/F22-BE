@@ -534,7 +534,6 @@ module.exports = ({ strapi }) => ({
   },
   async daily(ctx) {
     const query = ctx.request.query
-    console.log('⭐  query:', query)
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
     const dateArr =
