@@ -17,6 +17,9 @@ module.exports = {
     if (default_vip_id) {
       data.vip = default_vip_id
     }
+    if (data?.bank_account?.owner_real_name) {
+      data.display_name = data?.bank_account?.owner_real_name
+    }
   },
   async afterCreate(event) {
     const { result } = event
