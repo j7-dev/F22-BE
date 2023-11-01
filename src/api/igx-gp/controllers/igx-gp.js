@@ -25,7 +25,7 @@ module.exports = {
     const endpoint = `${apiUrl}?${params.toString()}`
 
     console.log('⭐  endpoint:', endpoint)
-    const getResult = await axios.post(
+    const getResult = await axios.get(
       endpoint,
       {},
       {
