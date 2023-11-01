@@ -42,7 +42,6 @@
       "type": "enumeration",
       "enum": [
         "SUCCESS",
-        "FAILED",
         "CANCEL",
         "PENDING",
         "REJECTED"

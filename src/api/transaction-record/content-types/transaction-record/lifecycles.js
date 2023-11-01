@@ -19,8 +19,9 @@ module.exports = {
 
     const status = data?.status
     const type = theTxn?.type
+    const allow_types = ['DEPOSIT', 'WITHDRAW']
 
-    if (type === 'WITHDRAW' && status === 'SUCCESS') {
+    if (allow_types.includes(type) && status === 'SUCCESS') {
       const user_id = theTxn?.user?.id
       if (!user_id) {
         throw new Error('user_id not found')
@@ -31,7 +32,7 @@ module.exports = {
         )
       }
 
-      // 提款已核准，扣除 balance
+      // 提款 | 存款已核准，更新 balance
       const updateResult = await strapi
         .service('api::wallet-api.wallet-api')
         .addBalance({
@@ -51,8 +52,8 @@ module.exports = {
           'api::cms-post.cms-post',
           {
             data: {
-              title: 'Withdrawal Approved',
-              content: `The Withdrawal ( ${Math.abs(theTxn.amount)} ${
+              title: `${type} Approved`,
+              content: `The ${type} ( ${Math.abs(theTxn.amount)} ${
                 theTxn?.currency
               } ) you submitted on ${
                 theTxn?.createdAt
@@ -65,7 +66,7 @@ module.exports = {
       } else {
         data.status = 'FAILED'
         data.balance_after_mutate = null
-        data.title = '提款失敗'
+        data.title = `${type} failed`
         data.description = JSON.stringify(updateResult)
 
         throw new Error(`update balance failed ${JSON.stringify(updateResult)}`)

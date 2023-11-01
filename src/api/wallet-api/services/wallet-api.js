@@ -256,4 +256,57 @@ module.exports = () => ({
     )
     return createTxnResult
   },
+
+  deposit: async (body) => {
+    // 只做創建 transaction record 狀態=PENDING
+    // afterUpdate 且 狀態=APPROVED 才做 balance 的更新
+
+    // 如果沒有帶參數就回 400
+    const requiredFields = ['amount', 'user_id']
+
+    for (const field of requiredFields) {
+      if (body[field] === undefined) {
+        return `${field} is required`
+      }
+    }
+
+    // 取得幣別
+    const siteSetting = global.appData.siteSetting
+    const defaultCurrency = siteSetting?.default_currency
+    const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
+
+    const currency =
+      (body?.currency || '').toUpperCase() || defaultCurrency || null
+    const amount_type = body?.amount_type || defaultAmountType
+
+    // 金額不能為負數
+    if (Number(body.amount) < 0) {
+      return "amount can't < 0"
+    }
+
+    /**
+     * @ref https://docs.strapi.io/dev-docs/api/entity-service/crud#create
+     * 創建一筆 Transaction Record
+     */
+
+    const createTxnResult = await strapi.entityService.create(
+      'api::transaction-record.transaction-record',
+      {
+        data: {
+          type: 'DEPOSIT',
+          title: `user_id #${body.user_id} deposit $${Math.abs(
+            body.amount
+          ).toLocaleString()} ${currency}`,
+          description: '',
+          amount: Math.abs(body?.amount || 0),
+          currency,
+          amount_type,
+          by: 'USER',
+          user: body.user_id, // connect
+          status: 'PENDING',
+        },
+      }
+    )
+    return createTxnResult
+  },
 })

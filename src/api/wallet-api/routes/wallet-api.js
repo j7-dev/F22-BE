@@ -36,5 +36,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/wallet-api/cash/deposit',
+      handler: 'cash.deposit',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 }
