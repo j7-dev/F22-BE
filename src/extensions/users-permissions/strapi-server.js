@@ -44,7 +44,27 @@ module.exports = (plugin) => {
     const user = await strapi.entityService.findOne(
       'plugin::users-permissions.user',
       ctx.state.user.id,
-      { populate: ['role', 'vip', 'balances'] }
+      {
+        populate: {
+          role: {
+            fields: '*',
+          },
+          vip: {
+            fields: '*',
+          },
+          balances: {
+            fields: '*',
+          },
+          last_deposit: {
+            fields: '*',
+            populate: {
+              deposit_bonus: {
+                fields: '*',
+              },
+            },
+          },
+        },
+      }
     )
 
     const siteSetting = global.appData.siteSetting
