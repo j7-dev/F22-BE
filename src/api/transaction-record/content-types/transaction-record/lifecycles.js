@@ -13,6 +13,9 @@ module.exports = {
           updated_by_user_id: {
             fields: ['id', 'display_name'],
           },
+          deposit_bonus: {
+            fields: ['id'],
+          },
         },
       }
     )
@@ -32,6 +35,8 @@ module.exports = {
         )
       }
 
+      //
+
       // 提款 | 存款已核准，更新 balance
       const updateResult = await strapi
         .service('api::wallet-api.wallet-api')
@@ -42,12 +47,26 @@ module.exports = {
           user_id,
         })
 
-      // 扣款成功  更新 balance_after_mutate
+      // 如果是存款，將deposit_bonus加上USER
+      if (type === 'DEPOSIT') {
+        const updateUserResult = await strapi.entityService.update(
+          'plugin::users-permissions.user',
+          user_id,
+          {
+            data: {
+              deposit_bonus: theTxn?.deposit_bonus?.id,
+            },
+          }
+        )
+      }
+
+      // 更新成功
       if (updateResult?.id) {
         data.status = 'SUCCESS'
+        // 更新 balance_after_mutate
         data.balance_after_mutate = updateResult?.amount
 
-        //TODO  發送站內信
+        // 發送站內信
         const createNotification = await strapi.entityService.create(
           'api::cms-post.cms-post',
           {

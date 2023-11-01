@@ -78,6 +78,11 @@
       "type": "component",
       "repeatable": true,
       "component": "general.meta-data"
+    },
+    "deposit_bonus": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::deposit-bonus.deposit-bonus"
     }
   }
 }

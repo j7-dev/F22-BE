@@ -304,6 +304,7 @@ module.exports = () => ({
           by: 'USER',
           user: body.user_id, // connect
           status: 'PENDING',
+          deposit_bonus: body?.deposit_bonus,
         },
       }
     )

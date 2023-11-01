@@ -26,22 +26,22 @@ module.exports = {
   async deposit(ctx) {
     const body = ctx.request.body
 
-    const withdrawResult = await strapi
+    const dpResult = await strapi
       .service('api::wallet-api.wallet-api')
       .deposit(body)
-    const txnId = withdrawResult?.id || null
+    const txnId = dpResult?.id || null
 
     if (txnId) {
       ctx.body = {
         status: '200',
         message: 'create transaction success',
-        data: withdrawResult,
+        data: dpResult,
       }
     } else {
       ctx.body = {
         status: '400',
         message: 'create transaction fail',
-        data: withdrawResult,
+        data: dpResult,
       }
     }
   },
