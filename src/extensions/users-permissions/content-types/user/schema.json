@@ -147,11 +147,10 @@
     "favorite_games": {
       "type": "json"
     },
-    "deposit_bonus": {
+    "last_deposit": {
       "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::deposit-bonus.deposit-bonus",
-      "inversedBy": "users"
+      "relation": "oneToOne",
+      "target": "api::transaction-record.transaction-record"
     }
   }
 }

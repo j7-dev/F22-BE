@@ -54,7 +54,7 @@ module.exports = {
           user_id,
           {
             data: {
-              deposit_bonus: theTxn?.deposit_bonus?.id,
+              last_deposit: theTxn?.id,
             },
           }
         )

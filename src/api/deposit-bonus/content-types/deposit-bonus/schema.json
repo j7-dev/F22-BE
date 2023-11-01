@@ -60,12 +60,6 @@
     },
     "allow_game_categories": {
       "type": "json"
-    },
-    "users": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "deposit_bonus"
     }
   }
 }
