@@ -1,7 +1,7 @@
 module.exports = {
   routes: [
     {
-      method: 'POST',
+      method: 'GET',
       path: '/igx/login-11a',
       handler: 'igx-gp.login11a',
       config: {
