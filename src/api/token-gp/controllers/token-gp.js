@@ -24,7 +24,6 @@ module.exports = {
         'Content-Type': 'application/x-www-form-urlencoded',
       },
     })
-    console.log('⭐  getResult:', getResult?.data)
 
     if (
       getResult?.data?.statuscode === '0' &&
@@ -32,6 +31,8 @@ module.exports = {
     ) {
       const uid = getResult?.data?.uid
       const md5 = crypto.createHash('md5')
+      console.log('⭐  md5:', `${agentId}|${apiKey}|${uid}`)
+
       md5.update(`${agentId}|${apiKey}|${uid}`)
       const hash = md5.digest('hex')
 
