@@ -4,7 +4,7 @@
   "info": {
     "singularName": "discount",
     "pluralName": "discounts",
-    "displayName": "Discount",
+    "displayName": "Discount (棄用)",
     "description": ""
   },
   "options": {
