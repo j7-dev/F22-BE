@@ -15,8 +15,6 @@ module.exports = {
     const body = ctx?.request?.body
     body.hash = '34536fd35da6877bcf8623ecee32d185'
     body.agent_id = 'roca'
-    console.log('⭐  body:', body)
-    console.log('⭐  api:', `${apiUrl}/api/auth/`)
 
     const getResult = await axios.post(`${apiUrl}/api/auth/`, body, {
       family: 4,
@@ -31,7 +29,6 @@ module.exports = {
     ) {
       const uid = getResult?.data?.uid
       const md5 = crypto.createHash('md5')
-      console.log('⭐  md5:', `${agentId}|${apiKey}|${uid}`)
 
       md5.update(`${agentId}|${apiKey}|${uid}`)
       const hash = md5.digest('hex')
