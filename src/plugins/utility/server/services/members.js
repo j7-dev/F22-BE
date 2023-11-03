@@ -35,7 +35,7 @@ module.exports = ({ strapi }) => ({
 
     const formattedRecords = allLoginRecords.map((record) => ({
       user_id: record?.user?.id,
-      roleType: record.user.role.type,
+      roleType: record?.user?.role?.type,
     }))
 
     const membersRecords = formattedRecords.filter((record) => !!record.user_id)
