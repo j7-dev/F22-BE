@@ -85,6 +85,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/statistic/today',
+      handler: 'statistic.today',
+      config: {
+        policies: [],
+      },
+    },
     // helper
     {
       method: 'POST',

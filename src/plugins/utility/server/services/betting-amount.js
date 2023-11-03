@@ -15,7 +15,6 @@ module.exports = ({ strapi }) => ({
    * @param string args?.type
    * @param string args?.start
    * @param string args?.end
-   * @param string args?.betResult
    * @returns
    */
   async get(args) {
@@ -24,16 +23,11 @@ module.exports = ({ strapi }) => ({
     const user_id = args?.user_id
     const amount_type = args?.amount_type
     const currency = args?.currency
-    const betResult = args?.type
     const type = args?.type
 
     const defaultFilters = {
       type: type ? type : 'CREDIT',
       status: 'SUCCESS',
-      amount: {
-        $gt: betResult === 'WIN' ? 0 : undefined,
-        $lt: betResult === 'LOSS' ? 0 : undefined,
-      },
       user: user_id,
       currency,
       amount_type,
@@ -59,24 +53,22 @@ module.exports = ({ strapi }) => ({
 
     return total
   },
-  //取贏
+  // FIXME 取贏 duprecated
   async getWin(args) {
     const totalWin = await strapi.service('plugin::utility.bettingAmount').get({
       ...args,
       type: 'CREDIT',
-      betResult: 'WIN',
     })
     return totalWin
   },
 
-  // 取輸
+  // FIXME 取輸 duprecated
   async getLoss(args) {
     const totalLoss = await strapi
       .service('plugin::utility.bettingAmount')
       .get({
         ...args,
         type: 'CREDIT',
-        betResult: 'LOSS',
       })
 
     return Math.abs(totalLoss)

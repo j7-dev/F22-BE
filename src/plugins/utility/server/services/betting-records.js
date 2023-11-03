@@ -48,12 +48,14 @@ module.exports = ({ strapi }) => ({
    * @param args.gameProviderNames?: string  - 遊戲商名稱 EVO, PP 不指定就是全部
    * @param args.user_id?: string
    * @param args.pageSize?: number - 一頁幾筆
+   * @param args.startTime?: Date ISO String
+   * @param args.endTime?: Date ISO String
    * @returns Txn[] - 交易紀錄
    */
   async get(args) {
     // ⚠️ 如果 support_game_providers 沒有 ${gp}_transactions 這張TABLE時會報錯
     // const support_game_providers =
-    // TODO  global.appData?.siteSetting?.support_game_providers
+    // TODO  ⚠️ global.appData?.siteSetting?.support_game_providers
     const support_game_providers = ['EVO', 'PP']
     const gameProviderNames = args?.gameProviderNames
       ? [args?.gameProviderNames]
@@ -74,6 +76,8 @@ module.exports = ({ strapi }) => ({
    * @param args.gameProviderNames?: string[] - 遊戲商名稱 EVO, PP
    * @param args.user_id?: string
    * @param args.pageSize?: number  - 一頁幾筆
+   * @param args.startTime?: Date ISO String
+   * @param args.endTime?: Date ISO String
    * @returns Txn[] - 交易紀錄
    */
   async getTxns(args) {
@@ -86,7 +90,6 @@ module.exports = ({ strapi }) => ({
     }
 
     // TODO 要支持分頁查詢, 日期查詢, 以及排序
-    // [x] 改成 gameProviderNames map 生成
 
     const gamesSQL = gameProviderNames
       .map((gameProviderName) => {
@@ -151,6 +154,7 @@ LIMIT ${pageSize};`
     )
 
     const filteredTxns = allTxns.flat().filter((txn) => !!txn)
+    console.log('⭐  filteredTxns:', filteredTxns)
 
     return filteredTxns
   },
