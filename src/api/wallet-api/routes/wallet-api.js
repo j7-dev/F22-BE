@@ -20,6 +20,15 @@ module.exports = {
     },
     {
       method: 'POST',
+      path: '/wallet-api/balance/add-without-record',
+      handler: 'balance.addWithoutRecord',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'POST',
       path: '/wallet-api/trunoverbonus-to-cash',
       handler: 'balance.trunoverBonusToCash',
       config: {

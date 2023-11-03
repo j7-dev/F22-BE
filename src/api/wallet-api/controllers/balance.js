@@ -11,6 +11,18 @@ module.exports = {
       data: result,
     }
   },
+  async addWithoutRecord(ctx) {
+    const body = ctx.request.body
+    const result = await strapi
+      .service('api::wallet-api.wallet-api')
+      .addBalance(body)
+    // respond
+    ctx.body = {
+      status: '200',
+      message: 'updateBalance success',
+      data: result,
+    }
+  },
   async get(ctx) {
     const query = ctx.request.query
     const result = await strapi.service('api::wallet-api.wallet-api').get(query)
