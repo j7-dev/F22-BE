@@ -151,6 +151,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::transaction-record.transaction-record"
+    },
+    "deposit_account_for_user": {
+      "type": "json"
     }
   }
 }
