@@ -79,6 +79,7 @@ module.exports = {
               } has been approved \n\n transaction_id: ${theTxn?.id}`,
               post_type: 'siteNotify',
               send_to_user_ids: [user_id],
+              publishedAt: new Date(),
             },
           }
         )
