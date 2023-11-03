@@ -1,4 +1,5 @@
 'use strict'
+// const dayjs = require('dayjs')
 
 module.exports = {
   /**
@@ -42,5 +43,9 @@ module.exports = {
     }
 
     // TODO 開遊戲前確認每個人身上的權限能不能開
+    // const start = dayjs().startOf('year').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    // const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+
+    // console.log('⭐  turnoverBonusTxns:', JSON.stringify(gpTxns))
   },
 }
