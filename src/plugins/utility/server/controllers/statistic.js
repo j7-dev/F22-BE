@@ -676,8 +676,10 @@ module.exports = ({ strapi }) => ({
     const start = dayjs().startOf('year').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
 
+    // TABLE 1
+
     // deposit
-    const dpTxns = await strapi.entityService.findMany(
+    const dpSuccessTxns = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
       {
         fields: ['id', 'amount'],
@@ -697,16 +699,16 @@ module.exports = ({ strapi }) => ({
       }
     )
 
-    const dpAmount = dpTxns.reduce((acc, cur) => {
+    const dpAmount = dpSuccessTxns.reduce((acc, cur) => {
       acc += cur.amount
       return acc
     }, 0)
-    const dpUserIds = dpTxns.map((txn) => txn?.user?.id)
+    const dpUserIds = dpSuccessTxns.map((txn) => txn?.user?.id)
     const uniqueDpUserIds = Array.from(new Set(dpUserIds))
     const dpUsers = uniqueDpUserIds.length
 
     // withdraw
-    const wdTxns = await strapi.entityService.findMany(
+    const wdSuccessTxns = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
       {
         fields: ['id', 'amount'],
@@ -727,49 +729,48 @@ module.exports = ({ strapi }) => ({
     )
 
     const wdAmount =
-      wdTxns.reduce((acc, cur) => {
+      wdSuccessTxns.reduce((acc, cur) => {
         acc += cur.amount
         return acc
       }, 0) * -1
-    const wdUserIds = wdTxns.map((txn) => txn?.user?.id)
+    const wdUserIds = wdSuccessTxns.map((txn) => txn?.user?.id)
     const uniqueWdUserIds = Array.from(new Set(wdUserIds))
     const wdUsers = uniqueWdUserIds.length
 
     // dpWd
     const dpWd = dpAmount - wdAmount
 
-    // coupon
-    const couponTxns = await strapi.entityService.findMany(
-      'api::transaction-record.transaction-record',
+    const allCashBalances = await strapi.entityService.findMany(
+      'api::balance.balance',
       {
-        fields: ['id', 'amount'],
+        fields: ['amount'],
+        filters: { currency, amount_type, amount: { $ne: 0 } },
+      }
+    )
+    const cashBalanceAmount = allCashBalances.reduce(
+      (acc, curr) => acc + curr.amount,
+      0
+    )
+
+    const allTurnoverBonusBalances = await strapi.entityService.findMany(
+      'api::balance.balance',
+      {
+        fields: ['amount'],
         filters: {
-          type: 'COUPON',
-          status: 'SUCCESS',
-          createdAt: {
-            $gte: start,
-            $lte: end,
-          },
-        },
-        populate: {
-          user: {
-            fields: ['id'],
-          },
+          currency,
+          amount_type: 'TURNOVER_BONUS',
+          amount: { $ne: 0 },
         },
       }
     )
-
-    const couponAmount = couponTxns.reduce((acc, cur) => {
-      acc += cur.amount
-      return acc
-    }, 0)
-
-    // TODO
-    const balance = 0
+    const turnoverBonusBalanceAmount = allTurnoverBonusBalances.reduce(
+      (acc, curr) => acc + curr.amount,
+      0
+    )
 
     const table1 = {
-      balance,
-      couponAmount,
+      cashBalanceAmount,
+      turnoverBonusBalanceAmount,
       dpAmount,
       dpUsers,
       wdAmount,
@@ -777,63 +778,153 @@ module.exports = ({ strapi }) => ({
       dpWd,
     }
 
-    // 抓取有效投注
-    const validBet = await strapi.service('plugin::utility.bettingAmount').get({
-      type: 'DEBIT',
-      currency,
-      amount_type,
-      start,
-      end,
-    })
+    // TABLE 2
 
-    // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
-    const payout = await strapi.service('plugin::utility.bettingAmount').get({
-      type: 'CREDIT',
-      currency,
-      amount_type,
-      start,
-      end,
-    })
+    const bettingRecords = await strapi
+      .service('plugin::utility.bettingRecords')
+      .get({
+        startTime: start,
+        endTime: end,
+      })
 
-    // 紅利+洗碼
-    const coupon = await strapi.service('plugin::utility.bettingAmount').get({
-      type: 'COUPON',
-      currency,
-      amount_type,
-      start,
-      end,
-    })
+    const debitRecords = bettingRecords.filter((r) => r.status === 'DEBIT')
+    const creditRecords = bettingRecords.filter((r) => r.status === 'CREDIT')
 
-    //新註冊人數
-    const getRegisterUsersResult = await strapi.entityService.findMany(
-      'plugin::users-permissions.user',
+    function getGPCashAmount(game_provider, records) {
+      if (game_provider === 'ALL') {
+        return records.reduce((acc, cur) => {
+          acc += cur.amount
+          return acc
+        }, 0)
+      }
+      const amount = records
+        .filter((r) => r.game_provider === game_provider)
+        .reduce((acc, cur) => {
+          acc += cur.amount
+          return acc
+        }, 0)
+      return amount
+    }
+
+    const turnoverBonusTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
       {
-        fields: ['id'],
+        fields: ['id', 'amount'],
         filters: {
+          type: 'COUPON',
+          amount_type: 'TURNOVER_BONUS',
+          status: 'SUCCESS',
           createdAt: {
             $gte: start,
             $lte: end,
           },
         },
+        populate: {
+          meta: '*',
+        },
       }
     )
-    const numberOfRegistrantUserIds = getRegisterUsersResult.map(
-      (item) => item?.id
-    )
-    const uniqueNumberOfRegistrantUserIds = Array.from(
-      new Set(numberOfRegistrantUserIds)
-    )
-    const numberOfRegistrants = uniqueNumberOfRegistrantUserIds.length
 
-    const debitTxns = await strapi.entityService.findMany(
+    function getGPTurnoverBonusAmount(game_provider, txns) {
+      if (game_provider === 'ALL') {
+        return txns.reduce((acc, cur) => {
+          acc += cur.amount
+          return acc
+        }, 0)
+      }
+      const gpTxns = turnoverBonusTxns.filter((r) =>
+        r?.meta.some(
+          (m) =>
+            m.meta_key === 'game_provider' && m.meta_value === game_provider
+        )
+      )
+      const amount = gpTxns.reduce((acc, cur) => {
+        acc += cur.amount
+        return acc
+      }, 0)
+      return amount
+    }
+
+    const table2 = [
+      {
+        label: 'bet amount(users)',
+        total: getGPCashAmount('ALL', debitRecords),
+        evo: getGPCashAmount('EVO', debitRecords),
+        pp: getGPCashAmount('PP', debitRecords),
+        bti: getGPCashAmount('BTI', debitRecords),
+        igx: getGPCashAmount('IGX', debitRecords),
+      },
+      {
+        label: 'payout',
+        total: getGPCashAmount('ALL', creditRecords) * -1,
+        evo: getGPCashAmount('EVO', creditRecords) * -1,
+        pp: getGPCashAmount('PP', creditRecords) * -1,
+        bti: getGPCashAmount('BTI', creditRecords) * -1,
+        igx: getGPCashAmount('IGX', creditRecords) * -1,
+      },
+      {
+        label: 'winloss',
+        total:
+          getGPCashAmount('ALL', debitRecords) -
+          getGPCashAmount('ALL', creditRecords),
+        evo:
+          getGPCashAmount('EVO', debitRecords) -
+          getGPCashAmount('EVO', creditRecords),
+        pp:
+          getGPCashAmount('PP', debitRecords) -
+          getGPCashAmount('PP', creditRecords),
+        bti:
+          getGPCashAmount('BTI', debitRecords) -
+          getGPCashAmount('BTI', creditRecords),
+        igx:
+          getGPCashAmount('IGX', debitRecords) -
+          getGPCashAmount('IGX', creditRecords),
+      },
+      {
+        label: 'turnover bonus',
+        total: getGPTurnoverBonusAmount('ALL', turnoverBonusTxns),
+        evo: getGPTurnoverBonusAmount('EVO', turnoverBonusTxns),
+        pp: getGPTurnoverBonusAmount('PP', turnoverBonusTxns),
+        bti: getGPTurnoverBonusAmount('BTI', turnoverBonusTxns),
+        igx: getGPTurnoverBonusAmount('IGX', turnoverBonusTxns),
+      },
+    ]
+
+    // TABLE 3
+    const dpPendingTxns = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
       {
         fields: ['id'],
-        populate: {
-          user: {
-            fields: ['id'],
+        filters: {
+          type: 'DEPOSIT',
+          status: 'PENDING',
+          createdAt: {
+            $gte: start,
+            $lte: end,
           },
         },
+      }
+    )
+
+    const wpPendingTxns = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['id'],
+        filters: {
+          type: 'WITHDRAW',
+          status: 'PENDING',
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+        },
+      }
+    )
+
+    const registeredUsers = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id', 'confirmed'],
         filters: {
           createdAt: {
             $gte: start,
@@ -842,27 +933,54 @@ module.exports = ({ strapi }) => ({
         },
       }
     )
-    const debitTxnUserIds = debitTxns.map((txn) => txn?.user?.id)
-    const uniqueDebitTxnUserIds = Array.from(new Set(debitTxnUserIds))
-    const bettingMembers = uniqueDebitTxnUserIds.length
 
-    const payload = {
-      deposit,
-      withdraw,
-      dpWd,
-      validBet,
-      payout: payout * -1, // 顯示為負數
-      winloss: validBet - payout,
-      coupon,
-      profit: validBet - payout - coupon,
-      numberOfRegistrants,
-      bettingMembers,
-    }
+    const table3 = [
+      {
+        label: 'deposit',
+        pending: dpPendingTxns.length,
+        confirmed: dpSuccessTxns.length,
+      },
+      {
+        label: 'withdraw',
+        pending: wpPendingTxns.length,
+        confirmed: wdSuccessTxns.length,
+      },
+      {
+        label: 'register',
+        pending: registeredUsers.filter((u) => !u.confirmed).length,
+        confirmed: registeredUsers.filter((u) => !!u.confirmed).length,
+      },
+    ]
+
+    // TABLE 4
+
+    const allRegisteredUsers = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id'],
+      }
+    )
+
+    const table4 = [
+      {
+        label: 'total_users',
+        count: allRegisteredUsers.length,
+      },
+      {
+        label: 'online_users',
+        count: '-', // TODO
+      },
+    ]
 
     ctx.body = {
       status: '200',
       message: 'get statistic/today success',
-      data: payload,
+      data: {
+        table1,
+        table2,
+        table3,
+        table4,
+      },
     }
   },
 })
