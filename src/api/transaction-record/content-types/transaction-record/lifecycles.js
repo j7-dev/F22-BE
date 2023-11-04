@@ -159,9 +159,11 @@ module.exports = {
       }
     )
 
-    // 計算返水
+    // 計算返水 ⚠️ BTI 不參與洗碼
     const turnover_rate = (theTxn?.user?.vip?.turnover_rate || 0) / 100
-    if (type === 'DEBIT' && status === 'SUCCESS') {
+
+    // 排除 BTI
+    if (type === 'DEBIT' && status === 'SUCCESS' && theTxn?.by !== 'bti-api') {
       const turnover_bonus = turnover_rate * amount
       const result = await strapi.service('api::wallet-api.wallet-api').add({
         user_id: theTxn?.user?.id,
