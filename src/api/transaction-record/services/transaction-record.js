@@ -38,7 +38,8 @@ module.exports = createCoreService(
 
       // 排除 BTI
       if (theTxn?.by !== 'bti-api') {
-        const turnover_bonus = turnover_rate * amount
+        // 因為 DEBIT 投注的金額都是負數，所以要乘以 -1
+        const turnover_bonus = turnover_rate * amount * -1
         const result = await strapi.service('api::wallet-api.wallet-api').add({
           user_id: theTxn?.user?.id,
           amount: turnover_bonus,

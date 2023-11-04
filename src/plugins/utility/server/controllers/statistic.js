@@ -807,7 +807,6 @@ module.exports = ({ strapi }) => ({
         sort: { createdAt: 'desc' },
       }
     )
-    console.log('⭐  bettingRecords:', bettingRecords)
 
     const debitRecords = bettingRecords.filter((r) => r.type === 'DEBIT')
     const creditRecords = bettingRecords.filter((r) => r.type === 'CREDIT')

@@ -27,12 +27,9 @@ module.exports = () => ({
     const findBalance = allBalances.find(
       (b) => b.currency === currency && b.amount_type === amount_type
     )
-    console.log('⭐  findBalance:', findBalance)
 
     // 計算修改後的 balance
     const newBalance = Number(findBalance?.amount || 0) + Number(body.amount)
-    console.log('⭐  body:', body)
-    console.log('⭐  newBalance:', newBalance)
 
     // 預防用戶金額不夠扣
     const allowNegative = body?.allowNegative ?? false
