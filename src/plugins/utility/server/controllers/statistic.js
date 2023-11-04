@@ -132,7 +132,7 @@ module.exports = ({ strapi }) => ({
         const value = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'DEPOSIT',
+            type: ['DEPOSIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
@@ -544,17 +544,10 @@ module.exports = ({ strapi }) => ({
 
     const dataSource = await Promise.all(
       dateArr.map(async (dateItem) => {
-        const dpWd = await strapi.service('plugin::utility.dpWd').getDpWd({
-          currency,
-          amount_type,
-          start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-          end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        })
-
         const deposit = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'DEPOSIT',
+            type: ['DEPOSIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
@@ -564,18 +557,20 @@ module.exports = ({ strapi }) => ({
         const withdraw = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'WITHDRAW',
+            type: ['WITHDRAW'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
 
+        const dpWd = deposit + withdraw
+
         // 抓取有效投注
         const validBet = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'DEBIT',
+            type: ['DEBIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
@@ -586,7 +581,7 @@ module.exports = ({ strapi }) => ({
         const payout = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'CREDIT',
+            type: ['CREDIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
@@ -597,9 +592,19 @@ module.exports = ({ strapi }) => ({
         const coupon = await strapi
           .service('plugin::utility.bettingAmount')
           .get({
-            type: 'COUPON',
+            type: ['COUPON', 'MANUAL', 'TURNOVER_BONUS_TO_CASH'],
             currency,
             amount_type,
+            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+          })
+        // 加上目前的洗碼總和
+        const turnoverBonusBalanceAmount = await strapi
+          .service('plugin::utility.bettingAmount')
+          .get({
+            type: ['COUPON', 'MANUAL', 'TURNOVER_BONUS_TO_CASH'],
+            currency,
+            amount_type: 'TURNOVER_BONUS',
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
           })
@@ -652,10 +657,10 @@ module.exports = ({ strapi }) => ({
           withdraw,
           dpWd,
           validBet,
-          payout: payout * -1, // 顯示為負數
-          winloss: validBet - payout,
-          coupon,
-          profit: validBet - payout - coupon,
+          payout, // 顯示為負數
+          winloss: validBet + payout,
+          coupon: coupon + turnoverBonusBalanceAmount,
+          profit: validBet + payout - coupon,
           numberOfRegistrants,
           bettingMembers,
         }
@@ -730,11 +735,10 @@ module.exports = ({ strapi }) => ({
       }
     )
 
-    const wdAmount =
-      wdSuccessTxns.reduce((acc, cur) => {
-        acc += cur.amount
-        return acc
-      }, 0) * -1
+    const wdAmount = wdSuccessTxns.reduce((acc, cur) => {
+      acc += cur.amount
+      return acc
+    }, 0)
     const wdUserIds = wdSuccessTxns.map((txn) => txn?.user?.id)
     const uniqueWdUserIds = Array.from(new Set(wdUserIds))
     const wdUsers = uniqueWdUserIds.length
