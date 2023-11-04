@@ -296,9 +296,7 @@ module.exports = () => ({
       {
         data: {
           type: 'DEPOSIT',
-          title: `user_id #${body.user_id} deposit $${Math.abs(
-            body.amount
-          ).toLocaleString()} ${currency}`,
+          title: body?.method || '',
           description: '',
           amount: Math.abs(body?.amount || 0),
           currency,
