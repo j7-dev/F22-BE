@@ -57,9 +57,7 @@
       "type": "media",
       "multiple": false,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ],
+      "allowedTypes": ["images"],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -70,9 +68,7 @@
       "type": "media",
       "multiple": true,
       "required": false,
-      "allowedTypes": [
-        "images"
-      ],
+      "allowedTypes": ["images"],
       "pluginOptions": {
         "i18n": {
           "localized": true
@@ -82,10 +78,11 @@
     "send_to_user_ids": {
       "pluginOptions": {
         "i18n": {
-          "localized": false
+          "localized": true
         }
       },
-      "type": "json"
+      "type": "json",
+      "default": null
     },
     "hide_to_user_ids": {
       "pluginOptions": {
@@ -93,7 +90,8 @@
           "localized": true
         }
       },
-      "type": "json"
+      "type": "json",
+      "default": []
     }
   }
 }
