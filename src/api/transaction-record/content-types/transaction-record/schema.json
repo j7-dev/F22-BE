@@ -22,7 +22,8 @@
         "COUPON",
         "DEBIT",
         "CREDIT",
-        "TURNOVER_BONUS_TO_CASH"
+        "TURNOVER_BONUS_TO_CASH",
+        "CANCEL"
       ],
       "default": "BET",
       "required": true
