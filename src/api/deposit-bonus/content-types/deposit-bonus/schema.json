@@ -15,8 +15,7 @@
     "vips": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::vip.vip",
-      "mappedBy": "deposit_bonus"
+      "target": "api::vip.vip"
     },
     "label": {
       "type": "string",

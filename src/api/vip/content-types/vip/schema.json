@@ -51,12 +51,6 @@
       "target": "api::discount.discount",
       "inversedBy": "vips"
     },
-    "deposit_bonus": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::deposit-bonus.deposit-bonus",
-      "inversedBy": "vips"
-    },
     "users": {
       "type": "relation",
       "relation": "oneToMany",
