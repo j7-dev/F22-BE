@@ -14,8 +14,9 @@
   "attributes": {
     "vips": {
       "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::vip.vip"
+      "relation": "manyToMany",
+      "target": "api::vip.vip",
+      "inversedBy": "deposit_bonuses"
     },
     "label": {
       "type": "string",

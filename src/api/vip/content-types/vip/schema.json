@@ -68,6 +68,12 @@
     "turnover_rate": {
       "type": "decimal",
       "required": true
+    },
+    "deposit_bonuses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::deposit-bonus.deposit-bonus",
+      "inversedBy": "vips"
     }
   }
 }
