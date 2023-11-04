@@ -890,20 +890,25 @@ module.exports = ({ strapi }) => ({
       {
         label: 'winloss',
         total:
-          getGPCashAmount('ALL', creditRecords) -
-          getGPCashAmount('ALL', debitRecords),
+          (getGPCashAmount('ALL', creditRecords) +
+            getGPCashAmount('ALL', debitRecords)) *
+          -1,
         evo:
-          getGPCashAmount(EVO, creditRecords) -
-          getGPCashAmount(EVO, debitRecords),
+          (getGPCashAmount(EVO, creditRecords) +
+            getGPCashAmount(EVO, debitRecords)) *
+          -1,
         pp:
-          getGPCashAmount(PP, creditRecords) -
-          getGPCashAmount(PP, debitRecords),
+          (getGPCashAmount(PP, creditRecords) +
+            getGPCashAmount(PP, debitRecords)) *
+          -1,
         bti:
-          getGPCashAmount(BTI, creditRecords) -
-          getGPCashAmount(BTI, debitRecords),
+          (getGPCashAmount(BTI, creditRecords) +
+            getGPCashAmount(BTI, debitRecords)) *
+          -1,
         igx:
-          getGPCashAmount(IGX, creditRecords) -
-          getGPCashAmount(IGX, debitRecords),
+          (getGPCashAmount(IGX, creditRecords) +
+            getGPCashAmount(IGX, debitRecords)) *
+          -1,
       },
       {
         label: 'turnover bonus',
