@@ -72,6 +72,7 @@ module.exports = () => ({
       'amount',
       'user_id',
       'currency',
+      // 'ref_id'
     ]
 
     for (const field of requiredFields) {
@@ -104,6 +105,7 @@ module.exports = () => ({
           bet_record: body.bet_record_id, // connect
           status: updateResult?.id ? 'SUCCESS' : 'FAILED',
           balance_after_mutate: updateResult?.id ? updateResult?.amount : null,
+          ref_id: body?.ref_id,
         },
       }
     )

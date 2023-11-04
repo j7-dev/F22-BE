@@ -82,6 +82,9 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::deposit-bonus.deposit-bonus"
+    },
+    "ref_id": {
+      "type": "string"
     }
   }
 }

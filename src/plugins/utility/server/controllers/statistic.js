@@ -863,6 +863,7 @@ module.exports = ({ strapi }) => ({
       return amount
     }
 
+    // ⚠️⚠️⚠️這個改的話，FE前端也要改
     const EVO = 'EVO'
     const BTI = 'bti-api'
     const PP = 'PP'
