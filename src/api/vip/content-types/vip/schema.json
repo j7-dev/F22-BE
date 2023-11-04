@@ -24,11 +24,6 @@
       "unique": true,
       "min": 0
     },
-    "upgrade_award": {
-      "type": "decimal",
-      "min": 0,
-      "required": true
-    },
     "users_role": {
       "type": "relation",
       "relation": "oneToOne",
@@ -48,12 +43,6 @@
     "valid_bet_amount_upgrade_threshold": {
       "type": "decimal",
       "min": 0,
-      "required": true
-    },
-    "vip_duration": {
-      "type": "integer",
-      "default": 30,
-      "min": 1,
       "required": true
     },
     "discount": {

@@ -154,7 +154,6 @@ LIMIT ${pageSize};`
     )
 
     const filteredTxns = allTxns.flat().filter((txn) => !!txn)
-    console.log('⭐  filteredTxns:', filteredTxns)
 
     return filteredTxns
   },
