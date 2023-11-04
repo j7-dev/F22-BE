@@ -44,20 +44,52 @@ module.exports = {
         )
       }
 
-      //
-
-      // 提款 | 存款已核准，更新 balance
-      const updateResult = await strapi
-        .service('api::wallet-api.wallet-api')
-        .addBalance({
-          amount: theTxn?.amount,
-          currency: theTxn?.currency,
-          amount_type: theTxn?.amount_type,
-          user_id,
-        })
-
-      // 如果是存款，將deposit_bonus加上USER
+      // 存款已核准，更新 balance，提款核准不變
+      // 存款，將deposit_bonus加上USER
       if (type === 'DEPOSIT') {
+        const updateResult = await strapi
+          .service('api::wallet-api.wallet-api')
+          .addBalance({
+            amount: theTxn?.amount,
+            currency: theTxn?.currency,
+            amount_type: theTxn?.amount_type,
+            user_id,
+          })
+
+        // 更新成功
+        if (updateResult?.id) {
+          data.status = 'SUCCESS'
+          // 更新 balance_after_mutate
+          data.balance_after_mutate = updateResult?.amount
+
+          // 發送站內信
+          const createNotification = await strapi.entityService.create(
+            'api::cms-post.cms-post',
+            {
+              data: {
+                title: `${type} Approved`,
+                content: `The ${type} ( ${Math.abs(theTxn.amount)} ${
+                  theTxn?.currency
+                } ) you submitted on ${
+                  theTxn?.createdAt
+                } has been approved \n\n transaction_id: ${theTxn?.id}`,
+                post_type: 'siteNotify',
+                send_to_user_ids: [user_id],
+                publishedAt: new Date(),
+              },
+            }
+          )
+        } else {
+          data.status = 'FAILED'
+          data.balance_after_mutate = null
+          data.title = `${type} failed`
+          data.description = JSON.stringify(updateResult)
+
+          throw new Error(
+            `update balance failed ${JSON.stringify(updateResult)}`
+          )
+        }
+
         const updateUserResult = await strapi.entityService.update(
           'plugin::users-permissions.user',
           user_id,
@@ -67,38 +99,6 @@ module.exports = {
             },
           }
         )
-      }
-
-      // 更新成功
-      if (updateResult?.id) {
-        data.status = 'SUCCESS'
-        // 更新 balance_after_mutate
-        data.balance_after_mutate = updateResult?.amount
-
-        // 發送站內信
-        const createNotification = await strapi.entityService.create(
-          'api::cms-post.cms-post',
-          {
-            data: {
-              title: `${type} Approved`,
-              content: `The ${type} ( ${Math.abs(theTxn.amount)} ${
-                theTxn?.currency
-              } ) you submitted on ${
-                theTxn?.createdAt
-              } has been approved \n\n transaction_id: ${theTxn?.id}`,
-              post_type: 'siteNotify',
-              send_to_user_ids: [user_id],
-              publishedAt: new Date(),
-            },
-          }
-        )
-      } else {
-        data.status = 'FAILED'
-        data.balance_after_mutate = null
-        data.title = `${type} failed`
-        data.description = JSON.stringify(updateResult)
-
-        throw new Error(`update balance failed ${JSON.stringify(updateResult)}`)
       }
     }
 
@@ -135,6 +135,29 @@ module.exports = {
       })
     }
   },
+  async afterUpdate(event) {
+    const { result } = event
+    const txn_id = result?.id
+    const status = result?.status
+    const amount = result?.amount
+    const type = result?.type
+    if (type === 'WITHDRAW' && status === 'CANCEL') {
+      const handleCancelWithdrawResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleCancelWithdraw(event)
+    }
+  },
+  async beforeCreate(event) {
+    const { params = {} } = event
+    const { data = {} } = params
+    const status = data?.status
+    const type = data?.type
+    if (type === 'WITHDRAW' && status === 'PENDING') {
+      const handleWithdrawResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleWithdraw(event)
+    }
+  },
   async afterCreate(event) {
     const { result } = event
     const txn_id = result?.id
@@ -142,38 +165,11 @@ module.exports = {
     const amount = result?.amount
     const type = result?.type
 
-    const theTxn = await strapi.entityService.findOne(
-      'api::transaction-record.transaction-record',
-      txn_id,
-      {
-        populate: {
-          user: {
-            fields: ['id'],
-            populate: {
-              vip: {
-                fields: ['id', 'label', 'turnover_rate'],
-              },
-            },
-          },
-        },
-      }
-    )
-
-    // 計算返水 ⚠️ BTI 不參與洗碼
-    const turnover_rate = (theTxn?.user?.vip?.turnover_rate || 0) / 100
-
     // 排除 BTI
-    if (type === 'DEBIT' && status === 'SUCCESS' && theTxn?.by !== 'bti-api') {
-      const turnover_bonus = turnover_rate * amount
-      const result = await strapi.service('api::wallet-api.wallet-api').add({
-        user_id: theTxn?.user?.id,
-        amount: turnover_bonus,
-        title: `turnover_bonus ${amount} * ${turnover_rate} = ${turnover_bonus}  txn#${theTxn?.id}`,
-        type: 'COUPON',
-        by: 'SYSTEM',
-        currency: theTxn?.currency,
-        amount_type: 'TURNOVER_BONUS',
-      })
+    if (type === 'DEBIT' && status === 'SUCCESS') {
+      const handleTurnoverBonusResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleTurnoverBonus(event)
     }
   },
 }

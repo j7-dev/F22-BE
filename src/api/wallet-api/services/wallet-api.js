@@ -35,7 +35,7 @@ module.exports = () => ({
     const allowNegative = body?.allowNegative ?? false
 
     if (newBalance < 0 && !allowNegative) {
-      return 'Insufficient balance'
+      throw new Error('Insufficient balance')
     }
 
     // 更新 balance
