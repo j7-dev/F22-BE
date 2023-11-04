@@ -7,7 +7,7 @@ const default_amount_type = 'CASH'
 
 module.exports = ({ strapi }) => ({
   async recent(ctx) {
-    const query = ctx.request.query
+    const query = ctx?.request?.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
     const dateArr =
@@ -673,8 +673,10 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
-    const start = dayjs().startOf('year').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const start = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    // start: 2023-11-04 00:00:00.000000
     const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    // end: 2023-11-04 23:59:59.999999
 
     // TABLE 1
 
@@ -738,7 +740,7 @@ module.exports = ({ strapi }) => ({
     const wdUsers = uniqueWdUserIds.length
 
     // dpWd
-    const dpWd = dpAmount - wdAmount
+    const dpWd = dpAmount + wdAmount
 
     const allCashBalances = await strapi.entityService.findMany(
       'api::balance.balance',
@@ -780,15 +782,31 @@ module.exports = ({ strapi }) => ({
 
     // TABLE 2
 
-    const bettingRecords = await strapi
-      .service('plugin::utility.bettingRecords')
-      .get({
-        startTime: start,
-        endTime: end,
-      })
+    const bettingRecords = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        filters: {
+          createdAt: {
+            $gte: start,
+            $lte: end,
+          },
+          type: {
+            $in: ['DEBIT', 'CREDIT'],
+          },
+        },
+        populate: {
+          user: {
+            fields: ['id'],
+          },
+          meta: '*',
+        },
+        sort: { createdAt: 'desc' },
+      }
+    )
+    console.log('⭐  bettingRecords:', bettingRecords)
 
-    const debitRecords = bettingRecords.filter((r) => r.status === 'DEBIT')
-    const creditRecords = bettingRecords.filter((r) => r.status === 'CREDIT')
+    const debitRecords = bettingRecords.filter((r) => r.type === 'DEBIT')
+    const creditRecords = bettingRecords.filter((r) => r.type === 'CREDIT')
 
     function getGPCashAmount(game_provider, records) {
       if (game_provider === 'ALL') {
@@ -798,7 +816,7 @@ module.exports = ({ strapi }) => ({
         }, 0)
       }
       const amount = records
-        .filter((r) => r.game_provider === game_provider)
+        .filter((r) => r.by === game_provider)
         .reduce((acc, cur) => {
           acc += cur.amount
           return acc
@@ -845,48 +863,54 @@ module.exports = ({ strapi }) => ({
       return amount
     }
 
+    const EVO = 'EVO'
+    const BTI = 'bti-api'
+    const PP = 'PP'
+    const TOKEN = 'TOKENGP'
+    const IGX = 'IGX'
+
     const table2 = [
       {
         label: 'bet amount(users)',
-        total: getGPCashAmount('ALL', debitRecords),
-        evo: getGPCashAmount('EVO', debitRecords),
-        pp: getGPCashAmount('PP', debitRecords),
-        bti: getGPCashAmount('BTI', debitRecords),
-        igx: getGPCashAmount('IGX', debitRecords),
+        total: getGPCashAmount('ALL', debitRecords) * -1,
+        evo: getGPCashAmount(EVO, debitRecords) * -1,
+        pp: getGPCashAmount(PP, debitRecords) * -1,
+        bti: getGPCashAmount(BTI, debitRecords) * -1,
+        igx: getGPCashAmount(IGX, debitRecords) * -1,
       },
       {
         label: 'payout',
         total: getGPCashAmount('ALL', creditRecords) * -1,
-        evo: getGPCashAmount('EVO', creditRecords) * -1,
-        pp: getGPCashAmount('PP', creditRecords) * -1,
-        bti: getGPCashAmount('BTI', creditRecords) * -1,
-        igx: getGPCashAmount('IGX', creditRecords) * -1,
+        evo: getGPCashAmount(EVO, creditRecords) * -1,
+        pp: getGPCashAmount(PP, creditRecords) * -1,
+        bti: getGPCashAmount(BTI, creditRecords) * -1,
+        igx: getGPCashAmount(IGX, creditRecords) * -1,
       },
       {
         label: 'winloss',
         total:
-          getGPCashAmount('ALL', debitRecords) -
-          getGPCashAmount('ALL', creditRecords),
+          getGPCashAmount('ALL', creditRecords) -
+          getGPCashAmount('ALL', debitRecords),
         evo:
-          getGPCashAmount('EVO', debitRecords) -
-          getGPCashAmount('EVO', creditRecords),
+          getGPCashAmount(EVO, creditRecords) -
+          getGPCashAmount(EVO, debitRecords),
         pp:
-          getGPCashAmount('PP', debitRecords) -
-          getGPCashAmount('PP', creditRecords),
+          getGPCashAmount(PP, creditRecords) -
+          getGPCashAmount(PP, debitRecords),
         bti:
-          getGPCashAmount('BTI', debitRecords) -
-          getGPCashAmount('BTI', creditRecords),
+          getGPCashAmount(BTI, creditRecords) -
+          getGPCashAmount(BTI, debitRecords),
         igx:
-          getGPCashAmount('IGX', debitRecords) -
-          getGPCashAmount('IGX', creditRecords),
+          getGPCashAmount(IGX, creditRecords) -
+          getGPCashAmount(IGX, debitRecords),
       },
       {
         label: 'turnover bonus',
         total: getGPTurnoverBonusAmount('ALL', turnoverBonusTxns),
-        evo: getGPTurnoverBonusAmount('EVO', turnoverBonusTxns),
-        pp: getGPTurnoverBonusAmount('PP', turnoverBonusTxns),
-        bti: getGPTurnoverBonusAmount('BTI', turnoverBonusTxns),
-        igx: getGPTurnoverBonusAmount('IGX', turnoverBonusTxns),
+        evo: getGPTurnoverBonusAmount(EVO, turnoverBonusTxns),
+        pp: getGPTurnoverBonusAmount(PP, turnoverBonusTxns),
+        bti: getGPTurnoverBonusAmount(BTI, turnoverBonusTxns),
+        igx: getGPTurnoverBonusAmount(IGX, turnoverBonusTxns),
       },
     ]
 

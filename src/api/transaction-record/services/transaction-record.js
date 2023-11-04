@@ -62,10 +62,8 @@ module.exports = createCoreService(
       // 1. 申請提款之後  先扣 balance
 
       const { params = {} } = event
-      console.log('⭐  event:', JSON.stringify(event))
       const { data = {} } = params
       const amount = data?.amount
-      const type = data?.type
       const currency = data?.currency
       const amount_type = data?.amount_type
       const user_id = data?.user
