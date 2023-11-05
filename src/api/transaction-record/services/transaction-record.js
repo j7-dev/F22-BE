@@ -55,6 +55,55 @@ module.exports = createCoreService(
         return '條件不符，沒有執行返水'
       }
     },
+    async handleRemoveDepositBonus(event) {
+      const LIMIT_AMOUNT = 10000
+      const { result } = event
+      const txn_id = result?.id
+      const theTxn = await strapi.entityService.findOne(
+        'api::transaction-record.transaction-record',
+        txn_id,
+        {
+          populate: {
+            user: {
+              fields: ['id'],
+            },
+          },
+        }
+      )
+
+      const user_id = theTxn?.user?.id
+
+      // 檢查用戶身上的 BALANCE
+      const balances =
+        (await strapi.entityService.findMany('api::balance.balance', {
+          filters: {
+            user: user_id,
+          },
+        })) || []
+
+      const findBalance = balances.find(
+        (b) => b.currency === 'KRW' && b.amount_type === 'CASH'
+      )
+
+      // 餘額 <= 10000 時解除限制
+      const isLimited = (findBalance?.amount || 0) > LIMIT_AMOUNT
+      console.log('⭐  isLimited:', isLimited)
+
+      if (!isLimited) {
+        const updateUserResult = await strapi.entityService.update(
+          'plugin::users-permissions.user',
+          user_id,
+          {
+            data: {
+              last_deposit: {
+                set: [],
+              },
+            },
+          }
+        )
+        return updateUserResult
+      }
+    },
     // 提款流程
     // 1. 申請提款之後  先扣 balance
     // 2-1. 管理員  APPROVED -> 狀態改變而已

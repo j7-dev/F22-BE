@@ -146,6 +146,11 @@ module.exports = {
         .service('api::transaction-record.transaction-record')
         .handleCancelWithdraw(event)
     }
+    if (type === 'WITHDRAW' && status === 'SUCCESS') {
+      const handleRemoveDepositBonusResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleRemoveDepositBonus(event)
+    }
   },
   async beforeCreate(event) {
     const { params = {} } = event
@@ -170,6 +175,13 @@ module.exports = {
       const handleTurnoverBonusResult = await strapi
         .service('api::transaction-record.transaction-record')
         .handleTurnoverBonus(event)
+    }
+
+    // 解除存款紅利限制判定 錢輸光 或 提款領光 才解除用戶限制
+    if (type === 'CREDIT' && status === 'SUCCESS') {
+      const handleRemoveDepositBonusResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleRemoveDepositBonus(event)
     }
   },
 }
