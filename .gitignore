@@ -113,3 +113,6 @@ build
 .vscode/settings.json
 .config/server.js
 db
+
+.vscode
+.vscode/settings.json
