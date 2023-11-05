@@ -827,6 +827,21 @@ module.exports = ({ strapi }) => ({
       return amount
     }
 
+    function getGPUserCount(game_provider, records) {
+      if (game_provider === 'ALL') {
+        const user_ids = records.map((r) => r?.user?.id)
+        const unique_user_ids = Array.from(new Set(user_ids))
+
+        return unique_user_ids.length
+      }
+      const user_ids = records
+        .filter((r) => r.by === game_provider)
+        .map((r) => r?.user?.id)
+      const unique_user_ids = Array.from(new Set(user_ids))
+
+      return unique_user_ids.length
+    }
+
     const turnoverBonusTxns = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
       {
@@ -881,6 +896,14 @@ module.exports = ({ strapi }) => ({
         pp: getGPCashAmount(PP, debitRecords) * -1,
         bti: getGPCashAmount(BTI, debitRecords) * -1,
         igx: getGPCashAmount(IGX, debitRecords) * -1,
+      },
+      {
+        label: 'bet users',
+        total: getGPUserCount('ALL', debitRecords),
+        evo: getGPUserCount(EVO, debitRecords),
+        pp: getGPUserCount(PP, debitRecords),
+        bti: getGPUserCount(BTI, debitRecords),
+        igx: getGPUserCount(IGX, debitRecords),
       },
       {
         label: 'payout',
