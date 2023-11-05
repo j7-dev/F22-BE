@@ -16,7 +16,7 @@
       "type": "relation",
       "relation": "manyToMany",
       "target": "api::vip.vip",
-      "inversedBy": "deposit_bonuses"
+      "mappedBy": "deposit_bonuses"
     },
     "label": {
       "type": "string",

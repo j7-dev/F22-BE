@@ -41,8 +41,7 @@
       "required": true
     },
     "valid_bet_amount_upgrade_threshold": {
-      "type": "decimal",
-      "min": 0,
+      "type": "biginteger",
       "required": true
     },
     "discount": {
