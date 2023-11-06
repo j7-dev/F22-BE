@@ -30,14 +30,16 @@
     },
     "amount": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "transaction_type": {
       "type": "enumeration",
-      "enum": [
-        "BET",
-        "CANCEL"
-      ],
+      "enum": ["BET", "CANCEL"],
       "required": true
     }
   }

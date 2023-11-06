@@ -14,7 +14,12 @@
   "attributes": {
     "amount": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "user": {
       "type": "relation",

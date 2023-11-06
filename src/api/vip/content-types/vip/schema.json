@@ -38,11 +38,21 @@
     "deposit_upgrade_threshold": {
       "type": "decimal",
       "min": 0,
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "valid_bet_amount_upgrade_threshold": {
-      "type": "biginteger",
-      "required": true
+      "type": "decimal",
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "discount": {
       "type": "relation",
@@ -66,7 +76,12 @@
     },
     "turnover_rate": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "deposit_bonuses": {
       "type": "relation",

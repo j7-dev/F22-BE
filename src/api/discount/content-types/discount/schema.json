@@ -21,7 +21,12 @@
     "valid_bet_amount_threshold": {
       "type": "decimal",
       "min": 0,
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "ratio": {
       "type": "json",
@@ -30,7 +35,12 @@
     "discount_limit": {
       "type": "decimal",
       "required": false,
-      "min": 0
+      "min": 0,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "amount_type": {
       "type": "string"

@@ -14,26 +14,35 @@
   "attributes": {
     "status": {
       "type": "enumeration",
-      "enum": [
-        "DRAW",
-        "WIN",
-        "LOSE",
-        "CANCEL",
-        "GAMING"
-      ],
+      "enum": ["DRAW", "WIN", "LOSE", "CANCEL", "GAMING"],
       "required": true
     },
     "stake": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "actual_stake": {
       "type": "decimal",
-      "required": true
+      "required": true,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "winloss": {
       "type": "decimal",
-      "required": false
+      "required": false,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "currency": {
       "type": "string",

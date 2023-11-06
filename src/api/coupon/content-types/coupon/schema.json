@@ -26,17 +26,19 @@
     },
     "coupon_type": {
       "type": "enumeration",
-      "enum": [
-        "FIXED",
-        "PERCENT"
-      ],
+      "enum": ["FIXED", "PERCENT"],
       "default": "FIXED",
       "required": true
     },
     "coupon_amount": {
       "type": "decimal",
       "required": true,
-      "min": 0
+      "min": 0,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "individual_use": {
       "type": "boolean",
@@ -63,7 +65,12 @@
     },
     "valid_bet_amount_threshold": {
       "type": "decimal",
-      "min": 0
+      "min": 0,
+      "column": {
+        "defaultTo": 0,
+        "type": "decimal",
+        "args": [16, 6]
+      }
     },
     "exclude_game_providers": {
       "type": "json"
