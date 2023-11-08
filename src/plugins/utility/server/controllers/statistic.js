@@ -567,26 +567,24 @@ module.exports = ({ strapi }) => ({
         const dpWd = deposit + withdraw
 
         // 抓取有效投注
-        const validBet = await strapi
-          .service('plugin::utility.bettingAmount')
-          .get({
+        const validBet =
+          (await strapi.service('plugin::utility.bettingAmount').get({
             type: ['DEBIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-          })
+          })) * -1
 
         // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
-        const payout = await strapi
-          .service('plugin::utility.bettingAmount')
-          .get({
+        const payout =
+          (await strapi.service('plugin::utility.bettingAmount').get({
             type: ['CREDIT'],
             currency,
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-          })
+          })) * -1
 
         // 紅利+洗碼
         const coupon = await strapi
