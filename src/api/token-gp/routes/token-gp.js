@@ -9,5 +9,14 @@ module.exports = {
         middlewares: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/tokenapi/startgame',
+      handler: 'token-gp.startgame',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
   ],
 }
