@@ -1,34 +1,43 @@
-name: Deploy to Server
+name: Deploy to Server with Docker
 
 on:
   push:
     branches:
-      - master # 這裡使用你的主要分支名稱，可以根據實際情況修改
+      - master
 
 jobs:
   deploy:
-    runs-on: ubuntu-22.04 # ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v2 # 使用官方的Checkout action來檢出你的代碼
+        uses: actions/checkout@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: ycnm
+          password: Zaq13edc
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ycnm/bef22:latest
 
       - name: Deploy to Server
         run: |
-          mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/staging.pem
-          chmod 600 ~/.ssh/staging.pem
-          cat >>~/.ssh/config <<END
-          Host staging
-            HostName $SSH_HOST
-            User $SSH_USER
-            IdentityFile ~/.ssh/staging.pem
-            StrictHostKeyChecking no
-          END
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "
+            docker pull ycnm/bef22:latest &&
+            docker stop bef22 || true &&
+            docker rm bef22 || true &&
+            docker run -d --name bef22 ycnm/bef22:latest
+          "
         env:
           SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
           SSH_HOST: ${{ secrets.SSH_HOST }}
-
-      - name: Yarn build and start
-        run: ssh staging '/usr/bin/fish && cd /var/www/html/f22 && pm2 stop f22 && git fetch origin && git reset --hard origin/master && yarn install && yarn build && pm2 start f22'
