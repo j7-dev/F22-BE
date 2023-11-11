@@ -32,7 +32,6 @@ module.exports = ({ strapi }) => ({
         },
       }
     )
-    console.log('⭐  user:', user)
     const available = user.length === 0
 
     ctx.body = {

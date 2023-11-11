@@ -12,9 +12,9 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "users": {
+    "user": {
       "type": "relation",
-      "relation": "oneToMany",
+      "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
     },
     "title": {
@@ -57,11 +57,13 @@
       "type": "boolean",
       "default": false
     },
-    "status": {
-      "type": "enumeration",
-      "enum": [
-        "AVAILABLE"
-      ]
+    "allow_game_categories": {
+      "type": "json"
+    },
+    "period": {
+      "type": "component",
+      "repeatable": false,
+      "component": "period.active-period"
     }
   }
 }
