@@ -12,7 +12,6 @@ module.exports = {
             populate: {
               vip: {
                 fields: ['id', 'label'],
-                populate: ['deposit_bonus'],
               },
             },
           },
@@ -20,7 +19,7 @@ module.exports = {
             fields: ['id', 'display_name'],
           },
           deposit_bonus: {
-            fields: ['id'],
+            fields: '*',
           },
         },
       }
@@ -105,9 +104,9 @@ module.exports = {
     // TODO 存款紅利判斷 案類型 不同規則
     // 存款紅利發放
 
-    const deposit_bonus = theTxn?.user?.vip?.deposit_bonus
+    const deposit_bonus = theTxn?.deposit_bonus
     const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
-    const deposit_type = deposit_bonus?.deposit_type
+
     if (
       !!deposit_bonus &&
       type === 'DEPOSIT' &&
