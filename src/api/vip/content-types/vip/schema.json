@@ -21,7 +21,7 @@
     "order": {
       "type": "integer",
       "required": true,
-      "unique": true,
+      "unique": false,
       "min": 0
     },
     "users_role": {
@@ -42,7 +42,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "valid_bet_amount_upgrade_threshold": {
@@ -51,7 +54,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "discount": {
@@ -80,7 +86,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "deposit_bonuses": {

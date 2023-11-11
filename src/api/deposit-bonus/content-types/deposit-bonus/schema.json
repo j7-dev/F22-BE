@@ -25,7 +25,11 @@
     },
     "deposit_type": {
       "type": "enumeration",
-      "enum": ["NORMAL", "FIRST", "FIRST_BY_DATE"],
+      "enum": [
+        "NORMAL",
+        "FIRST",
+        "FIRST_BY_DATE"
+      ],
       "default": "NORMAL"
     },
     "bonus_rate": {
@@ -40,7 +44,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "max_bonus_amount": {
@@ -50,7 +57,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "currency": {

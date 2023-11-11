@@ -25,7 +25,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "ratio": {
@@ -39,7 +42,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "amount_type": {
