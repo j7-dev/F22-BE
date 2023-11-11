@@ -2,6 +2,7 @@ module.exports = {
   async beforeUpdate(event) {
     const { params } = event
     const { data, where } = params
+    const toStatus = data?.status
     const theTxn = await strapi.entityService.findOne(
       'api::transaction-record.transaction-record',
       where?.id,
@@ -45,7 +46,7 @@ module.exports = {
 
       // 存款已核准，更新 balance，提款核准不變
       // 存款，將deposit_bonus加上USER
-      if (type === 'DEPOSIT') {
+      if (type === 'DEPOSIT' && toStatus === 'SUCCESS') {
         const updateResult = await strapi
           .service('api::wallet-api.wallet-api')
           .addBalance({
@@ -115,7 +116,7 @@ module.exports = {
     if (
       !!deposit_bonus &&
       type === 'DEPOSIT' &&
-      status === 'SUCCESS' &&
+      toStatus === 'SUCCESS' &&
       amount >= min_deposit_amount
     ) {
       const bonus_rate = deposit_bonus?.bonus_rate / 100
