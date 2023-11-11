@@ -175,6 +175,7 @@ module.exports = {
       ctx.body = {
         ...startgameResult?.data,
         hash,
+        uid,
       }
     } else {
       ctx.body = getResult?.data
