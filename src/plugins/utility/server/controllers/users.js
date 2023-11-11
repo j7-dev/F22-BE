@@ -11,23 +11,24 @@ module.exports = ({ strapi }) => ({
     const username = query?.username?.toLowerCase()
     const email = query?.email?.toLowerCase()
     const phone = query?.phone?.toLowerCase()
+    const or = []
+
+    if (username) {
+      or.push({ username })
+    }
+    if (email) {
+      or.push({ email })
+    }
+    if (phone) {
+      or.push({ phone })
+    }
 
     // find the user
     const user = await strapi.entityService.findMany(
       'plugin::users-permissions.user',
       {
         filters: {
-          $or: [
-            {
-              username,
-            },
-            {
-              email,
-            },
-            {
-              phone,
-            },
-          ],
+          $or: or,
         },
       }
     )
