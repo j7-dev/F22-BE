@@ -5,6 +5,7 @@ const bettingRecords = require('./betting-records')
 const statistic = require('./statistic')
 const helper = require('./helper')
 const dpWd = require('./dp-wd')
+const users = require('./users')
 
 module.exports = {
   bettingRecords,
@@ -12,4 +13,5 @@ module.exports = {
   statistic,
   dpWd,
   helper,
+  users,
 }

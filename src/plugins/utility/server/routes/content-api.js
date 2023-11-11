@@ -1,6 +1,15 @@
 module.exports = {
   type: 'content-api',
   routes: [
+    // users
+    {
+      method: 'GET',
+      path: '/users/can-register',
+      handler: 'users.canRegister',
+      config: {
+        policies: [],
+      },
+    },
     // betting-records
     {
       method: 'GET',
