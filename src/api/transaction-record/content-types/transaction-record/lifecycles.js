@@ -25,8 +25,8 @@ module.exports = {
       }
     )
 
-    const status = data?.status
-    const amount = data?.amount
+    const status = theTxn?.status
+    const amount = theTxn?.amount
 
     const type = theTxn?.type
     const allow_types = ['DEPOSIT', 'WITHDRAW']
@@ -110,6 +110,7 @@ module.exports = {
     console.log('⭐  type:', type)
     console.log('⭐  min_deposit_amount:', min_deposit_amount)
     console.log('⭐  status:', status)
+    console.log('⭐  amount:', amount)
 
     if (
       !!deposit_bonus &&
