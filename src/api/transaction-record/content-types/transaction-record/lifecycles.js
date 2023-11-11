@@ -26,14 +26,13 @@ module.exports = {
       }
     )
 
-    const status = theTxn?.status
     const amount = theTxn?.amount
 
     const type = theTxn?.type
     const allow_types = ['DEPOSIT', 'WITHDRAW']
 
     // 存提款成功 發站內通知
-    if (allow_types.includes(type) && status === 'SUCCESS') {
+    if (allow_types.includes(type) && toStatus === 'SUCCESS') {
       const user_id = theTxn?.user?.id
       if (!user_id) {
         throw new Error('user_id not found')
@@ -106,12 +105,7 @@ module.exports = {
     // 存款紅利發放
 
     const deposit_bonus = theTxn?.deposit_bonus
-    console.log('⭐  deposit_bonus:', deposit_bonus)
     const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
-    console.log('⭐  type:', type)
-    console.log('⭐  min_deposit_amount:', min_deposit_amount)
-    console.log('⭐  status:', status)
-    console.log('⭐  amount:', amount)
 
     if (
       !!deposit_bonus &&
@@ -127,8 +121,6 @@ module.exports = {
           ? max_bonus_amount
           : calculate_bonus
         : calculate_bonus
-
-      console.log('⭐  bonus:', bonus)
 
       // 將 bonus 寫入 balance
       const result = await strapi.service('api::wallet-api.wallet-api').add({
