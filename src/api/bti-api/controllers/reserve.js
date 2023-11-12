@@ -17,7 +17,15 @@ module.exports = {
         customer_id,
         extsessionID,
       } = ctx.request.query
-      console.log('⭐  reserve query:', ctx.request.query)
+      // console.log('⭐  reserve query:', ctx.request.query)
+
+      // cust_id: '39',
+      // customer_id: '127482182',
+      // agent_id: '125166753',
+      // reserve_id: '511627712671571968',
+      // amount: '5555',
+      // extsessionID: ''
+
       var check_balance_result
 
       //check user if exist

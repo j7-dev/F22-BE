@@ -29,7 +29,29 @@ module.exports = {
           filters: { reserve_id },
         }
       )
-      console.log(reserve)
+      console.log('commitreserve - reserve', reserve)
+      // [
+      // 	  {
+      // 	    id: 583,
+      // 	    trx_id: '1699818352555',
+      // 	    cust_id: '39',
+      // 	    amount: 5555,
+      // 	    type: 'reserve',
+      // 	    reserve_id: '511627712671571968',
+      // 	    req_id: null,
+      // 	    after_balance: 33
+      // 	  },
+      // 	  {
+      // 	    id: 584,
+      // 	    trx_id: '1699818359264',
+      // 	    cust_id: '39',
+      // 	    amount: 5555,
+      // 	    type: 'debitreserve',
+      // 	    reserve_id: '511627712671571968',
+      // 	    req_id: '511627741314424832',
+      // 	    after_balance: 33
+      // 	  }
+      // 	]
       var current_balance = 0
       try {
         const result = await strapi
