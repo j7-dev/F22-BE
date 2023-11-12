@@ -79,9 +79,6 @@ module.exports = {
         {
           filters: {
             ref_id: purchase_id,
-            credit_amount: {
-              $ne: null,
-            },
           },
         }
       )
