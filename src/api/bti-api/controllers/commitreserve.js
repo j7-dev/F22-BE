@@ -104,13 +104,15 @@ module.exports = {
 
       var krw_amount = 0
       try {
-        const update_balance_result = await strapi
-          .service('api::wallet-api.wallet-api')
-          .add(body)
+        if (!!available_amount) {
+          const update_balance_result = await strapi
+            .service('api::wallet-api.wallet-api')
+            .add(body)
 
-        for (const balance of update_balance_result.balances) {
-          if ((balance.currency = 'KRW')) {
-            krw_amount = balance.amount
+          for (const balance of update_balance_result.balances) {
+            if ((balance.currency = 'KRW')) {
+              krw_amount = balance.amount
+            }
           }
         }
       } catch (err) {
