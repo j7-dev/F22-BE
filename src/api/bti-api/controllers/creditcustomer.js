@@ -74,6 +74,8 @@ module.exports = {
         allowNegative: true,
       }
 
+      console.log('⭐  start findTxns:')
+
       const findTxns = await strapi.entityService.findMany(
         'api:transaction-record.transaction-record',
         {
