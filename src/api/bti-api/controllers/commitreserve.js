@@ -110,6 +110,30 @@ module.exports = {
           },
         }
       )
+
+      // 用 reserve_id 去找 bet record 然後更新
+      const theBetRecords = await strapi.entityService.findMany(
+        'api::bet-record.bet-record',
+        {
+          filters: {
+            ref_id: reserve_id,
+          },
+        }
+      )
+      console.log('⭐  theBetRecords:', theBetRecords)
+      if (theBetRecords > 0) {
+        const theBetRecord = theBetRecords[0]
+        await strapi.entityService.update(
+          'api::bet-record.bet-record',
+          theBetRecord?.id,
+          {
+            data: {
+              ref_id: purchase_id,
+            },
+          }
+        )
+      }
+
       available_amount = accepted_reserve_amount - accepted_debitreserve_amount
 
       //add available_amount back to player wallet

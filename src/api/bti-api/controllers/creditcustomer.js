@@ -11,9 +11,9 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } =
         ctx.request.query
-      console.log('⭐ creditcustomer request:', JSON.stringify(ctx.request))
+      // console.log('⭐ creditcustomer request:', JSON.stringify(ctx.request))
 
-      console.log('⭐ creditcustomer query:', ctx.request.query)
+      // console.log('⭐ creditcustomer query:', ctx.request.query)
 
       // cust_id: '39',
       // amount: '0',
