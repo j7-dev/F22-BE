@@ -237,5 +237,92 @@ module.exports = createCoreService(
 
       return 'no deposit_bonus'
     },
+    async handleBetRecords(event) {
+      const { result } = event
+      const txn_id = result?.id
+      const theTxn = await strapi.entityService.findOne(
+        'api::transaction-record.transaction-record',
+        txn_id,
+        {
+          populate: {
+            user: {
+              fields: ['id'],
+            },
+          },
+        }
+      )
+
+      const user_id = theTxn?.user?.id
+      console.log('⭐  theTxn:', theTxn)
+      const ref_id = theTxn?.ref_id
+      console.log('⭐  {ref_id, user_id}:', { ref_id, user_id })
+
+      if (!ref_id) return 'ref_id is null'
+
+      const findBR = await strapi.entityService.findMany(
+        'api::bet-record.bet-record',
+        {
+          filters: {
+            user: user_id,
+            ref_id,
+          },
+        }
+      )
+      console.log('⭐  findBR:', findBR)
+
+      const { type, by, title, description, amount } = theTxn
+
+      if (findBR.length === 0) {
+        // 第一次投注，寫入 bet_records
+        const createBR = await strapi.entityService.create(
+          'api::bet-record.bet-record',
+          {
+            data: {
+              by,
+              title,
+              description,
+              debit_amount: type === 'DEBIT' ? amount : null,
+              credit_amount: null,
+              ref_id,
+              user: user_id,
+              status: type === 'CANCEL' ? 'CANCEL' : 'PENDING',
+              bet_time: theTxn?.createdAt,
+              update_time: null,
+            },
+          }
+        )
+        return createBR
+      } else {
+        // 有其他同場遊戲的投注，用更新，不是寫入
+        const theBR = findBR?.[0]
+
+        const getStatus = (type) => {
+          switch (type) {
+            case 'CANCEL':
+              return 'CANCEL'
+            case 'CREDIT':
+              return 'NORMAL'
+            default:
+              return ''
+          }
+        }
+
+        const updateBR = await strapi.entityService.update(
+          'api::bet-record.bet-record',
+          theBR?.id,
+          {
+            data: {
+              by,
+              title,
+              description,
+              credit_amount: amount,
+              status: getStatus(type),
+              update_time: theTxn?.createdAt,
+            },
+          }
+        )
+        return updateBR
+      }
+    },
   }
 )

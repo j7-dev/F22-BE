@@ -176,6 +176,16 @@ module.exports = {
     const amount = result?.amount
     const type = result?.type
 
+    // 將交易紀錄寫入bet records
+    if (type === 'DEBIT' || type === 'CREDIT' || type === 'CANCEL') {
+      // if (status === 'SUCCESS') {
+      const handleBetRecordsResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleBetRecords(event)
+      console.log('⭐  handleBetRecordsResult:', handleBetRecordsResult)
+      // }
+    }
+
     // 排除 BTI
     if (type === 'DEBIT' && status === 'SUCCESS') {
       const handleTurnoverBonusResult = await strapi

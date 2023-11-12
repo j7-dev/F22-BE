@@ -12,66 +12,46 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "status": {
-      "type": "enumeration",
-      "enum": ["DRAW", "WIN", "LOSE", "CANCEL", "GAMING"],
-      "required": true
-    },
-    "stake": {
-      "type": "decimal",
-      "required": true,
-      "column": {
-        "defaultTo": 0,
-        "type": "decimal",
-        "args": [16, 6]
-      }
-    },
-    "actual_stake": {
-      "type": "decimal",
-      "required": true,
-      "column": {
-        "defaultTo": 0,
-        "type": "decimal",
-        "args": [16, 6]
-      }
-    },
-    "winloss": {
-      "type": "decimal",
-      "required": false,
-      "column": {
-        "defaultTo": 0,
-        "type": "decimal",
-        "args": [16, 6]
-      }
-    },
-    "currency": {
+    "by": {
       "type": "string",
       "required": true
     },
-    "amount_type": {
+    "title": {
       "type": "string",
       "required": true
     },
-    "game_provider": {
-      "type": "string",
+    "description": {
+      "type": "text"
+    },
+    "debit_amount": {
+      "type": "decimal",
       "required": true
     },
-    "game_provider_transaction_id": {
-      "type": "string"
+    "credit_amount": {
+      "type": "decimal"
     },
-    "meta": {
-      "type": "component",
-      "repeatable": true,
-      "component": "general.meta-data"
-    },
-    "is_finish": {
-      "type": "boolean",
-      "default": false
+    "ref_id": {
+      "type": "string",
+      "required": true
     },
     "user": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "NORMAL",
+        "PENDING",
+        "CANCEL"
+      ]
+    },
+    "bet_time": {
+      "type": "datetime"
+    },
+    "update_time": {
+      "type": "datetime"
     }
   }
 }
