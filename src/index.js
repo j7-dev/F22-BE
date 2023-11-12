@@ -41,7 +41,5 @@ module.exports = {
       siteSetting,
       gameProvider,
     }
-
-    // TODO 開遊戲前確認每個人身上的權限能不能開
   },
 }

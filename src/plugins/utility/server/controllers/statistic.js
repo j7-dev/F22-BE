@@ -627,11 +627,24 @@ module.exports = ({ strapi }) => ({
                 $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
                 $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
-              agent: agent_id,
+            },
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
             },
           }
         )
-        const numberOfRegistrantUserIds = getRegisterUsersResult.map(
+        const filteredGetRegisterUsersResult = getRegisterUsersResult.filter(
+          (u) => {
+            if (agent_id) {
+              return u?.agent?.id === agent_id
+            }
+            return true
+          }
+        )
+
+        const numberOfRegistrantUserIds = filteredGetRegisterUsersResult.map(
           (item) => item?.id
         )
         const uniqueNumberOfRegistrantUserIds = Array.from(
