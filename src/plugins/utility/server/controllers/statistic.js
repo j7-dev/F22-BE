@@ -536,6 +536,10 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
+    const user = ctx?.state?.user
+    const roleType = user?.role?.type
+    const agent_id = roleType === 'agent' ? user?.id : undefined
+
     const dateArr =
       countByDate({
         startD: dayjs(query?.start),
@@ -552,6 +556,7 @@ module.exports = ({ strapi }) => ({
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })
 
         const withdraw = await strapi
@@ -562,6 +567,7 @@ module.exports = ({ strapi }) => ({
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })
 
         const dpWd = deposit + withdraw
@@ -574,6 +580,7 @@ module.exports = ({ strapi }) => ({
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })) * -1
 
         // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
@@ -584,6 +591,7 @@ module.exports = ({ strapi }) => ({
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })) * -1
 
         // 紅利+洗碼
@@ -595,6 +603,7 @@ module.exports = ({ strapi }) => ({
             amount_type,
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })
         // 加上目前的洗碼總和
         const turnoverBonusBalanceAmount = await strapi
@@ -605,6 +614,7 @@ module.exports = ({ strapi }) => ({
             amount_type: 'TURNOVER_BONUS',
             start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
             end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            agent_id,
           })
 
         //新註冊人數
@@ -617,6 +627,7 @@ module.exports = ({ strapi }) => ({
                 $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
                 $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
+              agent: agent_id,
             },
           }
         )
@@ -628,25 +639,36 @@ module.exports = ({ strapi }) => ({
         )
         const numberOfRegistrants = uniqueNumberOfRegistrantUserIds.length
 
-        const debitTxns = await strapi.entityService.findMany(
-          'api::transaction-record.transaction-record',
+        const betRecords = await strapi.entityService.findMany(
+          'api::bet-record.bet-record',
           {
             fields: ['id'],
             populate: {
               user: {
                 fields: ['id'],
+                populate: {
+                  agent: {
+                    fields: ['id'],
+                  },
+                },
               },
             },
             filters: {
-              createdAt: {
+              bet_time: {
                 $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
                 $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
               },
             },
           }
         )
-        const debitTxnUserIds = debitTxns.map((txn) => txn?.user?.id)
-        const uniqueDebitTxnUserIds = Array.from(new Set(debitTxnUserIds))
+        const filteredBetRecords = betRecords.filter((r) => {
+          if (agent_id) {
+            return r?.user?.agent?.id === agent_id
+          }
+          return true
+        })
+        const betRecordsUserIds = filteredBetRecords.map((txn) => txn?.user?.id)
+        const uniqueDebitTxnUserIds = Array.from(new Set(betRecordsUserIds))
         const bettingMembers = uniqueDebitTxnUserIds.length
 
         const payload = {
@@ -681,6 +703,10 @@ module.exports = ({ strapi }) => ({
     const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     // end: 2023-11-04 23:59:59.999999
 
+    const user = ctx?.state?.user
+    const roleType = user?.role?.type
+    const agent_id = roleType === 'agent' ? user?.id : undefined
+
     // TABLE 1
 
     // deposit
@@ -699,16 +725,27 @@ module.exports = ({ strapi }) => ({
         populate: {
           user: {
             fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
           },
         },
       }
     )
 
-    const dpAmount = dpSuccessTxns.reduce((acc, cur) => {
+    const filteredDpSuccessTxns = dpSuccessTxns.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
+    const dpAmount = filteredDpSuccessTxns.reduce((acc, cur) => {
       acc += cur.amount
       return acc
     }, 0)
-    const dpUserIds = dpSuccessTxns.map((txn) => txn?.user?.id)
+    const dpUserIds = filteredDpSuccessTxns.map((txn) => txn?.user?.id)
     const uniqueDpUserIds = Array.from(new Set(dpUserIds))
     const dpUsers = uniqueDpUserIds.length
 
@@ -728,16 +765,27 @@ module.exports = ({ strapi }) => ({
         populate: {
           user: {
             fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
           },
         },
       }
     )
 
-    const wdAmount = wdSuccessTxns.reduce((acc, cur) => {
+    const filteredWdSuccessTxns = wdSuccessTxns.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
+    const wdAmount = filteredWdSuccessTxns.reduce((acc, cur) => {
       acc += cur.amount
       return acc
     }, 0)
-    const wdUserIds = wdSuccessTxns.map((txn) => txn?.user?.id)
+    const wdUserIds = filteredWdSuccessTxns.map((txn) => txn?.user?.id)
     const uniqueWdUserIds = Array.from(new Set(wdUserIds))
     const wdUsers = uniqueWdUserIds.length
 
@@ -748,10 +796,30 @@ module.exports = ({ strapi }) => ({
       'api::balance.balance',
       {
         fields: ['amount'],
-        filters: { currency, amount_type, amount: { $ne: 0 } },
+        filters: {
+          currency,
+          amount_type,
+          amount: { $ne: 0 },
+        },
+        populate: {
+          user: {
+            fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
+        },
       }
     )
-    const cashBalanceAmount = allCashBalances.reduce(
+    const filteredCashBalances = allCashBalances.filter((b) => {
+      if (agent_id) {
+        return b?.user?.agent?.id === agent_id
+      }
+      return true
+    })
+    const cashBalanceAmount = filteredCashBalances.reduce(
       (acc, curr) => acc + curr.amount,
       0
     )
@@ -765,9 +833,27 @@ module.exports = ({ strapi }) => ({
           amount_type: 'TURNOVER_BONUS',
           amount: { $ne: 0 },
         },
+        populate: {
+          user: {
+            fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
+        },
       }
     )
-    const turnoverBonusBalanceAmount = allTurnoverBonusBalances.reduce(
+    const filteredTurnoverBonusBalances = allTurnoverBonusBalances.filter(
+      (b) => {
+        if (agent_id) {
+          return b?.user?.agent?.id === agent_id
+        }
+        return true
+      }
+    )
+    const turnoverBonusBalanceAmount = filteredTurnoverBonusBalances.reduce(
       (acc, curr) => acc + curr.amount,
       0
     )
@@ -785,43 +871,64 @@ module.exports = ({ strapi }) => ({
     // TABLE 2
 
     const bettingRecords = await strapi.entityService.findMany(
-      'api::transaction-record.transaction-record',
+      'api::bet-record.bet-record',
       {
         filters: {
-          createdAt: {
+          updatedAt: {
             $gte: start,
             $lte: end,
-          },
-          type: {
-            $in: ['DEBIT', 'CREDIT'],
           },
         },
         populate: {
           user: {
             fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
           },
-          meta: '*',
         },
         sort: { createdAt: 'desc' },
       }
     )
 
-    const debitRecords = bettingRecords.filter((r) => r.type === 'DEBIT')
-    const creditRecords = bettingRecords.filter((r) => r.type === 'CREDIT')
+    const filteredBettingRecords = bettingRecords.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
 
-    function getGPCashAmount(game_provider, records) {
+    function getGPCashAmount(game_provider, records, field) {
       if (game_provider === 'ALL') {
         return records.reduce((acc, cur) => {
-          acc += cur.amount
+          acc += cur?.[field]
           return acc
         }, 0)
       }
       const amount = records
         .filter((r) => r.by === game_provider)
         .reduce((acc, cur) => {
-          acc += cur.amount
+          acc += cur?.[field]
           return acc
         }, 0)
+      return amount
+    }
+
+    function getGPWinLoss(game_provider) {
+      const amount =
+        (getGPCashAmount(
+          game_provider,
+          filteredBettingRecords,
+          'credit_amount'
+        ) +
+          getGPCashAmount(
+            game_provider,
+            filteredBettingRecords,
+            'debit_amount'
+          )) *
+        -1
       return amount
     }
 
@@ -854,10 +961,24 @@ module.exports = ({ strapi }) => ({
           },
         },
         populate: {
-          meta: '*',
+          user: {
+            fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
         },
       }
     )
+
+    const filteredTurnoverBonusTxns = turnoverBonusTxns.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
 
     function getGPTurnoverBonusAmount(game_provider, txns) {
       if (game_provider === 'ALL') {
@@ -866,16 +987,13 @@ module.exports = ({ strapi }) => ({
           return acc
         }, 0)
       }
-      const gpTxns = turnoverBonusTxns.filter((r) =>
-        r?.meta.some(
-          (m) =>
-            m.meta_key === 'game_provider' && m.meta_value === game_provider
-        )
-      )
-      const amount = gpTxns.reduce((acc, cur) => {
-        acc += cur.amount
-        return acc
-      }, 0)
+
+      const amount = txns
+        .filter((r) => r.by === game_provider)
+        .reduce((acc, cur) => {
+          acc += cur.amount
+          return acc
+        }, 0)
       return amount
     }
 
@@ -889,58 +1007,45 @@ module.exports = ({ strapi }) => ({
     const table2 = [
       {
         label: 'bet amount(users)',
-        total: getGPCashAmount('ALL', debitRecords) * -1,
-        evo: getGPCashAmount(EVO, debitRecords) * -1,
-        pp: getGPCashAmount(PP, debitRecords) * -1,
-        bti: getGPCashAmount(BTI, debitRecords) * -1,
-        igx: getGPCashAmount(IGX, debitRecords) * -1,
+        total:
+          getGPCashAmount('ALL', filteredBettingRecords, 'debit_amount') * -1,
+        evo: getGPCashAmount(EVO, filteredBettingRecords, 'debit_amount') * -1,
+        pp: getGPCashAmount(PP, filteredBettingRecords, 'debit_amount') * -1,
+        bti: getGPCashAmount(BTI, filteredBettingRecords, 'debit_amount') * -1,
+        igx: getGPCashAmount(IGX, filteredBettingRecords, 'debit_amount') * -1,
       },
       {
         label: 'bet users',
-        total: getGPUserCount('ALL', debitRecords),
-        evo: getGPUserCount(EVO, debitRecords),
-        pp: getGPUserCount(PP, debitRecords),
-        bti: getGPUserCount(BTI, debitRecords),
-        igx: getGPUserCount(IGX, debitRecords),
+        total: getGPUserCount('ALL', filteredBettingRecords),
+        evo: getGPUserCount(EVO, filteredBettingRecords),
+        pp: getGPUserCount(PP, filteredBettingRecords),
+        bti: getGPUserCount(BTI, filteredBettingRecords),
+        igx: getGPUserCount(IGX, filteredBettingRecords),
       },
       {
         label: 'payout',
-        total: getGPCashAmount('ALL', creditRecords) * -1,
-        evo: getGPCashAmount(EVO, creditRecords) * -1,
-        pp: getGPCashAmount(PP, creditRecords) * -1,
-        bti: getGPCashAmount(BTI, creditRecords) * -1,
-        igx: getGPCashAmount(IGX, creditRecords) * -1,
+        total:
+          getGPCashAmount('ALL', filteredBettingRecords, 'credit_amount') * -1,
+        evo: getGPCashAmount(EVO, filteredBettingRecords, 'credit_amount') * -1,
+        pp: getGPCashAmount(PP, filteredBettingRecords, 'credit_amount') * -1,
+        bti: getGPCashAmount(BTI, filteredBettingRecords, 'credit_amount') * -1,
+        igx: getGPCashAmount(IGX, filteredBettingRecords, 'credit_amount') * -1,
       },
       {
         label: 'winloss',
-        total:
-          (getGPCashAmount('ALL', creditRecords) +
-            getGPCashAmount('ALL', debitRecords)) *
-          -1,
-        evo:
-          (getGPCashAmount(EVO, creditRecords) +
-            getGPCashAmount(EVO, debitRecords)) *
-          -1,
-        pp:
-          (getGPCashAmount(PP, creditRecords) +
-            getGPCashAmount(PP, debitRecords)) *
-          -1,
-        bti:
-          (getGPCashAmount(BTI, creditRecords) +
-            getGPCashAmount(BTI, debitRecords)) *
-          -1,
-        igx:
-          (getGPCashAmount(IGX, creditRecords) +
-            getGPCashAmount(IGX, debitRecords)) *
-          -1,
+        total: getGPWinLoss('ALL'),
+        evo: getGPWinLoss(EVO),
+        pp: getGPWinLoss(PP),
+        bti: getGPWinLoss(BTI),
+        igx: getGPWinLoss(IGX),
       },
       {
         label: 'turnover bonus',
-        total: getGPTurnoverBonusAmount('ALL', turnoverBonusTxns),
-        evo: getGPTurnoverBonusAmount(EVO, turnoverBonusTxns),
-        pp: getGPTurnoverBonusAmount(PP, turnoverBonusTxns),
-        bti: getGPTurnoverBonusAmount(BTI, turnoverBonusTxns),
-        igx: getGPTurnoverBonusAmount(IGX, turnoverBonusTxns),
+        total: getGPTurnoverBonusAmount('ALL', filteredTurnoverBonusTxns),
+        evo: getGPTurnoverBonusAmount(EVO, filteredTurnoverBonusTxns),
+        pp: getGPTurnoverBonusAmount(PP, filteredTurnoverBonusTxns),
+        bti: getGPTurnoverBonusAmount(BTI, filteredTurnoverBonusTxns),
+        igx: getGPTurnoverBonusAmount(IGX, filteredTurnoverBonusTxns),
       },
     ]
 
@@ -957,8 +1062,24 @@ module.exports = ({ strapi }) => ({
             $lte: end,
           },
         },
+        populate: {
+          user: {
+            fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
+        },
       }
     )
+    const filteredDpPendingTxns = dpPendingTxns.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
 
     const wpPendingTxns = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
@@ -972,8 +1093,24 @@ module.exports = ({ strapi }) => ({
             $lte: end,
           },
         },
+        populate: {
+          user: {
+            fields: ['id'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
+        },
       }
     )
+    const filteredWpPendingTxns = wpPendingTxns.filter((t) => {
+      if (agent_id) {
+        return t?.user?.agent?.id === agent_id
+      }
+      return true
+    })
 
     const registeredUsers = await strapi.entityService.findMany(
       'plugin::users-permissions.user',
@@ -985,24 +1122,35 @@ module.exports = ({ strapi }) => ({
             $lte: end,
           },
         },
+        populate: {
+          agent: {
+            fields: ['id'],
+          },
+        },
       }
     )
+    const filteredRegisteredUsers = registeredUsers.filter((u) => {
+      if (agent_id) {
+        return u?.agent?.id === agent_id
+      }
+      return true
+    })
 
     const table3 = [
       {
         label: 'deposit',
-        pending: dpPendingTxns.length,
-        confirmed: dpSuccessTxns.length,
+        pending: filteredDpPendingTxns.length,
+        confirmed: filteredDpPendingTxns.length,
       },
       {
         label: 'withdraw',
-        pending: wpPendingTxns.length,
-        confirmed: wdSuccessTxns.length,
+        pending: filteredWpPendingTxns.length,
+        confirmed: filteredWpPendingTxns.length,
       },
       {
         label: 'register',
-        pending: registeredUsers.filter((u) => !u.confirmed).length,
-        confirmed: registeredUsers.filter((u) => !!u.confirmed).length,
+        pending: filteredRegisteredUsers.filter((u) => !u.confirmed).length,
+        confirmed: filteredRegisteredUsers.filter((u) => !!u.confirmed).length,
       },
     ]
 
@@ -1012,13 +1160,24 @@ module.exports = ({ strapi }) => ({
       'plugin::users-permissions.user',
       {
         fields: ['id'],
+        populate: {
+          agent: {
+            fields: ['id'],
+          },
+        },
       }
     )
+    const filteredAllRegisteredUsers = allRegisteredUsers.filter((u) => {
+      if (agent_id) {
+        return u?.agent?.id === agent_id
+      }
+      return true
+    })
 
     const table4 = [
       {
         label: 'total_users',
-        count: allRegisteredUsers.length,
+        count: filteredAllRegisteredUsers.length,
       },
       {
         label: 'online_users',

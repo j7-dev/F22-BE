@@ -2,7 +2,7 @@
 
 module.exports = ({ strapi }) => ({
   /**
-   *
+   * @deprecated
    * @param user_id?: number
    * @param gameProviderName?: string
    */

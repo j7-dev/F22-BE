@@ -44,6 +44,7 @@ ${!!whereCondition.length ? `WHERE ${whereSQL}` : ' '}
 module.exports = ({ strapi }) => ({
   /**
    * 取得各家 game provider 的交易紀錄
+   * @deprecated
    * @param object args
    * @param args.gameProviderNames?: string  - 遊戲商名稱 EVO, PP 不指定就是全部
    * @param args.user_id?: string

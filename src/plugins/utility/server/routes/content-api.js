@@ -10,7 +10,7 @@ module.exports = {
         policies: [],
       },
     },
-    // betting-records
+    // betting-records @deprecated
     {
       method: 'GET',
       path: '/betting-records',

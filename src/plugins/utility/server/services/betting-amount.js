@@ -21,6 +21,7 @@ module.exports = ({ strapi }) => ({
     const start = args?.start
     const end = args?.end
     const user_id = args?.user_id
+    const agent_id = args?.agent_id
     const amount_type = args?.amount_type
     const currency = args?.currency
     const type = args?.type
@@ -43,15 +44,32 @@ module.exports = ({ strapi }) => ({
 
     const filters = removeUndefinedKeys(defaultFilters)
 
-    const winRecords = await strapi.entityService.findMany(
+    const records = await strapi.entityService.findMany(
       'api::transaction-record.transaction-record',
       {
         fields: ['amount'],
+        populate: {
+          user: {
+            fields: ['username'],
+            populate: {
+              agent: {
+                fields: ['id'],
+              },
+            },
+          },
+        },
         filters,
       }
     )
 
-    const total = winRecords.reduce((acc, cur) => {
+    const filteredRecords = records.filter((record) => {
+      if (agent_id) {
+        return record?.user?.agent?.id === agent_id
+      }
+      return true
+    })
+
+    const total = filteredRecords.reduce((acc, cur) => {
       return Number(acc) + Number(cur.amount)
     }, 0)
 
