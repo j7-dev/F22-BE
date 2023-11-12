@@ -1,4 +1,4 @@
-"use strict";
+'use strict'
 
 /**
  * A set of functions called "actions" for `bti-api`
@@ -6,42 +6,52 @@
 
 module.exports = {
   creditcustomer: async (ctx, next) => {
-    ctx.type = 'text/plain';
+    ctx.type = 'text/plain'
     try {
       // 取的 query string 的 auth_token
-      const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } = ctx.request.query;
+      const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } =
+        ctx.request.query
 
       // 取得 req_id 的所有 record
       const existCreditcustomerArray = await strapi.entityService.findMany(
-        "api::bti-requests-singular.bti-requests-singular",
+        'api::bti-requests-singular.bti-requests-singular',
         {
-          fields: ["id", "trx_id", "cust_id", "amount", "type", "reserve_id", "req_id", "after_balance"],
+          fields: [
+            'id',
+            'trx_id',
+            'cust_id',
+            'amount',
+            'type',
+            'reserve_id',
+            'req_id',
+            'after_balance',
+          ],
           filters: { req_id },
         }
-      );
-      
-      var current_balance = 0;
+      )
+
+      var current_balance = 0
       try {
         const result = await strapi
           .service('api::wallet-api.wallet-api')
           .get({ user_id: cust_id })
 
-        current_balance = parseFloat(result[0].amount);
+        current_balance = parseFloat(result[0].amount)
       } catch (err) {
-        return;
+        return
       }
 
       if (existCreditcustomerArray.length > 0) {
         ctx.body = formatAsKeyValueText({
-          error_code: "0",
-          error_message: "No Error",
+          error_code: '0',
+          error_message: 'No Error',
           balance: existCreditcustomerArray[0].after_balance,
-          trx_id: existCreditcustomerArray[0].trx_id
-        });
-        return;
+          trx_id: existCreditcustomerArray[0].trx_id,
+        })
+        return
       }
 
-      console.log("creditcustomer - start update balance");
+      console.log('creditcustomer - start update balance')
       const body = {
         user_id: cust_id,
         amount: amount,
@@ -50,23 +60,36 @@ module.exports = {
         by: 'bti-api',
         currency: 'KRW',
         ref_id: purchase_id,
-        allowNegative: true
+        allowNegative: true,
       }
 
-      var krw_amount=0;
-      try{
-        const update_balance_result = await strapi.service('api::wallet-api.wallet-api').add(body)
+      const findTxns = await strapi.entityService.findMany(
+        'api:transaction-record.transaction-record',
+        {
+          filters: {
+            ref_id: purchase_id,
+          },
+        }
+      )
 
-        for (const balance of update_balance_result.balances) {
-          if(balance.currency = "KRW"){
-            krw_amount = balance.amount;
+      var krw_amount = 0
+      try {
+        if (findTxns.length === 0) {
+          const update_balance_result = await strapi
+            .service('api::wallet-api.wallet-api')
+            .add(body)
+
+          for (const balance of update_balance_result.balances) {
+            if ((balance.currency = 'KRW')) {
+              krw_amount = balance.amount
+            }
           }
         }
       } catch (err) {
-        return;
+        return
       }
-      console.log("creditcustomer - end update balance");
-      var trx_id = Math.floor(new Date().getTime()).toString();
+      console.log('creditcustomer - end update balance')
+      var trx_id = Math.floor(new Date().getTime()).toString()
 
       const create_bti_request_result = await strapi.entityService.create(
         'api::bti-requests-singular.bti-requests-singular',
@@ -81,33 +104,33 @@ module.exports = {
             purchase_id: purchase_id,
             after_balance: krw_amount,
             url: ctx.request.url,
-            type: "creditcustomer",
+            type: 'creditcustomer',
           },
         }
       )
 
       ctx.body = formatAsKeyValueText({
-        error_code: "0",
-        error_message: "No Error",
+        error_code: '0',
+        error_message: 'No Error',
         balance: krw_amount,
-        trx_id: trx_id
-      });
+        trx_id: trx_id,
+      })
     } catch (err) {
-      ctx.body = err;
+      ctx.body = err
     }
   },
-};
+}
 
 function formatAsKeyValueText(data) {
-  let plainText = '';
-  let isFirstLine = true;
+  let plainText = ''
+  let isFirstLine = true
 
   for (const key in data) {
     if (!isFirstLine) {
-      plainText += '\n'; // Add newline if it's not the first line
+      plainText += '\n' // Add newline if it's not the first line
     }
-    plainText += `${key}=${data[key]}`;
-    isFirstLine = false;
+    plainText += `${key}=${data[key]}`
+    isFirstLine = false
   }
-  return plainText;
+  return plainText
 }
