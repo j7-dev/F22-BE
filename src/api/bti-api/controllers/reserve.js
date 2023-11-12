@@ -17,7 +17,7 @@ module.exports = {
         customer_id,
         extsessionID,
       } = ctx.request.query
-      console.log('⭐  creserve query:', ctx.request.query)
+      console.log('⭐  reserve query:', ctx.request.query)
       var check_balance_result
 
       //check user if exist

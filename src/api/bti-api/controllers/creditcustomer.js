@@ -11,7 +11,16 @@ module.exports = {
       // 取的 query string 的 auth_token
       const { cust_id, amount, req_id, agent_id, customer_id, purchase_id } =
         ctx.request.query
+      console.log('⭐ creditcustomer request:', JSON.stringify(ctx.request))
+
       console.log('⭐ creditcustomer query:', ctx.request.query)
+      //  cust_id: '49',
+      //  amount: '10000',
+      //  req_id: '511622763640266753',
+      //  agent_id: '125166753',
+      //  customer_id: '127267216',
+      //  purchase_id: '511621453339377664',
+      //  is_casino: 'false'
 
       // 取得 req_id 的所有 record
       const existCreditcustomerArray = await strapi.entityService.findMany(
