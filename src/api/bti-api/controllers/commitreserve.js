@@ -12,6 +12,8 @@ module.exports = {
       const { cust_id, reserve_id, agent_id, customer_id, purchase_id } =
         ctx.request.query
 
+      console.log('⭐  purchase_id:', purchase_id)
+
       // 取得 reserve_id 的所有 record
       const reserve = await strapi.entityService.findMany(
         'api::bti-requests-singular.bti-requests-singular',
@@ -123,7 +125,7 @@ module.exports = {
       console.log('⭐  theBetRecords:', theBetRecords)
       if (theBetRecords > 0) {
         const theBetRecord = theBetRecords[0]
-        await strapi.entityService.update(
+        const updateResult = await strapi.entityService.update(
           'api::bet-record.bet-record',
           theBetRecord?.id,
           {
@@ -132,6 +134,7 @@ module.exports = {
             },
           }
         )
+        console.log('⭐  updateResult:', updateResult)
       }
 
       available_amount = accepted_reserve_amount - accepted_debitreserve_amount
