@@ -79,9 +79,13 @@ module.exports = {
         {
           filters: {
             ref_id: purchase_id,
+            credit_amount: {
+              $ne: null,
+            },
           },
         }
       )
+      console.log('⭐  findTxns:', findTxns)
 
       var krw_amount = 0
       try {
