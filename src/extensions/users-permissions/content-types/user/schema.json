@@ -93,12 +93,6 @@
       "target": "api::login-detail.login-detail",
       "mappedBy": "user"
     },
-    "user_relationship": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::user-relationship.user-relationship",
-      "inversedBy": "user"
-    },
     "vip": {
       "type": "relation",
       "relation": "manyToOne",
@@ -117,11 +111,6 @@
       "default": " "
     },
     "agent": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.user"
-    },
-    "top_agent": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
