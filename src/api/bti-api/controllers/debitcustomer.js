@@ -38,6 +38,7 @@ module.exports = {
         type: 'CREDIT',
         by: 'bti-api',
         currency: 'KRW',
+        ref_id: purchase_id,
         allowNegative: true
       })
 

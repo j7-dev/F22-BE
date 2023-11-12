@@ -89,7 +89,8 @@ module.exports = {
         title: 'bti-commitreserve',
         type: 'CREDIT',
         by: 'bti-api',
-        currency: 'KRW'
+        currency: 'KRW',
+        ref_id:reserve_id
       }
 
       var krw_amount = 0;

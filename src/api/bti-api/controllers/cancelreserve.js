@@ -93,6 +93,7 @@ module.exports = {
         type: 'CANCEL', // 原本 CREDIT by dino
         by: 'bti-api',
         currency: 'KRW',
+        ref_id:reserve_id
       }
 
       var krw_amount = 0

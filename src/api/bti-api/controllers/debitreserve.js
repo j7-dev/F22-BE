@@ -103,6 +103,7 @@ module.exports = {
             amount: final_debit_amount,
             reserve_id: reserve_id,
             req_id: req_id,
+            ref_id: req_id,
             purchase_id: purchase_id,
             url: ctx.request.url,
             after_balance: reserve_afterbalance,
