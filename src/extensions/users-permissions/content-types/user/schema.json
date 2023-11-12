@@ -116,12 +116,6 @@
       "unique": false,
       "default": " "
     },
-    "commission": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::commission.commission",
-      "inversedBy": "agents"
-    },
     "agent": {
       "type": "relation",
       "relation": "oneToOne",
@@ -154,6 +148,9 @@
     },
     "deposit_account_for_user": {
       "type": "json"
+    },
+    "commission_rate": {
+      "type": "decimal"
     }
   }
 }
