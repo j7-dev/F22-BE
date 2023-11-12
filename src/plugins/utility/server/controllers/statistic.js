@@ -835,6 +835,10 @@ module.exports = ({ strapi }) => ({
       const user_ids = records
         .filter((r) => r.by === game_provider)
         .map((r) => r?.user?.id)
+      console.log('⭐  user_ids:', {
+        game_provider,
+        user_ids,
+      })
       const unique_user_ids = Array.from(new Set(user_ids))
 
       return unique_user_ids.length
