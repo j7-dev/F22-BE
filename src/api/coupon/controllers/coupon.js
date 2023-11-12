@@ -108,4 +108,44 @@ module.exports = createCoreController('api::coupon.coupon', {
       data: updateResult,
     }
   },
+
+  add: async (ctx, next) => {
+    const body = ctx.request.body
+    const operator = ctx?.state?.user
+
+    const requiredFields = [
+      'amount',
+      'amount_type',
+      'currency',
+      'title',
+      'user_id',
+    ]
+
+    for (const field of requiredFields) {
+      if (body?.[field] === undefined) {
+        return ctx.badRequest(`${field} is required`)
+      }
+    }
+
+    const createResult = await strapi.entityService.create(
+      'api::coupon.coupon',
+      {
+        data: {
+          title: body?.title,
+          description: `coupon added by ${operator?.display_name} #${operator?.id}`,
+          coupon_type: 'FIXED',
+          coupon_amount: body?.amount,
+          currency: body?.currency,
+          amount_type: body?.amount_type,
+          is_claimed: true,
+          user: body?.user_id,
+        },
+      }
+    )
+    ctx.body = {
+      status: 200,
+      message: 'add coupon success',
+      data: createResult,
+    }
+  },
 })

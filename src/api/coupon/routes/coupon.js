@@ -31,5 +31,14 @@ const extraRoutes = [
       middlewares: [],
     },
   },
+  {
+    method: 'POST',
+    path: '/coupon/add',
+    handler: 'coupon.add',
+    config: {
+      policies: [],
+      middlewares: [],
+    },
+  },
 ]
 module.exports = customRouter(defaultRouter, extraRoutes)

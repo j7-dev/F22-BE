@@ -29,7 +29,7 @@ module.exports = createCoreService('api::coupon.coupon', {
     const addResult = await strapi.service('api::wallet-api.wallet-api').add({
       user_id,
       amount: coupon_amount,
-      title: `Coupon Claimed ${title} #${id}`,
+      title: `Coupon Claimed ${title} coupon_id #${id}`,
       type: 'COUPON',
       by: 'SYSTEM',
       currency,
