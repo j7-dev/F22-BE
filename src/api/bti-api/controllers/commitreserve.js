@@ -123,7 +123,7 @@ module.exports = {
         }
       )
       console.log('⭐  theBetRecords:', theBetRecords)
-      if (theBetRecords > 0) {
+      if (theBetRecords.length > 0) {
         const theBetRecord = theBetRecords[0]
         const updateResult = await strapi.entityService.update(
           'api::bet-record.bet-record',
