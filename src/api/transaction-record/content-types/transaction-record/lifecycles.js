@@ -101,38 +101,38 @@ module.exports = {
       }
     }
 
-    // TODO 存款紅利判斷 案類型 不同規則
+    // @deprecated
     // 存款紅利發放
 
-    const deposit_bonus = theTxn?.deposit_bonus
-    const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
+    // const deposit_bonus = theTxn?.deposit_bonus
+    // const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
 
-    if (
-      !!deposit_bonus &&
-      type === 'DEPOSIT' &&
-      toStatus === 'SUCCESS' &&
-      amount >= min_deposit_amount
-    ) {
-      const bonus_rate = deposit_bonus?.bonus_rate / 100
-      const calculate_bonus = bonus_rate * amount
-      const max_bonus_amount = deposit_bonus?.max_bonus_amount || 0
-      const bonus = !!max_bonus_amount
-        ? calculate_bonus > max_bonus_amount
-          ? max_bonus_amount
-          : calculate_bonus
-        : calculate_bonus
+    // if (
+    //   !!deposit_bonus &&
+    //   type === 'DEPOSIT' &&
+    //   toStatus === 'SUCCESS' &&
+    //   amount >= min_deposit_amount
+    // ) {
+    //   const bonus_rate = deposit_bonus?.bonus_rate / 100
+    //   const calculate_bonus = bonus_rate * amount
+    //   const max_bonus_amount = deposit_bonus?.max_bonus_amount || 0
+    //   const bonus = !!max_bonus_amount
+    //     ? calculate_bonus > max_bonus_amount
+    //       ? max_bonus_amount
+    //       : calculate_bonus
+    //     : calculate_bonus
 
-      // 將 bonus 寫入 balance
-      const result = await strapi.service('api::wallet-api.wallet-api').add({
-        user_id: theTxn?.user?.id,
-        amount: bonus,
-        title: `deposit_bonus ${deposit_bonus.label} #${deposit_bonus.id}`,
-        type: 'COUPON',
-        by: 'SYSTEM',
-        currency: deposit_bonus.currency,
-        amount_type: deposit_bonus.amount_type,
-      })
-    }
+    //   // 將 bonus 寫入 balance
+    //   const result = await strapi.service('api::wallet-api.wallet-api').add({
+    //     user_id: theTxn?.user?.id,
+    //     amount: bonus,
+    //     title: `deposit_bonus ${deposit_bonus.label} #${deposit_bonus.id}`,
+    //     type: 'COUPON',
+    //     by: 'SYSTEM',
+    //     currency: deposit_bonus.currency,
+    //     amount_type: deposit_bonus.amount_type,
+    //   })
+    // }
   },
   async afterUpdate(event) {
     const { result } = event
@@ -149,6 +149,13 @@ module.exports = {
       const handleRemoveDepositBonusResult = await strapi
         .service('api::transaction-record.transaction-record')
         .handleRemoveDepositBonus(event)
+    }
+
+    if (type === 'DEPOSIT' && status === 'SUCCESS') {
+      const handleDepositBonusResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleDepositBonus(event)
+      console.log('⭐  handleDepositBonusResult:', handleDepositBonusResult)
     }
   },
   async beforeCreate(event) {

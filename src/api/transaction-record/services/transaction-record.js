@@ -179,5 +179,63 @@ module.exports = createCoreService(
 
       return updateResult
     },
+    async handleDepositBonus(event) {
+      const { result } = event
+      const txn_id = result?.id
+      const amount = result?.amount
+      const currency = result?.currency
+      const amount_type = result?.amount_type
+
+      const theTxn = await strapi.entityService.findOne(
+        'api::transaction-record.transaction-record',
+        txn_id,
+        {
+          populate: {
+            user: {
+              fields: ['id'],
+            },
+            deposit_bonus: {
+              fields: '*',
+            },
+          },
+        }
+      )
+      const user_id = theTxn?.user?.id
+
+      if (!user_id) {
+        throw new Error('user_id is required')
+      }
+
+      // TODO 存款紅利判斷 案類型 不同規則
+      // 存款紅利發放
+
+      const deposit_bonus = theTxn?.deposit_bonus
+      const min_deposit_amount = deposit_bonus?.min_deposit_amount || 0
+
+      if (!!deposit_bonus && amount >= min_deposit_amount) {
+        const bonus_rate = deposit_bonus?.bonus_rate / 100
+        const calculate_bonus = bonus_rate * amount
+        const max_bonus_amount = deposit_bonus?.max_bonus_amount || 0
+        const bonus = !!max_bonus_amount
+          ? calculate_bonus > max_bonus_amount
+            ? max_bonus_amount
+            : calculate_bonus
+          : calculate_bonus
+
+        // 將 bonus 寫入 balance
+        const result = await strapi.service('api::wallet-api.wallet-api').add({
+          user_id: user_id,
+          amount: bonus,
+          title: `deposit_bonus ${deposit_bonus.label} #${deposit_bonus.id}`,
+          type: 'COUPON',
+          by: 'SYSTEM',
+          currency: deposit_bonus.currency,
+          amount_type: deposit_bonus.amount_type,
+        })
+        return result
+      }
+
+      return 'no deposit_bonus'
+    },
   }
 )
