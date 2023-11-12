@@ -86,6 +86,10 @@
     },
     "ref_id": {
       "type": "string"
+    },
+    "is_hide": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

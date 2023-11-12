@@ -106,6 +106,7 @@ module.exports = () => ({
           status: updateResult?.id ? 'SUCCESS' : 'FAILED',
           balance_after_mutate: updateResult?.id ? updateResult?.amount : null,
           ref_id: body?.ref_id,
+          is_hide: body?.is_hide,
         },
       }
     )
