@@ -25,10 +25,13 @@
     },
     "debit_amount": {
       "type": "decimal",
-      "required": true,
+      "required": false,
       "column": {
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "credit_amount": {
@@ -45,7 +48,11 @@
     },
     "status": {
       "type": "enumeration",
-      "enum": ["NORMAL", "PENDING", "CANCEL"]
+      "enum": [
+        "NORMAL",
+        "PENDING",
+        "CANCEL"
+      ]
     },
     "bet_time": {
       "type": "datetime"
