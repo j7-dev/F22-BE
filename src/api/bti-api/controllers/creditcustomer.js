@@ -74,14 +74,13 @@ module.exports = {
         allowNegative: true,
       }
 
-      console.log('⭐  start findTxns:')
-
       const findTxns = await strapi.entityService.findMany(
-        'api:transaction-record.transaction-record',
+        'api::transaction-record.transaction-record',
         {
+          fields: ['id', 'amount'],
           filters: {
-            ref_id: purchase_id,
             type: 'CREDIT',
+            ref_id: purchase_id,
           },
         }
       )

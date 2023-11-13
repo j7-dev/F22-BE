@@ -41,5 +41,18 @@ module.exports = {
       siteSetting,
       gameProvider,
     }
+
+    //TEST
+    // const findTxns = await strapi.entityService.findMany(
+    //   'api::transaction-record.transaction-record',
+    //   {
+    //     fields: ['id', 'amount'],
+    //     filters: {
+    //       type: 'CREDIT',
+    //       ref_id: 'SUCCESS',
+    //     },
+    //   }
+    // )
+    // console.log('⭐  findTxns:', findTxns)
   },
 }
