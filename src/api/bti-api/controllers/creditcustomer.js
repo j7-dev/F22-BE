@@ -81,6 +81,7 @@ module.exports = {
         {
           filters: {
             ref_id: purchase_id,
+            type: 'CREDIT',
           },
         }
       )
