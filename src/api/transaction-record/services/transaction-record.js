@@ -253,9 +253,7 @@ module.exports = createCoreService(
       )
 
       const user_id = theTxn?.user?.id
-      console.log('⭐  theTxn:', theTxn)
       const ref_id = theTxn?.ref_id
-      console.log('⭐  {ref_id, user_id}:', { ref_id, user_id })
 
       if (!ref_id) return 'ref_id is null'
 
@@ -282,7 +280,7 @@ module.exports = createCoreService(
               title,
               description,
               debit_amount: type === 'DEBIT' ? amount : null,
-              credit_amount: null,
+              credit_amount: type === 'CREDIT' ? amount : null,
               ref_id,
               user: user_id,
               status: type === 'CANCEL' ? 'CANCEL' : 'PENDING',
@@ -293,35 +291,61 @@ module.exports = createCoreService(
         )
         return createBR
       } else {
-        // 有其他同場遊戲的投注，用更新，不是寫入
+        // 有其他同場遊戲的投注，用更新累加，不是寫入
         const theBR = findBR?.[0]
 
-        const getStatus = (type) => {
-          switch (type) {
-            case 'CANCEL':
-              return 'CANCEL'
-            case 'CREDIT':
-              return 'NORMAL'
-            default:
-              return ''
-          }
+        if (type === 'DEBIT') {
+          const updateBR = await strapi.entityService.update(
+            'api::bet-record.bet-record',
+            theBR?.id,
+            {
+              data: {
+                by,
+                title,
+                description,
+                debit_amount: Number(amount || 0) + Number(theBR?.amount || 0),
+                update_time: theTxn?.createdAt,
+              },
+            }
+          )
+          return updateBR
         }
 
-        const updateBR = await strapi.entityService.update(
-          'api::bet-record.bet-record',
-          theBR?.id,
-          {
-            data: {
-              by,
-              title,
-              description,
-              credit_amount: amount,
-              status: getStatus(type),
-              update_time: theTxn?.createdAt,
-            },
-          }
-        )
-        return updateBR
+        if (type === 'CREDIT') {
+          const updateBR = await strapi.entityService.update(
+            'api::bet-record.bet-record',
+            theBR?.id,
+            {
+              data: {
+                by,
+                title,
+                description,
+                credit_amount: Number(amount || 0) + Number(theBR?.amount || 0),
+                status: 'NORMAL',
+                update_time: theTxn?.createdAt,
+              },
+            }
+          )
+          return updateBR
+        }
+
+        if (type === 'CANCEL') {
+          const updateBR = await strapi.entityService.update(
+            'api::bet-record.bet-record',
+            theBR?.id,
+            {
+              data: {
+                by,
+                title,
+                description,
+                credit_amount: Number(amount || 0),
+                status: 'CANCEL',
+                update_time: theTxn?.createdAt,
+              },
+            }
+          )
+          return updateBR
+        }
       }
     },
   }
