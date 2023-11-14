@@ -18,7 +18,7 @@ jobs:
         id: set-ssh-host
         run: |
           if [ "${{ github.ref }}" == "refs/heads/master" ]; then
-            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST }}"
+            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
           elif [ "${{ github.ref }}" == "refs/heads/cicd" ]; then
             echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
           fi
