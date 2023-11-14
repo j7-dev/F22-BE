@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master # 這裡使用你的主要分支名稱，可以根據實際情況修改
-
+      - cicd
 jobs:
   deploy:
     runs-on: ubuntu-22.04 # ubuntu-latest
@@ -12,23 +12,33 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2 # 使用官方的Checkout action來檢出你的代碼
-
+        
+      - name: Set SSH credentials based on branch
+        id: set_ssh
+        run: |
+          if [ "${{ github.ref }}" = "refs/heads/master" ]; then
+            echo "::set-output name=SSH_USER::${{ secrets.SSH_USER }}"
+            echo "::set-output name=SSH_KEY::${{ secrets.SSH_KEY }}"
+            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST }}"
+          else
+            echo "::set-output name=SSH_USER::${{ secrets.SSH_USER }}"
+            echo "::set-output name=SSH_KEY::${{ secrets.SSH_KEY }}"
+            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
+          fi
+          
       - name: Deploy to Server
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/staging.pem
+          echo "${{ steps.set_ssh.outputs.SSH_KEY }}" > ~/.ssh/staging.pem
           chmod 600 ~/.ssh/staging.pem
           cat >>~/.ssh/config <<END
           Host staging
-            HostName $SSH_HOST
-            User $SSH_USER
+            HostName ${{ steps.set_ssh.outputs.SSH_HOST }}
+            User ${{ steps.set_ssh.outputs.SSH_USER }}
             IdentityFile ~/.ssh/staging.pem
             StrictHostKeyChecking no
           END
-        env:
-          SSH_USER: ${{ secrets.SSH_USER }}
-          SSH_KEY: ${{ secrets.SSH_KEY }}
-          SSH_HOST: ${{ secrets.SSH_HOST }}
+
 
       - name: Yarn build and start
         run: ssh staging 'fish -c "nvm use 18.17.0; and cd /var/www/html/F22-BE; and pm2 stop F22-BE; and git fetch origin; and git reset --hard origin/master; and yarn install; and yarn build; and pm2 start F22-BE"'
