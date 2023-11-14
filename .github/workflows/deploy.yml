@@ -31,4 +31,4 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
 
       - name: Yarn build and start
-        run: ssh staging '/usr/bin/fish && nvm use 18.17.0 && cd /var/www/html/F22-BE && pm2 stop f22 && git fetch origin && git reset --hard origin/master && yarn install && yarn build && pm2 start f22'
+        run: ssh staging 'fish -c "nvm use 18.17.0; and cd /var/www/html/F22-BE; and pm2 stop f22; and git fetch origin; and git reset --hard origin/master; and yarn install; and yarn build; and pm2 start f22"'
