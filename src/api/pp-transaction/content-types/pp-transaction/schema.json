@@ -33,7 +33,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "bonus": {
@@ -42,7 +45,10 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "reference": {
@@ -70,7 +76,15 @@
     },
     "transaction_type": {
       "type": "enumeration",
-      "enum": ["RESULT", "BONUS", "JACKPOT", "PROMO", "REFUND", "BET"],
+      "enum": [
+        "RESULT",
+        "BONUS",
+        "JACKPOT",
+        "PROMO",
+        "REFUND",
+        "BET",
+        "ADJUSTMENT"
+      ],
       "required": true
     },
     "bonusCode": {
