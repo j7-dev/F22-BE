@@ -73,10 +73,7 @@
     },
     "gender": {
       "type": "enumeration",
-      "enum": [
-        "MALE",
-        "FEMALE"
-      ]
+      "enum": ["MALE", "FEMALE"]
     },
     "birthday": {
       "type": "date"
@@ -116,10 +113,12 @@
       "target": "plugin::users-permissions.user"
     },
     "allow_payments": {
-      "type": "json"
+      "type": "json",
+      "default": ["TRANSFER"]
     },
     "allow_game_providers": {
-      "type": "json"
+      "type": "json",
+      "default": ["EVO", "PP", "BTI", "IGX", "TOKEN"]
     },
     "user_notes": {
       "type": "json"
