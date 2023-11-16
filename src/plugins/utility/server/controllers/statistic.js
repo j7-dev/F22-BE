@@ -1026,6 +1026,8 @@ module.exports = ({ strapi }) => ({
         pp: getGPCashAmount(PP, filteredBettingRecords, 'debit_amount') * -1,
         bti: getGPCashAmount(BTI, filteredBettingRecords, 'debit_amount') * -1,
         igx: getGPCashAmount(IGX, filteredBettingRecords, 'debit_amount') * -1,
+        token:
+          getGPCashAmount(TOKEN, filteredBettingRecords, 'debit_amount') * -1,
       },
       {
         label: 'bet users',
@@ -1034,6 +1036,7 @@ module.exports = ({ strapi }) => ({
         pp: getGPUserCount(PP, filteredBettingRecords),
         bti: getGPUserCount(BTI, filteredBettingRecords),
         igx: getGPUserCount(IGX, filteredBettingRecords),
+        token: getGPUserCount(TOKEN, filteredBettingRecords),
       },
       {
         label: 'payout',
@@ -1043,6 +1046,8 @@ module.exports = ({ strapi }) => ({
         pp: getGPCashAmount(PP, filteredBettingRecords, 'credit_amount') * -1,
         bti: getGPCashAmount(BTI, filteredBettingRecords, 'credit_amount') * -1,
         igx: getGPCashAmount(IGX, filteredBettingRecords, 'credit_amount') * -1,
+        token:
+          getGPCashAmount(TOKEN, filteredBettingRecords, 'credit_amount') * -1,
       },
       {
         label: 'winloss',
@@ -1051,6 +1056,7 @@ module.exports = ({ strapi }) => ({
         pp: getGPWinLoss(PP),
         bti: getGPWinLoss(BTI),
         igx: getGPWinLoss(IGX),
+        token: getGPWinLoss(TOKEN),
       },
       {
         label: 'turnover bonus',
@@ -1059,6 +1065,7 @@ module.exports = ({ strapi }) => ({
         pp: getGPTurnoverBonusAmount(PP, filteredTurnoverBonusTxns),
         bti: getGPTurnoverBonusAmount(BTI, filteredTurnoverBonusTxns),
         igx: getGPTurnoverBonusAmount(IGX, filteredTurnoverBonusTxns),
+        token: getGPTurnoverBonusAmount(TOKEN, filteredTurnoverBonusTxns),
       },
     ]
 
