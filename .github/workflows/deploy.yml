@@ -41,8 +41,6 @@ jobs:
 
       - name: Yarn build and start
         run: ssh staging 'cd /opt/nginx/front; \
-              GIT_PATH=$(which git); \
-              DOCKER_COMPOSE_PATH=$(which docker-compose); \
-              $GIT_PATH fetch origin; \
-              $GIT_PATH reset --hard origin/master; \
-              $DOCKER_COMPOSE_PATH up --build;'
+             git fetch origin; \
+             git reset --hard origin/master; \
+             docker-compose up --build;'
