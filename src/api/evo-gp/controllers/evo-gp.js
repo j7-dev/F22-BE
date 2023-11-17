@@ -66,7 +66,7 @@ module.exports = {
       sid = sids?.[0].session_id
     }
 
-    const reqHost = ctx?.request?.headers?.host
+    // const reqHost = ctx?.request?.headers?.host
 
     const body = {
       uuid,
@@ -81,7 +81,7 @@ module.exports = {
         currency: 'KRW',
         session: {
           id: sid,
-          ip: reqHost,
+          ip: '192.168.0.1',
         },
         group: {
           id: 'rn7ixj24vtakua35',
