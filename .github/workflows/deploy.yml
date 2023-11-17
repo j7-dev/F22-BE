@@ -40,9 +40,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
       - name: Yarn build and start
-        run: ssh staging 'cd /var/www/html/F22-BE; \
+        run: ssh staging 'cd /opt/nginx/front; \
               git fetch origin; \
               git reset --hard origin/master; \
-              yarn install; \
-              yarn build; \
-              env-cmd -f ./home/ubuntu/.env.dev nohup strapi start &'
+              docker-compose up --build;'
