@@ -40,4 +40,9 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
       - name: Yarn build and start
-        run: ssh staging 'fish -c "nvm use 18.17.0; and cd /var/www/html/F22-BE; and pm2 stop F22-BE; and git fetch origin; and git reset --hard origin/master; and yarn install; and yarn build; and pm2 start F22-BE"'
+        run: ssh staging 'cd /var/www/html/F22-BE; \
+              git fetch origin; \
+              git reset --hard origin/master; \
+              yarn install; \
+              yarn build; \
+              env-cmd -f ./home/ubuntu/.env.dev nohup strapi start &'
