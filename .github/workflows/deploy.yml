@@ -22,11 +22,6 @@ jobs:
           elif [ "${{ github.ref }}" == "refs/heads/cicd" ]; then
             echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
           fi
-      - name: Install Git and Docker-Compose
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git
-          sudo apt-get install -y docker-compose
           
       - name: Deploy to Server
         run: |
@@ -46,6 +41,6 @@ jobs:
 
       - name: Yarn build and start
         run: ssh staging 'cd /opt/nginx/front; \
-              git fetch origin; \
-              git reset --hard origin/master; \
-              docker-compose up --build;'
+              /usr/bin/git fetch origin; \
+              /usr/bin/git reset --hard origin/master; \
+              /usr/bin/docker-compose up --build;'
