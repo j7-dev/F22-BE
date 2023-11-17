@@ -41,7 +41,7 @@ jobs:
 
       - name: Yarn build and start
         run: ssh staging 'cd /opt/nginx/front; \
-              echo "test" > filename.txt;
+              sudo echo "test" > filename.txt;
               git fetch origin; \
               git reset --hard origin/master; \
               docker-compose up --build;'
