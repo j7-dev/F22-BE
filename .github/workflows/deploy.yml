@@ -41,6 +41,6 @@ jobs:
 
       - name: Yarn build and start
         run: ssh staging 'cd /opt/nginx/front; \
-              git fetch origin; \
-              git reset --hard origin/master; \
-              docker-compose up --build;'
+              sudo git fetch origin; \
+              sudo git reset --hard origin/master; \
+              sudo docker-compose up --build;'
