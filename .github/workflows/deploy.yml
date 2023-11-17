@@ -40,7 +40,4 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
       - name: Yarn build and start
-        run: ssh staging 'cd /opt/nginx/front; \
-             git fetch origin; \
-             git reset --hard origin/master; \
-             docker-compose up --build;'
+        run: ssh staging 'fish -c "nvm use 18.17.0; and cd /var/www/html/F22-BE; and git fetch origin; and git reset --hard origin/master; and docker-compose up --build"'
