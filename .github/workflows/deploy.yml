@@ -40,7 +40,7 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
       - name: Yarn build and start
-        run: ssh staging 'cd /opt/nginx/front; \
+        run: ssh staging 'cd /opt/nginx/front/test; \
               sudo echo "test" > filename.txt;
               git fetch origin; \
               git reset --hard origin/master; \
