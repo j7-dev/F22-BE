@@ -71,7 +71,7 @@ module.exports = {
     const body = {
       uuid,
       player: {
-        id: user?.id,
+        id: user?.id.toString(),
         update: true,
         firstName: 'smtbet7',
         lastName: user?.username,
