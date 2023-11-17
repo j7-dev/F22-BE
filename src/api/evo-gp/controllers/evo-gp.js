@@ -33,6 +33,7 @@ module.exports = {
     const key = process?.env?.EVO_CASINO_KEY
     const token = process?.env?.EVO_TOKEN
     const user = ctx?.state?.user
+    const config = ctx?.request?.body?.config
     if (!ctx.state.user) {
       return ctx.unauthorized()
     }
@@ -87,19 +88,7 @@ module.exports = {
           action: 'assign',
         },
       },
-      config: {
-        game: {
-          category: '',
-          interface: 'view1',
-          table: {
-            id: '',
-          },
-        },
-        channel: {
-          wrapped: false,
-          mobile: false,
-        },
-      },
+      config,
     }
 
     console.log('⭐  body:', JSON.stringify(body))
