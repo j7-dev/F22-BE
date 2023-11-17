@@ -81,7 +81,7 @@ module.exports = {
         currency: 'KRW',
         session: {
           id: sid,
-          ip: '192.168.0.1',
+          ip: '3.38.54.250',
         },
         group: {
           id: 'rn7ixj24vtakua35',
