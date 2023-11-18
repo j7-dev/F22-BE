@@ -1,9 +1,13 @@
 'use strict'
 const dayjs = require('dayjs')
 const utc = require('dayjs/plugin/utc')
+const timezone = require('dayjs/plugin/timezone')
 dayjs.extend(utc)
+dayjs.extend(timezone)
 require('dayjs/locale/ko')
 dayjs.locale('ko')
+const TIMEZONE = 'Asia/Seoul'
+dayjs.tz.setDefault(TIMEZONE)
 
 module.exports = {
   /**
