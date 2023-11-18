@@ -4,6 +4,7 @@ const { removeUndefinedKeys } = require('../services/utils')
 const dayjs = require('dayjs')
 const default_currency = 'KRW'
 const default_amount_type = 'CASH'
+const TIMEZONE = 'Asia/Seoul'
 
 module.exports = ({ strapi }) => ({
   async recent(ctx) {
@@ -711,10 +712,23 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
-    const start = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const start = dayjs()
+      .startOf('day')
+      .tz(TIMEZONE)
+      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    console.log('⭐  start:', start)
+    const utcstart = dayjs()
+      .startOf('day')
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    console.log('⭐  utcstart:', utcstart)
     // start: 2023-11-04 00:00:00.000000
 
-    const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const end = dayjs()
+      .endOf('day')
+      .tz(TIMEZONE)
+      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    console.log('⭐  end:', end)
     // end: 2023-11-04 23:59:59.999999
 
     const user = ctx?.state?.user
