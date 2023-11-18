@@ -1,9 +1,14 @@
 const userContentType = require('./content-types/user')
 const dayjs = require('dayjs')
 
-module.exports = (plugin) => {
-  const UTC9toUTC0 = global.appData.UTC9toUTC0
+const UTC9toUTC0 = (dayjsObj, format = 'YYYY-MM-DD HH:mm:ss.SSSSSS') => {
+  return dayjs
+    .tz(dayjsObj.format('YYYY-MM-DDTHH:mm:ss[Z]'), 'Asia/Seoul')
+    .utc()
+    .format(format)
+}
 
+module.exports = (plugin) => {
   // support lifecycles
   plugin.contentTypes.user = userContentType
 
