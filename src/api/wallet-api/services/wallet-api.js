@@ -244,7 +244,7 @@ module.exports = () => ({
       {
         data: {
           type: 'WITHDRAW',
-          title: `user_id #${body.user_id} withdraw $${Math.abs(
+          title: `user_id #${body.user_id} 환전	$${Math.abs(
             body.amount
           ).toLocaleString()} ${currency}`,
           description: '',

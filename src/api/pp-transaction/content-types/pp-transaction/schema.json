@@ -53,11 +53,11 @@
     },
     "reference": {
       "type": "string",
-      "required": true
+      "required": false
     },
     "timestamp": {
       "type": "biginteger",
-      "required": true
+      "required": false
     },
     "round_details": {
       "type": "json"
