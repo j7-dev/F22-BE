@@ -713,14 +713,14 @@ module.exports = ({ strapi }) => ({
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
     const start = dayjs
-      .tz(dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'))
+      .utc(dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'))
       .tz(TIMEZONE)
       .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     console.log('⭐  start:', start)
     // start: 2023-11-04 00:00:00.000000
 
     const end = dayjs
-      .tz(
+      .utc(
         dayjs().endOf('day').tz(TIMEZONE).format('YYYY-MM-DD HH:mm:ss.SSSSSS')
       )
       .tz(TIMEZONE)
