@@ -711,9 +711,12 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
-    const start = dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const start = dayjs()
+      .startOf('day')
+      .utc()
+      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     // start: 2023-11-04 00:00:00.000000
-    const end = dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const end = dayjs().endOf('day').utc().format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     // end: 2023-11-04 23:59:59.999999
 
     const user = ctx?.state?.user

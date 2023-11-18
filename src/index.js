@@ -1,5 +1,7 @@
 'use strict'
 const dayjs = require('dayjs')
+const utc = require('dayjs/plugin/utc')
+dayjs.extend(utc)
 require('dayjs/locale/ko')
 dayjs.locale('ko')
 
