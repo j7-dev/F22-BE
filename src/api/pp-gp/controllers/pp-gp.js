@@ -86,7 +86,7 @@ module.exports = {
       ...query,
       secureLogin,
       token,
-      lobbyUrl: 'https://f22-fe.vercel.app/slot', // TODO test for pp
+      lobbyUrl: 'https://smtbet7.com/slot',
     }
     const hash = getHash(params)
     const queryString = objectToQueryString({
