@@ -6,7 +6,7 @@ dayjs.extend(utc)
 dayjs.extend(timezone)
 require('dayjs/locale/ko')
 dayjs.locale('ko')
-const TIMEZONE = 'Asia/Seoul'
+const TIMEZONE = 'Etc/GMT'
 dayjs.tz.setDefault(TIMEZONE)
 
 module.exports = {
