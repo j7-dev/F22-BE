@@ -45,16 +45,6 @@ module.exports = createCoreController('api::coupon.coupon', {
     const end_datetime = coupon?.period?.end_datetime
     const is_before = dayjs().isBefore(start_datetime)
     const is_after = dayjs().isAfter(end_datetime)
-    console.log('⭐  obj:', {
-      start_datetime,
-      end_datetime,
-      now: dayjs().format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-    })
-
-    console.log(
-      '⭐  isBetween:',
-      dayjs().isBetween(start_datetime, end_datetime)
-    )
 
     // const startTime = start_datetime ? dayjs(start_datetime) : null
     // const endTime = end_datetime ? dayjs(end_datetime) : null

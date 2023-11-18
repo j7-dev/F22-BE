@@ -4,13 +4,14 @@ const { removeUndefinedKeys } = require('../services/utils')
 const dayjs = require('dayjs')
 const default_currency = 'KRW'
 const default_amount_type = 'CASH'
-const TIMEZONE = 'Asia/Seoul'
 
 module.exports = ({ strapi }) => ({
   async recent(ctx) {
     const query = ctx?.request?.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
+
     const dateArr =
       countByDate({
         startD: dayjs(query?.start),
@@ -39,8 +40,8 @@ module.exports = ({ strapi }) => ({
         const value = await strapi.service('plugin::utility.dpWd').getDpWd({
           currency,
           amount_type,
-          start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-          end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+          start: UTC9toUTC0(dateItem.startD),
+          end: UTC9toUTC0(dateItem.endD),
         })
 
         const payload = {
@@ -58,8 +59,8 @@ module.exports = ({ strapi }) => ({
           .get({
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
           })
 
         const payload = {
@@ -96,8 +97,8 @@ module.exports = ({ strapi }) => ({
             fields: ['id'],
             filters: {
               createdAt: {
-                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $gte: UTC9toUTC0(dateItem.startD),
+                $lte: UTC9toUTC0(dateItem.endD),
               },
             },
           }
@@ -116,8 +117,8 @@ module.exports = ({ strapi }) => ({
         const value = await strapi
           .service('plugin::utility.members')
           .getOnlineMembers({
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
           })
 
         const payload = {
@@ -136,8 +137,8 @@ module.exports = ({ strapi }) => ({
             type: ['DEPOSIT'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
           })
 
         const payload = {
@@ -168,60 +169,44 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
+
     const dateArr = [
       {
         // today
         label: 'today',
-        start: dayjs().startOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs().endOf('day').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().startOf('day')),
+        end: UTC9toUTC0(dayjs().endOf('day')),
       },
       {
         // yesterday
         label: 'yesterday',
-        start: dayjs()
-          .subtract(1, 'day')
-          .startOf('day')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs()
-          .subtract(1, 'day')
-          .endOf('day')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().subtract(1, 'day').startOf('day')),
+        end: UTC9toUTC0(dayjs().subtract(1, 'day').endOf('day')),
       },
       {
         // this week
         label: 'thisWeek',
-        start: dayjs().startOf('week').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs().endOf('week').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().startOf('week')),
+        end: UTC9toUTC0(dayjs().endOf('week')),
       },
       {
         // last week
         label: 'lastWeek',
-        start: dayjs()
-          .subtract(1, 'week')
-          .startOf('week')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs()
-          .subtract(1, 'week')
-          .endOf('week')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().subtract(1, 'week').startOf('week')),
+        end: UTC9toUTC0(dayjs().subtract(1, 'week').endOf('week')),
       },
       {
         // this month
         label: 'thisMonth',
-        start: dayjs().startOf('month').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs().endOf('month').format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().startOf('month')),
+        end: UTC9toUTC0(dayjs().endOf('month')),
       },
       {
         // last month
         label: 'lastMonth',
-        start: dayjs()
-          .subtract(1, 'month')
-          .startOf('month')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-        end: dayjs()
-          .subtract(1, 'month')
-          .endOf('month')
-          .format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+        start: UTC9toUTC0(dayjs().subtract(1, 'month').startOf('month')),
+        end: UTC9toUTC0(dayjs().subtract(1, 'month').endOf('month')),
       },
     ]
 
@@ -540,6 +525,7 @@ module.exports = ({ strapi }) => ({
     const user = ctx?.state?.user
     const roleType = user?.role?.type
     const agent_id = roleType === 'agent' ? user?.id : undefined
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
 
     const dateArr =
       countByDate({
@@ -555,8 +541,8 @@ module.exports = ({ strapi }) => ({
             type: ['DEPOSIT'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })
 
@@ -566,8 +552,8 @@ module.exports = ({ strapi }) => ({
             type: ['WITHDRAW'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })
 
@@ -579,8 +565,8 @@ module.exports = ({ strapi }) => ({
             type: ['DEBIT'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })) * -1
 
@@ -590,8 +576,8 @@ module.exports = ({ strapi }) => ({
             type: ['CREDIT'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })) * -1
 
@@ -602,8 +588,8 @@ module.exports = ({ strapi }) => ({
             type: ['COUPON', 'MANUAL', 'TURNOVER_BONUS_TO_CASH'],
             currency,
             amount_type,
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })
         // 加上目前的洗碼總和
@@ -613,8 +599,8 @@ module.exports = ({ strapi }) => ({
             type: ['COUPON', 'MANUAL', 'TURNOVER_BONUS_TO_CASH'],
             currency,
             amount_type: 'TURNOVER_BONUS',
-            start: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-            end: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+            start: UTC9toUTC0(dateItem.startD),
+            end: UTC9toUTC0(dateItem.endD),
             agent_id,
           })
 
@@ -625,8 +611,8 @@ module.exports = ({ strapi }) => ({
             fields: ['id'],
             filters: {
               createdAt: {
-                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $gte: UTC9toUTC0(dateItem.startD),
+                $lte: UTC9toUTC0(dateItem.endD),
               },
             },
             populate: {
@@ -669,8 +655,8 @@ module.exports = ({ strapi }) => ({
             },
             filters: {
               bet_time: {
-                $gte: dateItem.startD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
-                $lte: dateItem.endD.format('YYYY-MM-DD HH:mm:ss.SSSSSS'),
+                $gte: UTC9toUTC0(dateItem.startD),
+                $lte: UTC9toUTC0(dateItem.endD),
               },
             },
           }
@@ -712,18 +698,15 @@ module.exports = ({ strapi }) => ({
     const query = ctx.request.query
     const currency = query?.currency || default_currency
     const amount_type = query?.amount_type || default_amount_type
-    const start = dayjs
-      .tz(dayjs().startOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]'), TIMEZONE)
-      .utc()
-      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
+    const start = UTC9toUTC0(dayjs().startOf('day'))
     console.log('⭐  start:', start)
+
     // start: 2023-11-04 00:00:00.000000
 
-    const end = dayjs
-      .tz(dayjs().endOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]'), TIMEZONE)
-      .utc()
-      .format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    const end = UTC9toUTC0(dayjs().endOf('day'))
     console.log('⭐  end:', end)
+
     // end: 2023-11-04 23:59:59.999999
 
     const user = ctx?.state?.user

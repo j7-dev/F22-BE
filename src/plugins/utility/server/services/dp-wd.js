@@ -19,10 +19,11 @@ module.exports = ({ strapi }) => ({
     const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
     const defaultAmountType = siteSetting?.default_amount_type || 'CASH'
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
 
     const {
       start,
-      end = dayjs().endOf('day').toISOString(),
+      end = UTC9toUTC0(dayjs().endOf('day')),
       user_id,
       amount_type = defaultAmountType,
       currency = defaultCurrency,

@@ -2,6 +2,8 @@ const userContentType = require('./content-types/user')
 const dayjs = require('dayjs')
 
 module.exports = (plugin) => {
+  const UTC9toUTC0 = global.appData.UTC9toUTC0
+
   // support lifecycles
   plugin.contentTypes.user = userContentType
 
@@ -76,26 +78,26 @@ module.exports = (plugin) => {
 
     const deposit = await strapi.service('plugin::utility.dpWd').getDeposit({
       user_id,
-      start: dayjs()
-        .subtract(
+      start: UTC9toUTC0(
+        dayjs().subtract(
           vip_upgrade_evaluation_interval,
           vip_upgrade_evaluation_interval_unit
         )
-        .toISOString(),
-      end: dayjs().toISOString(),
+      ),
+      end: UTC9toUTC0(dayjs()),
     })
 
     const validBetAmount = await strapi
       .service('plugin::utility.bettingAmount')
       .getDebit({
         user_id,
-        start: dayjs()
-          .subtract(
+        start: UTC9toUTC0(
+          dayjs().subtract(
             vip_upgrade_evaluation_interval,
             vip_upgrade_evaluation_interval_unit
           )
-          .toISOString(),
-        end: dayjs().toISOString(),
+        ),
+        end: UTC9toUTC0(dayjs()),
       })
 
     const allBalances = await strapi

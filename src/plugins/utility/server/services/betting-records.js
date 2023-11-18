@@ -13,11 +13,13 @@ const dayjs = require('dayjs')
  * @returns sql: string - SQL 查詢語句
  */
 function getSQLbyGameProviderName(args) {
+  const UTC9toUTC0 = global.appData.UTC9toUTC0
+
   const {
     gameProviderName,
     user_id,
     startTime,
-    endTime = dayjs().add(8, 'hour').toISOString(),
+    endTime = UTC9toUTC0(dayjs()),
   } = args
 
   const gp = gameProviderName.toLowerCase()

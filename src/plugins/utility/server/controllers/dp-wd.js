@@ -49,9 +49,11 @@ module.exports = ({ strapi }) => ({
     if (!user_ids || !user_ids.length) {
       return ctx.badRequest('user_ids is required')
     }
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
+
     const starArr = [
-      dayjs().startOf('day').toISOString(),
-      dayjs().subtract(30, 'day').startOf('week').toISOString(),
+      UTC9toUTC0(dayjs().startOf('day')),
+      UTC9toUTC0(dayjs().subtract(30, 'day').startOf('week')),
       undefined, // TODO 取得總數據可以優化，用類似 BALANCE 方式去拿!?
     ]
 

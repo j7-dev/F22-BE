@@ -44,10 +44,21 @@ module.exports = {
         txn: 'api::pp-transaction.pp-transaction',
       },
     }
+
+    // 將韓國時間轉換為 UTC+0時間
+
+    const UTC9toUTC0 = (dayjsObj, format = 'YYYY-MM-DD HH:mm:ss.SSSSSS') => {
+      return dayjs
+        .tz(dayjsObj.format('YYYY-MM-DDTHH:mm:ss[Z]'), 'Asia/Seoul')
+        .utc()
+        .format(format)
+    }
+
     // 將 siteSetting 設定到 global 全域變數
     global.appData = {
       siteSetting,
       gameProvider,
+      UTC9toUTC0,
     }
 
     //TEST
