@@ -1,5 +1,7 @@
 'use strict'
-// const dayjs = require('dayjs')
+const dayjs = require('dayjs')
+require('dayjs/locale/ko')
+dayjs.locale('ko')
 
 module.exports = {
   /**
