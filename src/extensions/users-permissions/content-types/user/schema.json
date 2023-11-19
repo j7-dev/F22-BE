@@ -73,7 +73,10 @@
     },
     "gender": {
       "type": "enumeration",
-      "enum": ["MALE", "FEMALE"]
+      "enum": [
+        "MALE",
+        "FEMALE"
+      ]
     },
     "birthday": {
       "type": "date"
@@ -114,11 +117,19 @@
     },
     "allow_payments": {
       "type": "json",
-      "default": ["TRANSFER"]
+      "default": [
+        "TRANSFER"
+      ]
     },
     "allow_game_providers": {
       "type": "json",
-      "default": ["EVO", "PP", "BTI", "IGX", "TOKEN"]
+      "default": [
+        "EVO",
+        "PP",
+        "BTI",
+        "IGX",
+        "TOKEN"
+      ]
     },
     "user_notes": {
       "type": "json"
@@ -139,6 +150,11 @@
     },
     "commission_rate": {
       "type": "decimal"
+    },
+    "referral": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
     }
   }
 }

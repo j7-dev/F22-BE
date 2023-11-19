@@ -700,12 +700,10 @@ module.exports = ({ strapi }) => ({
     const amount_type = query?.amount_type || default_amount_type
     const UTC9toUTC0 = global.appData.UTC9toUTC0
     const start = UTC9toUTC0(dayjs().startOf('day'))
-    console.log('⭐  start:', start)
 
     // start: 2023-11-04 00:00:00.000000
 
     const end = UTC9toUTC0(dayjs().endOf('day'))
-    console.log('⭐  end:', end)
 
     // end: 2023-11-04 23:59:59.999999
 
@@ -1124,7 +1122,6 @@ module.exports = ({ strapi }) => ({
       }
       return true
     })
-    console.log('⭐  filteredWpPendingTxns:', filteredWpPendingTxns.length)
 
     const registeredUsers = await strapi.entityService.findMany(
       'plugin::users-permissions.user',

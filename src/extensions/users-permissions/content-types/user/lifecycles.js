@@ -24,7 +24,7 @@ module.exports = {
     //如果沒有手動指定代理，就用 localStorage 的查看
     if (!data?.agent) {
       if (ref) {
-        const findAgent = await strapi.entityService.findMany(
+        const referralUser = await strapi.entityService.findMany(
           'plugin::users-permissions.user',
           {
             populate: {
@@ -36,12 +36,14 @@ module.exports = {
           }
         )
         // 確認這個用戶是否為 agent
-        const role = findAgent?.[0]?.role.type
-        const agentId = findAgent?.[0]?.id
+        const role = referralUser?.[0]?.role.type
+        const referralUserId = referralUser?.[0]?.id
 
-        if (findAgent.length > 0 && role === 'agent') {
-          data.agent = agentId
+        if (referralUser.length > 0 && role === 'agent') {
+          data.agent = referralUserId
         }
+
+        data.referral = referralUserId
       }
     }
   },
