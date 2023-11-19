@@ -22,7 +22,6 @@ ${
     ? `AND tr.type = '${type}'`
     : `AND tr.type IN (${type.join(', ')})`
 }
-
 AND tr.currency = '${currency}'
 AND tr.amount_type = '${amount_type}'
 ${user_ids.length ? `AND trul.user_id IN (${user_ids_string})` : ''}
@@ -82,7 +81,9 @@ module.exports = async (ctx) => {
         start,
         end,
       })
-      const getDpResult = await strapi.db.connection.raw(getDepositSQL)
+      const getDpResult = member_ids.length
+        ? await strapi.db.connection.raw(getDepositSQL)
+        : null
       const totalDeposit = getDpResult?.[0]?.[0]?.total || 0
 
       const getWithdrawSQL = getTxnSQL({
@@ -91,7 +92,9 @@ module.exports = async (ctx) => {
         start,
         end,
       })
-      const getWdResult = await strapi.db.connection.raw(getWithdrawSQL)
+      const getWdResult = member_ids.length
+        ? await strapi.db.connection.raw(getWithdrawSQL)
+        : null
       const totalWithdraw = (getWdResult?.[0]?.[0]?.total || 0) * -1
 
       const getDebitSQL = getTxnSQL({
@@ -100,7 +103,9 @@ module.exports = async (ctx) => {
         start,
         end,
       })
-      const getDebitResult = await strapi.db.connection.raw(getDebitSQL)
+      const getDebitResult = member_ids.length
+        ? await strapi.db.connection.raw(getDebitSQL)
+        : null
       const totalDebit = (getDebitResult?.[0]?.[0]?.total || 0) * -1
 
       const getCreditSQL = getTxnSQL({
@@ -109,7 +114,9 @@ module.exports = async (ctx) => {
         start,
         end,
       })
-      const getCreditResult = await strapi.db.connection.raw(getCreditSQL)
+      const getCreditResult = member_ids.length
+        ? await strapi.db.connection.raw(getCreditSQL)
+        : null
       const totalCredit = getCreditResult?.[0]?.[0]?.total || 0
 
       const getCouponSQL = getTxnSQL({
@@ -118,13 +125,16 @@ module.exports = async (ctx) => {
         start,
         end,
       })
-      const getCouponResult = await strapi.db.connection.raw(getCouponSQL)
+      const getCouponResult = member_ids.length
+        ? await strapi.db.connection.raw(getCouponSQL)
+        : null
       const totalCoupon = getCouponResult?.[0]?.[0]?.total || 0
 
       const commissionRate = (agent?.commission_rate || 0) / 100
       const commission = Math.round(totalDebit * commissionRate)
 
       return {
+        key: agent?.id,
         agent,
         deposit: totalDeposit,
         withdraw: totalWithdraw,
