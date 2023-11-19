@@ -73,4 +73,43 @@ module.exports = {
       })
     })
   },
+
+  async beforeUpdate(event) {
+    // 當 updatedUserId 變成代理時，將本部的用戶轉移到 updatedUserId
+    const { params } = event
+    const updatedUserId = params?.where?.id
+    const { data } = params
+    const toRole = data?.role
+
+    const referralUsers = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id'],
+        filters: {
+          referral: updatedUserId,
+          agent: null,
+        },
+      }
+    )
+
+    const referralUserIds = referralUsers.map((user) => user?.id)
+
+    if (toRole === 3) {
+      // 3 = agent
+      const results = await Promise.all(
+        referralUserIds.map(async (userId) => {
+          const result = await strapi.entityService.update(
+            'plugin::users-permissions.user',
+            userId,
+            {
+              data: {
+                agent: updatedUserId,
+              },
+            }
+          )
+          return result
+        })
+      )
+    }
+  },
 }
