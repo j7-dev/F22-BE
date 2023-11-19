@@ -62,16 +62,20 @@ module.exports = {
     }
 
     //TEST
-    // const findTxns = await strapi.entityService.findMany(
-    //   'api::transaction-record.transaction-record',
-    //   {
-    //     fields: ['id', 'amount'],
-    //     filters: {
-    //       type: 'CREDIT',
-    //       ref_id: 'SUCCESS',
-    //     },
-    //   }
-    // )
+    const getDepositSQL = `
+		SELECT SUM(tr.amount) AS totalDeposit
+FROM transaction_records tr
+JOIN transaction_records_user_links trul ON tr.id = trul.transaction_record_id
+WHERE tr.type = 'DEPOSIT'
+  AND tr.status = 'SUCCESS'
+  AND tr.currency = 'KRW'
+  AND tr.amount_type = 'CASH'
+  AND trul.user_id IN (26)
+  AND tr.created_at >= '2023-09-19T00:00:00.000Z'
+  AND tr.created_at <= '2023-10-28T00:00:00.000Z';`
+
+    const queryResult = await strapi.db.connection.raw(getDepositSQL)
+    console.log('⭐  totalDeposit:', queryResult?.[0]?.[0]?.totalDeposit)
     // console.log('⭐  findTxns:', findTxns)
   },
 }

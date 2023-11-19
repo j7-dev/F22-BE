@@ -104,8 +104,8 @@ module.exports = {
     },
     {
       method: 'GET',
-      path: '/statistic/agent-daily',
-      handler: 'statistic.agentDaily',
+      path: '/statistic/agent',
+      handler: 'statistic.agent',
       config: {
         policies: [],
       },

@@ -1,8 +1,10 @@
 'use strict'
 const { removeUndefinedKeys } = require('./utils')
+const dayjs = require('dayjs')
 
 module.exports = ({ strapi }) => ({
   async getOnlineMembers(args) {
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
     const start = args?.start
     const end = args?.end
 
@@ -46,23 +48,26 @@ module.exports = ({ strapi }) => ({
 
     return members.length
   },
+  /**
+   * @param {Object} args
+   * @param {string} args.agent_id
+   * @param {string} [args.start]
+   * @param {string} [args.end]
+   * @param {string} [args.fields] - 欄位
+   * @returns
+   */
   async getMembersByAgent(args) {
     const start = args?.start
     const end = args?.end
     const agent_id = args?.agent_id
-    const top_agent_id = args?.top_agent_id
     const fields = args?.fields || '*'
-    const role_type = args?.role_type
+    const UTC9toUTC0 = global.appData.UTC9toUTC0
 
     const defaultFilters = {
-      top_agent: top_agent_id,
       agent: agent_id,
       createdAt: {
         $gt: start,
         $lt: end,
-      },
-      role: {
-        type: role_type,
       },
     }
 

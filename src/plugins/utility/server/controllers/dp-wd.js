@@ -37,10 +37,10 @@ module.exports = ({ strapi }) => ({
   },
   /**
    *
-   * @param args
-   * @param args.user_id: string
-   * @param args.amount_type?: string
-   * @param args.currency?: string
+   * @param {object} args
+   * @param {string} args.user_id
+   * @param {string} [args.amount_type]
+   * @param {string} [args.currency]
    * @returns
    */
   async getDpWdInfosByUser(ctx) {
