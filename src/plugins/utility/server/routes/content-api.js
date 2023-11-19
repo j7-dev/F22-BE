@@ -102,6 +102,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/statistic/agent-daily',
+      handler: 'statistic.agentDaily',
+      config: {
+        policies: [],
+      },
+    },
     // helper
     {
       method: 'POST',
