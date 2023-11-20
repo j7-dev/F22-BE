@@ -35,25 +35,4 @@ module.exports = {
 
     ctx.body = getResult?.data
   },
-  login11b: async (ctx, next) => {
-    const apiUrl = process?.env?.IGX_11B_API_URL
-    const otp_id = process?.env?.IGX_OTP_ID
-
-    const body = ctx?.request?.body
-    const { login_id, lang = 'ko' } = body
-
-    const getResult = await axios.post(
-      apiUrl,
-      {
-        login_id,
-        lang,
-        otp_id,
-      },
-      {
-        family: 4,
-      }
-    )
-
-    ctx.body = getResult?.data
-  },
 }
