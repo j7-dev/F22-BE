@@ -4,7 +4,8 @@
   "info": {
     "singularName": "golf-transaction",
     "pluralName": "golf-transactions",
-    "displayName": "golf_transaction"
+    "displayName": "golf_transaction",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -34,12 +35,22 @@
       "column": {
         "defaultTo": 0,
         "type": "decimal",
-        "args": [16, 6]
+        "args": [
+          16,
+          6
+        ]
       }
     },
     "transaction_type": {
       "type": "enumeration",
-      "enum": ["BET", "CANCEL"],
+      "enum": [
+        "BET",
+        "CANCEL"
+      ],
+      "required": true
+    },
+    "username": {
+      "type": "string",
       "required": true
     }
   }

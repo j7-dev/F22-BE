@@ -20,6 +20,7 @@ module.exports = createCoreController(
         'currency',
         'amount',
         'transaction_type',
+        'username',
       ]
 
       for (const field of requiredFields) {
