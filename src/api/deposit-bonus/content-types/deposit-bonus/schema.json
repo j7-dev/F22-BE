@@ -12,12 +12,6 @@
   },
   "pluginOptions": {},
   "attributes": {
-    "vips": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::vip.vip",
-      "mappedBy": "deposit_bonuses"
-    },
     "label": {
       "type": "string",
       "unique": true,

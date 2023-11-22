@@ -45,12 +45,6 @@
       "target": "plugin::users-permissions.user",
       "mappedBy": "role",
       "configurable": false
-    },
-    "vip": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "api::vip.vip",
-      "mappedBy": "users_role"
     }
   }
 }

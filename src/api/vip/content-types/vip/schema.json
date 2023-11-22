@@ -24,12 +24,6 @@
       "unique": false,
       "min": 0
     },
-    "users_role": {
-      "type": "relation",
-      "relation": "oneToOne",
-      "target": "plugin::users-permissions.role",
-      "inversedBy": "vip"
-    },
     "activated": {
       "type": "boolean",
       "default": false,
@@ -60,12 +54,6 @@
         ]
       }
     },
-    "discount": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::discount.discount",
-      "inversedBy": "vips"
-    },
     "users": {
       "type": "relation",
       "relation": "oneToMany",
@@ -91,12 +79,6 @@
           6
         ]
       }
-    },
-    "deposit_bonuses": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::deposit-bonus.deposit-bonus",
-      "inversedBy": "vips"
     }
   }
 }
