@@ -1,3 +1,4 @@
+// @ts-nocheck
 'use strict'
 const axios = require('axios')
 /**
@@ -20,11 +21,6 @@ module.exports = {
     params.append('channel', channel)
     params.append('api_key', apiKey)
     params.append('agent_code', angentCode)
-
-    const result = await strapi
-      .service('api::igx-gp.igx-gp')
-      .saveToGolfLoginInfo(login_id)
-    console.log('⭐  result:', result)
 
     const endpoint = `${apiUrl}?${params.toString()}`
 

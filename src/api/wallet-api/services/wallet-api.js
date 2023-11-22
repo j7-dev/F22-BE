@@ -134,6 +134,7 @@ module.exports = () => ({
     return result
   },
   get: async (query) => {
+    const USERNAME_PREFIX = process?.env?.USERNAME_PREFIX || ''
     const siteSetting = global.appData.siteSetting
     const defaultCurrency = siteSetting?.default_currency
     const support_currencies = siteSetting?.support_currencies || [
@@ -173,12 +174,22 @@ module.exports = () => ({
       .service('plugin::utility.utils')
       .handleBalances(balances, query.user_id)
 
+    // 取得用戶資料
+    const theUser = await strapi.entityService.findOne(
+      'plugin::users-permissions.user',
+      query.user_id,
+      {
+        fields: ['id', 'username'],
+      }
+    )
+
     const formattedBalances = allBalances.map((balance) => {
       return {
         ...balance,
         amount: balance.amount.toString(),
         amount_type: balance?.amount_type,
         currency: balance.currency,
+        username: `${USERNAME_PREFIX}_${theUser?.username}`,
       }
     })
 
