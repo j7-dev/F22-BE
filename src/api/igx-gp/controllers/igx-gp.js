@@ -8,9 +8,8 @@ module.exports = {
   login11a: async (ctx, next) => {
     const apiUrl = process?.env?.IGX_11A_API_URL
     const apiKey = process?.env?.IGX_API_KEY
+    console.log('⭐  apiKey:', apiKey)
     const angentCode = process?.env?.IGX_AGENT_CODE
-    const key = process?.env?.EVO_CASINO_KEY
-    const token = process?.env?.EVO_TOKEN
     const query = ctx?.request?.query
     const { login_id, name, channel = 'WEB' } = query
 
@@ -21,6 +20,11 @@ module.exports = {
     params.append('channel', channel)
     params.append('api_key', apiKey)
     params.append('agent_code', angentCode)
+
+    const result = await strapi
+      .service('api::igx-gp.igx-gp')
+      .saveToGolfLoginInfo(login_id)
+    console.log('⭐  result:', result)
 
     const endpoint = `${apiUrl}?${params.toString()}`
 
