@@ -154,10 +154,15 @@ module.exports = {
     }
 
     if (type === 'DEPOSIT' && status === 'SUCCESS') {
+      // 判定存款紅利
       const handleDepositBonusResult = await strapi
         .service('api::transaction-record.transaction-record')
         .handleDepositBonus(event)
-      console.log('⭐  handleDepositBonusResult:', handleDepositBonusResult)
+
+      // 判定VIP升級
+      const handleVipResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleVip(event)
     }
   },
   async beforeCreate(event) {
@@ -188,11 +193,17 @@ module.exports = {
       // }
     }
 
-    // 排除 BTI
     if (type === 'DEBIT' && status === 'SUCCESS') {
+      // 判定返水
       const handleTurnoverBonusResult = await strapi
         .service('api::transaction-record.transaction-record')
         .handleTurnoverBonus(event)
+
+      // 判定VIP升級
+      const handleVipResult = await strapi
+        .service('api::transaction-record.transaction-record')
+        .handleVip(event)
+      console.log('⭐  handleVipResult:', handleVipResult)
     }
 
     // 解除存款紅利限制判定 錢輸光 或 提款領光 才解除用戶限制

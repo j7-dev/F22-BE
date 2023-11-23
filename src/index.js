@@ -76,5 +76,17 @@ module.exports = {
 
     //     const queryResult = await strapi.db.connection.raw(getDepositSQL)
     // console.log('⭐  findTxns:', findTxns)
+
+    // const user_id = 1
+
+    // const userDeposit = await strapi
+    //   .service('plugin::utility.bettingAmount')
+    //   .get({
+    //     type: ['DEPOSIT'],
+    //     currency: 'KRW',
+    //     amount_type: 'CASH',
+    //     user_id: user_id,
+    //   })
+    // console.log('⭐  userDeposit:', userDeposit)
   },
 }

@@ -5,10 +5,12 @@
  */
 
 const { createCoreService } = require('@strapi/strapi').factories
+const handleVip = require('./handleVip')
 
 module.exports = createCoreService(
   'api::transaction-record.transaction-record',
   {
+    handleVip,
     async handleTurnoverBonus(event) {
       const { result } = event
       const txn_id = result?.id
