@@ -15,6 +15,8 @@ module.exports = {
     }
     if (data?.bank_account?.owner_real_name) {
       data.display_name = data?.bank_account?.owner_real_name
+    } else {
+      data.display_name = data?.username
     }
 
     // 建立代理關係

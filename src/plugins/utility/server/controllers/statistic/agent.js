@@ -30,6 +30,27 @@ ${end ? `AND tr.created_at <= '${end}'` : ''};`
 
   return sqlString
 }
+
+function getBalanceSQL({
+  currency = 'KRW',
+  amount_type = 'CASH',
+  user_ids = [],
+  start = undefined,
+  end = undefined,
+}) {
+  const user_ids_string = user_ids.join(', ')
+  const sqlString = `
+	SELECT SUM(bl.amount) AS total
+FROM balances bl
+JOIN balances_user_links blul ON bl.id = blul.balance_id
+WHERE bl.currency = '${currency}'
+AND bl.amount_type = '${amount_type}'
+${user_ids.length ? `AND blul.user_id IN (${user_ids_string})` : ''}
+${start ? `AND bl.created_at >= '${start}'` : ''}
+${end ? `AND bl.created_at <= '${end}'` : ''};`
+
+  return sqlString
+}
 // TODO 分頁
 module.exports = async (ctx) => {
   const query = ctx.request.query
@@ -130,8 +151,50 @@ module.exports = async (ctx) => {
         : null
       const totalCoupon = getCouponResult?.[0]?.[0]?.total || 0
 
+      /**
+       * 計算公式
+       * ( DPWD - CASH BALANCE - TURNOVER_BONUS BALANCE ) X COMMISION RATE = COMMISSION
+       */
+      const dpWd = totalDeposit - totalWithdraw
+
+      const cashBalanceSQL = getBalanceSQL({
+        currency,
+        amount_type: 'CASH',
+        user_ids: member_ids,
+        start,
+        end,
+      })
+
+      const getCashBalanceResult = member_ids.length
+        ? await strapi.db.connection.raw(cashBalanceSQL)
+        : null
+      const totalCashBalance = getCashBalanceResult?.[0]?.[0]?.total || 0
+
+      const turnoverBonusBalanceSQL = getBalanceSQL({
+        currency,
+        amount_type: 'TURNOVER_BONUS',
+        user_ids: member_ids,
+        start,
+        end,
+      })
+
+      const getTurnoverBonusBalanceResult = member_ids.length
+        ? await strapi.db.connection.raw(turnoverBonusBalanceSQL)
+        : null
+      const totalTurnoverBonusBalance =
+        getTurnoverBonusBalanceResult?.[0]?.[0]?.total || 0
+
       const commissionRate = (agent?.commission_rate || 0) / 100
-      const commission = Math.round(totalDebit * commissionRate)
+
+      const commission = Math.round(
+        (dpWd - totalCashBalance - totalTurnoverBonusBalance) * commissionRate
+      )
+
+      console.log('⭐  totalTurnoverBonusBalance:', {
+        dpWd,
+        totalTurnoverBonusBalance,
+        totalCashBalance,
+      })
 
       return {
         key: agent?.id,
