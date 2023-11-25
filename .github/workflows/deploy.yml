@@ -20,7 +20,7 @@ jobs:
           if [ "${{ github.ref }}" == "refs/heads/master" ]; then
             echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
           elif [ "${{ github.ref }}" == "refs/heads/cicd" ]; then
-            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_CICD }}"
+            echo "::set-output name=SSH_HOST::${{ secrets.SSH_HOST_TEST }}" #開一台新的的來測試寫得如何
           fi
           
       - name: Deploy to Server
