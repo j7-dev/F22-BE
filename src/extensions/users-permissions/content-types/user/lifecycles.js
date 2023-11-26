@@ -9,7 +9,13 @@ module.exports = {
     const default_vip_id = siteSetting?.default_vip?.id || null
     data.uuid = nanoid()
 
-    data.confirmed = false
+    const user_status = data?.user_status
+    if (user_status === 'ACTIVE') {
+      data.confirmed = true
+    } else {
+      data.confirmed = false
+    }
+
     if (default_vip_id) {
       data.vip = default_vip_id
     }
@@ -82,6 +88,12 @@ module.exports = {
     const updatedUserId = params?.where?.id
     const { data } = params
     const toRole = data?.role
+    const user_status = data?.user_status
+    if (user_status === 'ACTIVE') {
+      data.confirmed = true
+    } else {
+      data.confirmed = false
+    }
 
     const referralUsers = await strapi.entityService.findMany(
       'plugin::users-permissions.user',

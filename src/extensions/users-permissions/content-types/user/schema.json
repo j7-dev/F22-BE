@@ -159,7 +159,7 @@
     "is_test": {
       "type": "boolean",
       "default": false,
-      "required": true
+      "required": false
     },
     "user_status": {
       "type": "enumeration",
@@ -168,7 +168,8 @@
         "ACTIVE",
         "INACTIVE",
         "OUT"
-      ]
+      ],
+      "default": "UNCONFIRMED"
     }
   }
 }
