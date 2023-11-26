@@ -75,7 +75,6 @@ module.exports = ({ strapi }) => ({
   },
   // 幫所有沒有userstatus 的用戶都加上 userstatus
   async updateAllUserUserstatus(ctx) {
-    const body = ctx.request.body
     const entries = await strapi.entityService.findMany(
       'plugin::users-permissions.user',
       {
