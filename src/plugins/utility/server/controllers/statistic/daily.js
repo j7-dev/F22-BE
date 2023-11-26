@@ -12,6 +12,7 @@ module.exports = async (ctx) => {
   const roleType = user?.role?.type
   const agent_id = roleType === 'agent' ? user?.id : undefined
   const UTC9toUTC0 = global.appData.UTC9toUTC0
+  const user_id = query?.user_id // 如果有帶就獲取該user_id的資料，沒有就是全部
 
   const dateArr =
     countByDate({
@@ -30,6 +31,7 @@ module.exports = async (ctx) => {
           start: UTC9toUTC0(dateItem.startD),
           end: UTC9toUTC0(dateItem.endD),
           agent_id,
+          user_id,
         })
 
       const withdraw = await strapi
@@ -41,6 +43,7 @@ module.exports = async (ctx) => {
           start: UTC9toUTC0(dateItem.startD),
           end: UTC9toUTC0(dateItem.endD),
           agent_id,
+          user_id,
         })
 
       const dpWd = deposit + withdraw
@@ -54,6 +57,7 @@ module.exports = async (ctx) => {
           start: UTC9toUTC0(dateItem.startD),
           end: UTC9toUTC0(dateItem.endD),
           agent_id,
+          user_id,
         })) * -1
 
       // payout = 中獎金額，CREDIT且 金額為正數，但CREDIT本身應該就不會負數
@@ -65,6 +69,7 @@ module.exports = async (ctx) => {
           start: UTC9toUTC0(dateItem.startD),
           end: UTC9toUTC0(dateItem.endD),
           agent_id,
+          user_id,
         })) * -1
 
       // 紅利+洗碼
@@ -75,6 +80,7 @@ module.exports = async (ctx) => {
         start: UTC9toUTC0(dateItem.startD),
         end: UTC9toUTC0(dateItem.endD),
         agent_id,
+        user_id,
       })
       // 加上目前的洗碼總和
       const turnoverBonusBalanceAmount = await strapi
@@ -86,6 +92,7 @@ module.exports = async (ctx) => {
           start: UTC9toUTC0(dateItem.startD),
           end: UTC9toUTC0(dateItem.endD),
           agent_id,
+          user_id,
         })
 
       //新註冊人數
@@ -108,6 +115,10 @@ module.exports = async (ctx) => {
       )
       const filteredGetRegisterUsersResult = getRegisterUsersResult.filter(
         (u) => {
+          if (user_id) {
+            // 如果有指定 user_id 就只看這人旗下的
+            return u?.agent?.id === user_id
+          }
           if (agent_id) {
             return u?.agent?.id === agent_id
           }
@@ -146,6 +157,10 @@ module.exports = async (ctx) => {
         }
       )
       const filteredBetRecords = betRecords.filter((r) => {
+        if (user_id) {
+          // 如果有指定 user_id 就只看這人旗下的
+          return r?.user?.agent?.id === user_id
+        }
         if (agent_id) {
           return r?.user?.agent?.id === agent_id
         }

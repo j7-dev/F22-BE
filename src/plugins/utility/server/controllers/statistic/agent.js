@@ -190,12 +190,6 @@ module.exports = async (ctx) => {
         (dpWd - totalCashBalance - totalTurnoverBonusBalance) * commissionRate
       )
 
-      console.log('⭐  totalTurnoverBonusBalance:', {
-        dpWd,
-        totalTurnoverBonusBalance,
-        totalCashBalance,
-      })
-
       return {
         key: agent?.id,
         agent,
