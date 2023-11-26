@@ -135,5 +135,13 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'POST',
+      path: '/helper/update-all-user-userstatus',
+      handler: 'helper.updateAllUserUserstatus',
+      config: {
+        policies: [],
+      },
+    },
   ],
 }

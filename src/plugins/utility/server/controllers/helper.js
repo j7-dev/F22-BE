@@ -73,4 +73,39 @@ module.exports = ({ strapi }) => ({
       data: result,
     }
   },
+  // 幫所有沒有userstatus 的用戶都加上 userstatus
+  async updateAllUserUserstatus(ctx) {
+    const body = ctx.request.body
+    const entries = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id', 'confirmed'],
+        filters: {
+          user_status: null,
+        },
+      }
+    )
+    console.log('⭐  entries:', entries)
+
+    const result = await Promise.all(
+      entries.map(async (entry) => {
+        const updateResult = await strapi.entityService.update(
+          'plugin::users-permissions.user',
+          entry.id,
+          {
+            data: {
+              user_status: entry?.confirmed ? 'ACTIVE' : 'UNCONFIRMED',
+            },
+          }
+        )
+        return updateResult
+      })
+    )
+
+    ctx.body = {
+      status: '200',
+      message: 'users userstatus updated',
+      data: result,
+    }
+  },
 })

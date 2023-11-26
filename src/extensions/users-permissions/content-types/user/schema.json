@@ -155,6 +155,20 @@
       "type": "relation",
       "relation": "oneToOne",
       "target": "plugin::users-permissions.user"
+    },
+    "is_test": {
+      "type": "boolean",
+      "default": false,
+      "required": true
+    },
+    "user_status": {
+      "type": "enumeration",
+      "enum": [
+        "UNCONFIRMED",
+        "ACTIVE",
+        "INACTIVE",
+        "OUT"
+      ]
     }
   }
 }
