@@ -9,6 +9,7 @@ module.exports = {
   login11a: async (ctx, next) => {
     const apiUrl = process?.env?.IGX_11A_API_URL
     const apiKey = process?.env?.IGX_API_KEY
+    const USERNAME_PREFIX = process?.env?.USERNAME_PREFIX
     console.log('⭐  apiKey:', apiKey)
     const angentCode = process?.env?.IGX_AGENT_CODE
     const query = ctx?.request?.query
@@ -16,7 +17,7 @@ module.exports = {
 
     // format url params
     const params = new URLSearchParams()
-    params.append('login_id', login_id)
+    params.append('login_id', `${USERNAME_PREFIX}_${login_id}`)
     params.append('name', name)
     params.append('channel', channel)
     params.append('api_key', apiKey)
