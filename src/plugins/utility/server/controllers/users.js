@@ -1,5 +1,4 @@
 'use strict'
-const { nanoid } = require('nanoid')
 
 module.exports = ({ strapi }) => ({
   /**
@@ -40,6 +39,40 @@ module.exports = ({ strapi }) => ({
         available ? 'available' : 'registered, please try another one'
       }`,
       data: available,
+    }
+  },
+
+  /**
+   * 用 username 找 user_id
+   */
+  async getUserId(ctx) {
+    const query = ctx?.request?.query
+    const username = query?.username
+
+    // find the user
+    const users = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        filters: {
+          username,
+        },
+      }
+    )
+    if (users.length === 0) {
+      ctx.body = {
+        status: '200',
+        message: `user not found`,
+        data: null,
+      }
+    } else {
+      const user = users?.[0]
+      ctx.body = {
+        status: '200',
+        message: `find user_id success`,
+        data: {
+          user_id: user?.id,
+        },
+      }
     }
   },
 })

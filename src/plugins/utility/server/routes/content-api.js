@@ -10,6 +10,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/users/id',
+      handler: 'users.getUserId',
+      config: {
+        policies: [],
+      },
+    },
     // betting-records @deprecated
     {
       method: 'GET',
