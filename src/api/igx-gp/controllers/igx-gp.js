@@ -33,6 +33,7 @@ module.exports = {
         family: 4,
       }
     )
+    console.log('⭐  getResult:', getResult)
 
     ctx.body = getResult?.data
   },
