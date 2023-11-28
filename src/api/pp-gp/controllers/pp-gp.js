@@ -74,6 +74,7 @@ module.exports = {
   opengame: async (ctx, next) => {
     const query = ctx.request.query
     const user_id = query?.user_id || 1
+    const USERNAME_PREFIX = process?.env?.USERNAME_PREFIX
     if (!user_id) throw new Error("can't get user_id")
 
     const siteSetting = global.appData.siteSetting
@@ -81,7 +82,7 @@ module.exports = {
 
     const currency = (query?.currency || '')?.toUpperCase() || defaultCurrency
 
-    const token = nanoid()
+    const token = `${USERNAME_PREFIX}_${nanoid()}`
     const params = {
       ...query,
       secureLogin,
