@@ -3,7 +3,7 @@ name: Deploy to Server
 on:
   push:
     branches:
-      - master # 這裡使用你的主要分支名稱，可以根據實際情況修改
+      - master # 這裡使用你的主要分支名稱，可以根據實際情況修改 
       - cicd 
 
 jobs:
