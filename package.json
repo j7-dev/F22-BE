@@ -8,6 +8,7 @@
     "develop": "env-cmd -f ./env/.env.dev strapi develop",
     "start": "env-cmd -f ./env/.env.prod strapi start",
     "build": "env-cmd -f ./env/.env.prod strapi build",
+    "build:dev": "env-cmd -f ./env/.env.dev strapi build",
     "strapi": "strapi"
   },
   "dependencies": {

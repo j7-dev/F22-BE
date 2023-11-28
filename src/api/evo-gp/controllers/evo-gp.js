@@ -98,6 +98,7 @@ module.exports = {
     const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
       family: 4,
     })
+    console.log('⭐  getResult:', JSON.stringify(getResult))
 
     ctx.body = getResult?.data
   },
