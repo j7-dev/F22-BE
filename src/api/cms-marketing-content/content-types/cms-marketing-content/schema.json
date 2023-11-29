@@ -4,7 +4,8 @@
   "info": {
     "singularName": "cms-marketing-content",
     "pluralName": "cms-marketing-contents",
-    "displayName": "CMS Marketing Content"
+    "displayName": "CMS Marketing Content",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -22,7 +23,7 @@
         }
       },
       "type": "string",
-      "required": true
+      "required": false
     },
     "content": {
       "pluginOptions": {
@@ -50,6 +51,30 @@
         }
       },
       "component": "period.active-period"
+    },
+    "feature_image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
+    },
+    "feature_image_mobile": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "pluginOptions": {
+        "i18n": {
+          "localized": true
+        }
+      }
     }
   }
 }
