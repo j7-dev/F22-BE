@@ -83,10 +83,6 @@ module.exports = {
           id: sid,
           ip: '3.38.54.250',
         },
-        group: {
-          id: 'rn7ixj24vtakua35',
-          action: 'assign',
-        },
       },
       config,
     }
