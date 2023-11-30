@@ -32,7 +32,7 @@ module.exports = {
     //如果沒有手動指定代理，就用 localStorage 的查看
     if (!data?.agent) {
       if (ref) {
-        const referralUser = await strapi.entityService.findMany(
+        const referrerUser = await strapi.entityService.findMany(
           'plugin::users-permissions.user',
           {
             populate: {
@@ -44,14 +44,14 @@ module.exports = {
           }
         )
         // 確認這個用戶是否為 agent
-        const role = referralUser?.[0]?.role.type
-        const referralUserId = referralUser?.[0]?.id
+        const role = referrerUser?.[0]?.role.type
+        const referrerUserId = referrerUser?.[0]?.id
 
-        if (referralUser.length > 0 && role === 'agent') {
-          data.agent = referralUserId
+        if (referrerUser.length > 0 && role === 'agent') {
+          data.agent = referrerUserId
         }
 
-        data.referral = referralUserId
+        data.referrer = referrerUserId
       }
     }
   },
@@ -95,23 +95,23 @@ module.exports = {
       data.confirmed = false
     }
 
-    const referralUsers = await strapi.entityService.findMany(
+    const referrerUsers = await strapi.entityService.findMany(
       'plugin::users-permissions.user',
       {
         fields: ['id'],
         filters: {
-          referral: updatedUserId,
+          referrer: updatedUserId,
           agent: null,
         },
       }
     )
 
-    const referralUserIds = referralUsers.map((user) => user?.id)
+    const referrerUserIds = referrerUsers.map((user) => user?.id)
 
     if (toRole === 3) {
       // 3 = agent
       const results = await Promise.all(
-        referralUserIds.map(async (userId) => {
+        referrerUserIds.map(async (userId) => {
           const result = await strapi.entityService.update(
             'plugin::users-permissions.user',
             userId,

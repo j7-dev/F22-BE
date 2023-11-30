@@ -118,6 +118,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/statistic/by-referral',
+      handler: 'statistic.byReferral',
+      config: {
+        policies: [],
+      },
+    },
     // helper
     {
       method: 'POST',
