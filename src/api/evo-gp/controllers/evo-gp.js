@@ -91,11 +91,14 @@ module.exports = {
 
     console.log('⭐  apiUrl:', `${apiUrl}/${key}/${token}`)
 
-    const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
-      family: 4,
-    })
-    console.log('⭐  getResult:', JSON.stringify(getResult))
-
-    ctx.body = getResult?.data
+    try {
+      const getResult = await axios.post(`${apiUrl}/${key}/${token}`, body, {
+        family: 4,
+      })
+      ctx.body = getResult?.data
+    } catch (error) {
+      console.log('⭐  error:', error)
+      ctx.body = JSON.stringify(error)
+    }
   },
 }
