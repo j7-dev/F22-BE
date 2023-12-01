@@ -18,6 +18,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/users/additional-info',
+      handler: 'users.getUserAdditionalInfo',
+      config: {
+        policies: [],
+      },
+    },
     // betting-records @deprecated
     {
       method: 'GET',

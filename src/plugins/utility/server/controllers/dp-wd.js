@@ -94,7 +94,7 @@ module.exports = ({ strapi }) => ({
             filters: {
               user: user_id,
             },
-            sort: 'createdAt:desc',
+            sort: { createdAt: 'desc' },
             limit: 1,
           }
         )

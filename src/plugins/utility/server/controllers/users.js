@@ -75,4 +75,51 @@ module.exports = ({ strapi }) => ({
       }
     }
   },
+
+  /**
+   * 取得用戶的額外資訊
+   */
+  async getUserAdditionalInfo(ctx) {
+    const query = ctx?.request?.query
+    const user_id = query?.user_id
+
+    if (!user_id) {
+      return ctx.badRequest(`cant find user id`)
+    }
+
+    // get last debit
+    const latestBet = await strapi.entityService.findMany(
+      'api::transaction-record.transaction-record',
+      {
+        fields: ['createdAt'],
+        filters: {
+          user: user_id,
+          type: 'DEBIT',
+          status: 'SUCCESS',
+        },
+        sort: { createdAt: 'desc' },
+        limit: 1,
+      }
+    )
+
+    // find the referral
+    const referrals = await strapi.entityService.findMany(
+      'plugin::users-permissions.user',
+      {
+        fields: ['id'],
+        filters: {
+          referrer: user_id,
+        },
+      }
+    )
+
+    ctx.body = {
+      status: '200',
+      message: `get UserAdditionalInfo success`,
+      data: {
+        latestBetAt: latestBet.length ? latestBet[0]?.createdAt : null,
+        referrals: referrals.length,
+      },
+    }
+  },
 })
