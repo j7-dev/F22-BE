@@ -45,7 +45,8 @@ module.exports = createCoreService(
         const result = await strapi.service('api::wallet-api.wallet-api').add({
           user_id: theTxn?.user?.id,
           amount: turnover_bonus,
-          title: `turnover_bonus ${amount} * ${turnover_rate} = ${turnover_bonus}  txn#${theTxn?.id}`,
+          title: `${amount} * ${turnover_rate} = ${turnover_bonus}`,
+          description: `turnover_bonus ${amount} * ${turnover_rate} = ${turnover_bonus}  txn#${theTxn?.id}`,
           type: 'COUPON',
           by: 'SYSTEM',
           currency: theTxn?.currency,
