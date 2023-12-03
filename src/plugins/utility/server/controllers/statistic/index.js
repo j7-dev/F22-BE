@@ -5,8 +5,8 @@ const recent = require('./recent')
 const important = require('./important')
 const agent = require('./agent')
 const byReferral = require('./by-referral')
-
 const today = require('./today')
+const memberBettingRecords = require('./member-betting-records')
 
 module.exports = ({ strapi }) => ({
   daily,
@@ -15,4 +15,5 @@ module.exports = ({ strapi }) => ({
   agent,
   byReferral,
   today,
+  memberBettingRecords,
 })

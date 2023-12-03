@@ -1,5 +1,6 @@
 'use strict'
 const dayjs = require('dayjs')
+const gpEnum = require('./enum')
 const default_currency = 'KRW'
 const default_amount_type = 'CASH'
 
@@ -304,62 +305,91 @@ module.exports = async (ctx) => {
     return amount
   }
 
-  // ⚠️⚠️⚠️這個改的話，FE前端也要改
-  const EVO = 'EVO'
-  const BTI = 'bti-api'
-  const PP = 'PP'
-  const TOKEN = 'TOKENGP'
-  const IGX = 'IGX'
-
   const table2 = [
     {
       label: 'bet amount(users)',
       total:
         getGPCashAmount('ALL', filteredBettingRecords, 'debit_amount') * -1,
-      evo: getGPCashAmount(EVO, filteredBettingRecords, 'debit_amount') * -1,
-      pp: getGPCashAmount(PP, filteredBettingRecords, 'debit_amount') * -1,
-      bti: getGPCashAmount(BTI, filteredBettingRecords, 'debit_amount') * -1,
-      igx: getGPCashAmount(IGX, filteredBettingRecords, 'debit_amount') * -1,
+      evo:
+        getGPCashAmount(gpEnum['EVO'], filteredBettingRecords, 'debit_amount') *
+        -1,
+      pp:
+        getGPCashAmount(gpEnum['PP'], filteredBettingRecords, 'debit_amount') *
+        -1,
+      bti:
+        getGPCashAmount(gpEnum['BTI'], filteredBettingRecords, 'debit_amount') *
+        -1,
+      igx:
+        getGPCashAmount(gpEnum['IGX'], filteredBettingRecords, 'debit_amount') *
+        -1,
       token:
-        getGPCashAmount(TOKEN, filteredBettingRecords, 'debit_amount') * -1,
+        getGPCashAmount(
+          gpEnum['TOKEN'],
+          filteredBettingRecords,
+          'debit_amount'
+        ) * -1,
     },
     {
       label: 'bet users',
       total: getGPUserCount('ALL', filteredBettingRecords),
-      evo: getGPUserCount(EVO, filteredBettingRecords),
-      pp: getGPUserCount(PP, filteredBettingRecords),
-      bti: getGPUserCount(BTI, filteredBettingRecords),
-      igx: getGPUserCount(IGX, filteredBettingRecords),
-      token: getGPUserCount(TOKEN, filteredBettingRecords),
+      evo: getGPUserCount(gpEnum['EVO'], filteredBettingRecords),
+      pp: getGPUserCount(gpEnum['PP'], filteredBettingRecords),
+      bti: getGPUserCount(gpEnum['BTI'], filteredBettingRecords),
+      igx: getGPUserCount(gpEnum['IGX'], filteredBettingRecords),
+      token: getGPUserCount(gpEnum['TOKEN'], filteredBettingRecords),
     },
     {
       label: 'payout',
       total:
         getGPCashAmount('ALL', filteredBettingRecords, 'credit_amount') * -1,
-      evo: getGPCashAmount(EVO, filteredBettingRecords, 'credit_amount') * -1,
-      pp: getGPCashAmount(PP, filteredBettingRecords, 'credit_amount') * -1,
-      bti: getGPCashAmount(BTI, filteredBettingRecords, 'credit_amount') * -1,
-      igx: getGPCashAmount(IGX, filteredBettingRecords, 'credit_amount') * -1,
+      evo:
+        getGPCashAmount(
+          gpEnum['EVO'],
+          filteredBettingRecords,
+          'credit_amount'
+        ) * -1,
+      pp:
+        getGPCashAmount(gpEnum['PP'], filteredBettingRecords, 'credit_amount') *
+        -1,
+      bti:
+        getGPCashAmount(
+          gpEnum['BTI'],
+          filteredBettingRecords,
+          'credit_amount'
+        ) * -1,
+      igx:
+        getGPCashAmount(
+          gpEnum['IGX'],
+          filteredBettingRecords,
+          'credit_amount'
+        ) * -1,
       token:
-        getGPCashAmount(TOKEN, filteredBettingRecords, 'credit_amount') * -1,
+        getGPCashAmount(
+          gpEnum['TOKEN'],
+          filteredBettingRecords,
+          'credit_amount'
+        ) * -1,
     },
     {
       label: 'winloss',
       total: getGPWinLoss('ALL'),
-      evo: getGPWinLoss(EVO),
-      pp: getGPWinLoss(PP),
-      bti: getGPWinLoss(BTI),
-      igx: getGPWinLoss(IGX),
-      token: getGPWinLoss(TOKEN),
+      evo: getGPWinLoss(gpEnum['EVO']),
+      pp: getGPWinLoss(gpEnum['PP']),
+      bti: getGPWinLoss(gpEnum['BTI']),
+      igx: getGPWinLoss(gpEnum['IGX']),
+      token: getGPWinLoss(gpEnum['TOKEN']),
     },
     {
       label: 'turnover bonus',
       total: getGPTurnoverBonusAmount('ALL', filteredTurnoverBonusTxns),
-      evo: getGPTurnoverBonusAmount(EVO, filteredTurnoverBonusTxns),
-      pp: getGPTurnoverBonusAmount(PP, filteredTurnoverBonusTxns),
-      bti: getGPTurnoverBonusAmount(BTI, filteredTurnoverBonusTxns),
-      igx: getGPTurnoverBonusAmount(IGX, filteredTurnoverBonusTxns),
-      token: getGPTurnoverBonusAmount(TOKEN, filteredTurnoverBonusTxns),
+      evo: getGPTurnoverBonusAmount(gpEnum['EVO'], filteredTurnoverBonusTxns),
+      pp: getGPTurnoverBonusAmount(gpEnum['PP'], filteredTurnoverBonusTxns),
+      bti: getGPTurnoverBonusAmount(gpEnum['BTI'], filteredTurnoverBonusTxns),
+      igx: getGPTurnoverBonusAmount(gpEnum['IGX'], filteredTurnoverBonusTxns),
+      token: getGPTurnoverBonusAmount(
+        gpEnum['TOKEN'],
+        filteredTurnoverBonusTxns
+      ),
     },
   ]
 

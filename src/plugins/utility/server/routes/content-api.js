@@ -134,6 +134,14 @@ module.exports = {
         policies: [],
       },
     },
+    {
+      method: 'GET',
+      path: '/statistic/member-betting-records',
+      handler: 'statistic.memberBettingRecords',
+      config: {
+        policies: [],
+      },
+    },
     // helper
     {
       method: 'POST',
