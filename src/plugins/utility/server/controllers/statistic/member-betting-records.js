@@ -77,7 +77,7 @@ module.exports = async (ctx) => {
               user_id,
             })) * -1
 
-          const winLoss = debit - credit
+          const winLoss = debit + credit
 
           return {
             game_provider: gp,
