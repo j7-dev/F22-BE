@@ -1,5 +1,5 @@
 'use strict'
-const { removeUndefinedKeys } = require('@utils')
+const { removeUndefinedKeys } = require('utils')
 
 module.exports = {
   main: async (ctx, next) => {

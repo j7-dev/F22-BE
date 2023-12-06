@@ -45,6 +45,6 @@
     "link-module-alias": "^1.2.0"
   },
   "_moduleAliases": {
-    "@utils": "src/plugins/utility/server/services/utils.js"
+    "utils": "src/plugins/utility/server/services/utils.js"
   }
 }
