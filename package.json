@@ -9,7 +9,9 @@
     "start": "env-cmd -f ./env/.env.prod strapi start",
     "build": "env-cmd -f ./env/.env.prod strapi build",
     "build:dev": "env-cmd -f ./env/.env.dev strapi build",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "postinstall": "link-module-alias",
+    "preinstall": "command -v link-module-alias && link-module-alias clean || true"
   },
   "dependencies": {
     "@strapi/plugin-i18n": "4.12.4",
@@ -39,6 +41,10 @@
   "devDependencies": {
     "@faker-js/faker": "^8.0.2",
     "@types/lodash-es": "^4.17.9",
-    "env-cmd": "^10.1.0"
+    "env-cmd": "^10.1.0",
+    "link-module-alias": "^1.2.0"
+  },
+  "_moduleAliases": {
+    "@utils": "src/plugins/utility/server/services/utils.js"
   }
 }

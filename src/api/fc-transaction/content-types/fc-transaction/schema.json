@@ -1,0 +1,86 @@
+{
+  "kind": "collectionType",
+  "collectionName": "fc_transactions",
+  "info": {
+    "singularName": "fc-transaction",
+    "pluralName": "fc-transactions",
+    "displayName": "fc-transaction"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "record_id": {
+      "type": "string",
+      "required": false
+    },
+    "user_id": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user"
+    },
+    "bank_id": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "game_id": {
+      "type": "integer"
+    },
+    "game_type": {
+      "type": "integer"
+    },
+    "Timestamp": {
+      "type": "string"
+    },
+    "isBuyFeature": {
+      "type": "boolean"
+    },
+    "bet": {
+      "type": "decimal"
+    },
+    "transaction_type": {
+      "type": "enumeration",
+      "enum": [
+        "bet",
+        "result",
+        "cancel",
+        "promo"
+      ],
+      "required": true
+    },
+    "amount": {
+      "type": "decimal",
+      "required": true
+    },
+    "currency": {
+      "type": "string",
+      "required": true
+    },
+    "win": {
+      "type": "decimal"
+    },
+    "JPBet": {
+      "type": "decimal"
+    },
+    "JPPrize": {
+      "type": "decimal"
+    },
+    "NetWin": {
+      "type": "decimal"
+    },
+    "GameDate": {
+      "type": "datetime"
+    },
+    "ValidBet": {
+      "type": "decimal"
+    },
+    "Comssion": {
+      "type": "decimal"
+    },
+    "trs_id": {
+      "type": "string"
+    }
+  }
+}
