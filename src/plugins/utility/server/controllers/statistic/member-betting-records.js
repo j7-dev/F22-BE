@@ -55,9 +55,8 @@ module.exports = async (ctx) => {
       const dataResult = await Promise.all(
         ['ALL', ...support_game_providers].map(async (gp) => {
           const by = gp === 'ALL' ? undefined : gpEnum[gp]
-          const debit = await strapi
-            .service('plugin::utility.bettingAmount')
-            .get({
+          const debit =
+            (await strapi.service('plugin::utility.bettingAmount').get({
               type: ['DEBIT'],
               by,
               currency,
@@ -65,7 +64,7 @@ module.exports = async (ctx) => {
               start,
               end,
               user_id,
-            })
+            })) * -1
 
           const credit =
             (await strapi.service('plugin::utility.bettingAmount').get({
