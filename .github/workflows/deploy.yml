@@ -40,4 +40,4 @@ jobs:
           SSH_KEY: ${{ secrets.SSH_KEY }}
 
       - name: Yarn build and start
-        run: ssh staging 'fish -c "cd /opt/nginx/backend; and git fetch origin; and git reset --hard origin/master; and cd .. ; and docker-compose up -d --build"'
+        run: ssh staging 'sudo fish -c "cd /opt/nginx/backend; and git fetch origin; and git reset --hard origin/master; and cd .. ; and docker-compose up -d --build"'
