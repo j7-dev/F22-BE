@@ -4,7 +4,8 @@
   "info": {
     "singularName": "fc-transaction",
     "pluralName": "fc-transactions",
-    "displayName": "fc-transaction"
+    "displayName": "fc-transaction",
+    "description": ""
   },
   "options": {
     "draftAndPublish": false
@@ -80,6 +81,9 @@
       "type": "decimal"
     },
     "trs_id": {
+      "type": "string"
+    },
+    "bet_id": {
       "type": "string"
     }
   }

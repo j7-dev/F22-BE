@@ -17,8 +17,9 @@ module.exports = {
     const user_id = query?.user_id
     const record_id = query?.record_id
     const bank_id = query?.bank_id
+    const bet_id = query?.bet_id
 
-    const filters = removeUndefinedKeys({ user_id, record_id, bank_id })
+    const filters = removeUndefinedKeys({ user_id, record_id, bank_id, bet_id })
 
     const transactions = await strapi.entityService.findMany(
       'api::fc-transaction.fc-transaction',
