@@ -23,8 +23,8 @@
     },
     "bank_id": {
       "type": "string",
-      "required": true,
-      "unique": true
+      "required": false,
+      "unique": false
     },
     "game_id": {
       "type": "integer"
